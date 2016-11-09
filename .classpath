@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-aop-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-aspects-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-beans-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-context-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-context-support-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-core-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-expression-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-instrument-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-instrument-tomcat-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-jdbc-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-jms-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-messaging-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-orm-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-oxm-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-test-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-tx-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-web-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-webmvc-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-webmvc-portlet-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-websocket-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
