@@ -9,4 +9,29 @@
        <property name="message" value="Hello World!"/>
    </bean>
 
+	<!-- Ví dụ về liên kết với file Beans.xml liên kết qua constructor -->
+	<bean id="addressBean" class="com.beanwiring.Address">
+	</bean>
+	<bean id="studentBean" class="com.beanwiring.Student">
+		<constructor-arg value="18"/>
+		<constructor-arg value="Nguyen Van A"/>
+		<constructor-arg ref="addressBean"/>
+	</bean>
+	
+	<!-- Ví dụ về liên kết với file Beans.xml liên kết qua setter -->
+	<bean name="studentBeanSetter" class="com.beanwiring.Student">
+	<property name="age" value="24" />
+	<property name="name" value="Nguyen Van B" />
+	<property name="address" ref="addressBean" />
+	</bean>
+	
+	<!-- Ví dụ về liên kết inner bean -->
+	<bean name="studentBeanInner" class="com.beanwiring.Student">
+		<constructor-arg value="30" />
+		<constructor-arg value="Nguyen Van C" />
+		<constructor-arg>
+			<bean class="com.beanwiring.Address">
+			</bean>
+		</constructor-arg>
+	</bean>
 </beans>
