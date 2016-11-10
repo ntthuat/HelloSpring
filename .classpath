@@ -23,5 +23,9 @@
 	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-webmvc-4.3.3.RELEASE.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-webmvc-portlet-4.3.3.RELEASE.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-websocket-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache/activemq-core-5.7.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache/ehcache-2.10.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache/jsr107cache-1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
