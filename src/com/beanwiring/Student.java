@@ -1,9 +1,18 @@
 package com.beanwiring;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
 public class Student {
 	private int age;
 	private String name;
 	private Address address;
+	
+	List<String> books;
+	Map<String, Subject> timeTable;
+	Properties hobbies;
+	
 	public Student() {
 		super();
 	}
@@ -13,6 +22,26 @@ public class Student {
 		this.name = name;
 		this.address = address;
 	}
+	
+	public List<String> getBooks() {
+		return books;
+	}
+	public void setBooks(List<String> books) {
+		this.books = books;
+	}
+	public Map<String, Subject> getTimeTable() {
+		return timeTable;
+	}
+	public void setTimeTable(Map<String, Subject> timeTable) {
+		this.timeTable = timeTable;
+	}
+	public Properties getHobbies() {
+		return hobbies;
+	}
+	public void setHobbies(Properties hobbies) {
+		this.hobbies = hobbies;
+	}
+	
 	public int getAge() {
 		return age;
 	}
