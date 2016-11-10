@@ -71,4 +71,15 @@
 			</props>
 		</property>
 	</bean>
+	
+	<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+	<!-- 					Ví dụ về autowiring 			 	 -->
+	<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+	<!-- Ví dụ về autowire by Name -->
+	<bean id="laptop1" class="com.autowiring.AcerLatop"></bean>
+	<bean id="laptop2" class="com.autowiring.LenovoLaptop"></bean>
+	
+	<bean id="laptopStore" class="com.autowiring.LaptopStore" autowire="byName"></bean>
+	<bean id="laptopStore2" class="com.autowiring.LaptopStore2" autowire="byType"></bean>
+	<bean id="laptopStore3" class="com.autowiring.LaptopStore3" autowire="constructor"></bean>
 </beans>
