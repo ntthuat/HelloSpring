@@ -27,5 +27,7 @@
 	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache/aopalliance-1.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache/ehcache-2.10.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache/jsr107cache-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho log/slf4j-simple-1.7.21.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho log/slf4j-api-1.7.21.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
