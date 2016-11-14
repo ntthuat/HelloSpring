@@ -18,10 +18,10 @@ public class SampleApplication {
 		logger.info("Iphone ->"+service.getByName("Iphone"));
 		logger.info("Iphone ->"+service.getByName("Iphone"));
 		logger.info("Refreshing all products");
-		service.refreshAllProducts();
+		/*service.refreshAllProducts();
 		logger.info("Ihone [after refresh]->"+service.getByName("Iphone"));
 		logger.info("Ihone [after refresh]->"+service.getByName("Iphone"));
-		logger.info("Ihone [after refresh]->"+service.getByName("Iphone"));
+		logger.info("Ihone [after refresh]->"+service.getByName("Iphone"));*/
 		((AbstractApplicationContext) context).close();
 	}
 }

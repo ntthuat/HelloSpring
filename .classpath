@@ -27,7 +27,17 @@
 	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache/aopalliance-1.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache/ehcache-2.10.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache/jsr107cache-1.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho log/slf4j-simple-1.7.21.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho log/slf4j-api-1.7.21.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache tren trang chu Spring/spring-boot-1.4.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache tren trang chu Spring/spring-boot-starter-cache-1.4.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache tren trang chu Spring/spring-boot-autoconfigure-1.4.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache tren trang chu Spring/spring-boot-starter-1.4.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache tren trang chu Spring/jcl-over-slf4j-1.7.21.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache tren trang chu Spring/jul-to-slf4j-1.7.21.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache tren trang chu Spring/logback-classic-1.1.7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache tren trang chu Spring/logback-core-1.1.7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache tren trang chu Spring/snakeyaml-1.17.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache tren trang chu Spring/spring-boot-starter-logging-1.4.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache tren trang chu Spring/log4j-over-slf4j-1.7.21.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
