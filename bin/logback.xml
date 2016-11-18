@@ -1,0 +1,33 @@
+<configuration>
+
+	<property name="thuat.log.file" value="${project.build.directory}/log/thuat-test.log"/>
+	<property name="message.pattern" value="%d [%thread] %level %mdc %logger{0} %C %M %ex - %msg%n"/>
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${thuat.log.file}</File>
+		<encoder>
+			<Pattern>${message.pattern}</Pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${thuat.log.file}.%d{yyyy-MM-dd-HH}
+			</FileNamePattern>
+		</rollingPolicy>
+	</appender>
+		<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${message.pattern}</pattern>
+		</encoder>
+	</appender>
+
+	<!-- Ví dụ này là version 1, cách làm thông thường -->
+  <!-- <appender name="FILE" class="ch.qos.logback.core.FileAppender"> 
+    <file>slf4j-example.log</file> 
+    <encoder> 
+      <pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern> 
+    </encoder> 
+  </appender>  -->
+  
+  <root level="debug"> 
+    <appender-ref ref="FILE" /> 
+  </root> 
+</configuration>

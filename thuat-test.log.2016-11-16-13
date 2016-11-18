@@ -1,0 +1,4 @@
+2016-11-16 13:58:30,141 [main] INFO  HelloWorld slf4j.log.HelloWorld main  - Nguyen Thien Thuat
+2016-11-16 13:58:35,667 [main] INFO  HelloWorld slf4j.log.HelloWorld main  - Nguyen Thien Thuat
+2016-11-16 13:59:13,897 [main] DEBUG  HelloWorld slf4j.log.HelloWorld main  - Nguyen Thien Thuat
+2016-11-16 13:59:13,899 [main] INFO  HelloWorld slf4j.log.HelloWorld main  - Nguyen Thien Thuat
