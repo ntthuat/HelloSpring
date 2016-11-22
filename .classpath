@@ -6,7 +6,7 @@
 	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-aop-4.3.3.RELEASE.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-aspects-4.3.3.RELEASE.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-beans-4.3.3.RELEASE.jar"/>
-	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-context-4.3.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-context-4.3.3.RELEASE.jar" sourcepath="C:/Users/tnguyen443/.m2/repository/org/springframework/spring-context/4.3.3.RELEASE/spring-context-4.3.3.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-context-support-4.3.3.RELEASE.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-core-4.3.3.RELEASE.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/spring-expression-4.3.3.RELEASE.jar"/>
