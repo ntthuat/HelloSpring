@@ -39,5 +39,6 @@
 	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache tren trang chu Spring/snakeyaml-1.17.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache tren trang chu Spring/spring-boot-starter-logging-1.4.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tnguyen443/Desktop/Daito/Spring Library/Lib danh cho cache tren trang chu Spring/log4j-over-slf4j-1.7.21.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
