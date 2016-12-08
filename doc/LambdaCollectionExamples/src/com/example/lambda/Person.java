@@ -1,13 +1,16 @@
-package com.lambda;
+package com.example.lambda;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.Map;
+import java.util.HashMap;
+
 
 /**
  * @author MikeW
  */
-public class Person2 {
+public class Person {
   private String givenName;
   private String surName;
   private int age;
@@ -15,6 +18,7 @@ public class Person2 {
   private String eMail;
   private String phone;
   private String address;
+
   
   public static class Builder{
     
@@ -26,51 +30,54 @@ public class Person2 {
     private String phone = "";
     private String address = "";
        
-    public Person2.Builder givenName(String givenName){
+    public Person.Builder givenName(String givenName){
       this.givenName = givenName;
       return this;
     }
     
-    public Person2.Builder surName(String surName){
+    public Person.Builder surName(String surName){
       this.surName = surName;
       return this;
     }
     
-    public Person2.Builder age (int val){
+    public Person.Builder age (int val){
       age = val;
       return this;
     }
     
-    public Person2.Builder gender(Gender val){
+    public Person.Builder gender(Gender val){
       gender = val;
       return this;
     }
     
-    public Person2.Builder email(String val){
+    public Person.Builder email(String val){
       eMail = val;
       return this;
     }
     
-    public Person2.Builder phoneNumber(String val){
+    public Person.Builder phoneNumber(String val){
       phone = val;
       return this;
     }
     
-    public Person2.Builder address(String val){
+    public Person.Builder address(String val){
       address = val;
       return this;
     }
     
-    public Person2 build(){
-      return new Person2(this);
+    public Person build(){
+      return new Person(this);
     }
   }
-    
-  private Person2(){
+  
+  
+  
+  private Person(){
     super();
   }
     
-  private Person2(Person2.Builder builder){
+  private Person(Person.Builder builder){
+    
     givenName = builder.givenName;
     surName = builder.surName;
     age = builder.age;
@@ -78,7 +85,6 @@ public class Person2 {
     eMail = builder.eMail;
     phone = builder.phone;
     address = builder.address;
-        
   }
   
   public String getGivenName(){
@@ -120,11 +126,11 @@ public class Person2 {
                 );
   } 
   
-  public String printCustom(Function <Person2, String> f){
+  public String printCustom(Function <Person, String> f){
       return f.apply(this);
   }
    
-  // Ở đây k cần define vì cái này sẽ được define luôn trong hàm main
+  
   public void printWesternName(){
   
     System.out.println("\nName: " + this.getGivenName() + " " + this.getSurName() + "\n" +
@@ -134,7 +140,7 @@ public class Person2 {
              "Address: " + this.getAddress());
   }
 
-  // Ở đây k cần define vì cái này sẽ được define luôn trong hàm main  
+    
   public void printEasternName(){
       
     System.out.println("\nName: " + this.getSurName() + " " + this.getGivenName() + "\n" +
@@ -145,17 +151,16 @@ public class Person2 {
   }
     
 
-  
   @Override
   public String toString(){
     return "Name: " + givenName + " " + surName + "\n" + "Age: " + age + "  Gender: " + gender + "\n" + "eMail: " + eMail + "\n";
   } 
 
-  public static List<Person2> createShortList(){
-    List<Person2> people = new ArrayList<>();
+  public static List<Person> createShortList(){
+    List<Person> people = new ArrayList<>();
     
     people.add(
-      new Person2.Builder()
+      new Person.Builder()
             .givenName("Bob")
             .surName("Baker")
             .age(21)
@@ -167,7 +172,7 @@ public class Person2 {
       );
     
     people.add(
-      new Person2.Builder()
+      new Person.Builder()
             .givenName("Jane")
             .surName("Doe")
             .age(25)
@@ -179,7 +184,7 @@ public class Person2 {
       );
     
     people.add(
-      new Person2.Builder()
+      new Person.Builder()
             .givenName("John")
             .surName("Doe")
             .age(25)
@@ -191,7 +196,7 @@ public class Person2 {
     );
     
     people.add(
-      new Person2.Builder()
+      new Person.Builder()
             .givenName("James")
             .surName("Johnson")
             .age(45)
@@ -203,7 +208,7 @@ public class Person2 {
     );
     
     people.add(
-      new Person2.Builder()
+      new Person.Builder()
             .givenName("Joe")
             .surName("Bailey")
             .age(67)
@@ -215,7 +220,7 @@ public class Person2 {
     );
     
     people.add(
-      new Person2.Builder()
+      new Person.Builder()
             .givenName("Phil")
             .surName("Smith")
             .age(55)
@@ -227,7 +232,7 @@ public class Person2 {
     );
     
     people.add(
-      new Person2.Builder()
+      new Person.Builder()
             .givenName("Betty")
             .surName("Jones")
             .age(85)
