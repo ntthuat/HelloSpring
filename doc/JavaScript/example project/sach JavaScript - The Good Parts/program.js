@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // Object Literals
 var stooge = {
 	"first-name" : "Jerome",
@@ -76,7 +75,6 @@ var myObject = function(){
 		}
 	};
 }();
-=======
 function volume( l, w, h ) {
   return l * w * h;
 }
@@ -84,4 +82,4 @@ function volume( l, w, h ) {
 var curried = curry( volume );
 
 curried( 1 )( 2 )( 3 );
->>>>>>> origin/master
+document.writeln('Hello, \u0045, world!');
