@@ -1,4 +1,4 @@
-package JdbcZero.com;
+package com.JdbcZero;
 
 /**
  * Hello world!

@@ -1,4 +1,4 @@
-package JdbcZero.com;
+package com.JdbcZero;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
