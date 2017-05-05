@@ -15,5 +15,4 @@ public class FieldAccessible {
         /*Field field2 = myClass.getClass().getDeclaredField("theField");
         System.out.println(field2.get(myClass));*/
     }
-
 }
