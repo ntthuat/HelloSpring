@@ -6,7 +6,6 @@ package com.jdbczero.core.constant;
  * 
  * @author tnguyen443
  * @version 05/05/2017
- *
  */
 public enum StatisticLevel {
 	/**
