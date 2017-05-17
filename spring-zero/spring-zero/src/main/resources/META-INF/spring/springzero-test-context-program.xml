@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+	<!-- <import resource="classpath:/spring/qre-test-core-context.xml"/> -->
+	<!-- <import resource="qre-test-infrastructure-init-db.xml"/> -->
+	<!-- The programManager will require the following beans
+		1) programClassResolver
+		2) programInvoker
+		3) programFinalizer
+		4) optionally 1 or more proramInitializers -->
+	<bean id="programManager" class="com.springzero.lang.support.ProgramManager">		
+		<!-- <property name="classResolver" ref="programClassResolver"/>
+		<property name="programInvoker" ref="programInvoker"/> -->
+	</bean>
+	 
+<!-- 	<bean id="programClassResolver" class="com.csc.qre.lang.support.impl.ClassResolverImpl">
+		<property name="locations" value="${qre.core.lang.support.program.mappings}"/>
+	</bean>
+	
+	
+	<bean id="programInitializer1" class="com.csc.qre.lang.support.impl.Test1ProgramInitializerImpl"/>
+	<bean id="programInitializer2" class="com.csc.qre.lang.support.impl.Test2ProgramInitializerImpl"/>
+	
+	<bean id="programInvoker" class="com.csc.qre.lang.support.impl.ProgramInvokerImpl">		
+	</bean>
+	
+	<bean id="programFinalizer" class="com.csc.qre.lang.support.impl.ProgramFinalizerImpl"/> -->
+	
+</beans>
