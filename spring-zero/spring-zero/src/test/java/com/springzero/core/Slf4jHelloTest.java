@@ -8,7 +8,8 @@ import com.springzero.core.Slf4jHello;
 /**
  * Class này dùng để test cho class Slf4jHello
  * 
- * @author tnguyen443
+ * @author Thuat T Nguyen
+ * @version 05/23/2017
  *
  */
 public class Slf4jHelloTest {
