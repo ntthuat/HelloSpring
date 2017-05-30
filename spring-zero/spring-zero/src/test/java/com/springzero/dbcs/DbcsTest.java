@@ -56,6 +56,10 @@ public class DbcsTest {
 		assertEquals("aðéÌRT[gÍÅÅµ½", str);
 		String str2 = DbcsFunctions.convertCharset(str, Charset.forName("ISO-8859-1"), Charset.forName("windows-31j"));
 		assertEquals("a昨夜のコンサートは最高でした", str2);
+		
+		String str3 = "昨";
+		byte[] b = str3.getBytes();
+		String hex = new String(Hex.encodeHex(b));
 	}
 	
 	@Test
@@ -81,6 +85,15 @@ public class DbcsTest {
 	
 	/**
 	 * Method này dùng để test character 240 trong bảng mã ASCII.<br>
+	 * <pre>
+	 * Output characters in range: 240
+	 * Unicode Number (int): 240
+	 * Unicode Number (hex): f0
+	 * Raw Hex: c3b0
+	 * Decimal array: [-61, -80]
+	 * Binary array: [1100 0011, 1011 0000]
+	 * Character: ð
+	 * </pre>
 	 * Tham khảo: http://dev.networkerror.org/utf8/
 	 */
 	@Test
@@ -101,6 +114,46 @@ public class DbcsTest {
 		byte[] b = str.getBytes();
 		assertEquals(-61, b[0]); // -61 nghĩa là 1100 0011
 		assertEquals(-80, b[1]); // -80 nghĩa là 1011 0000
+	}
+	
+	/**
+	 * Method này dùng để test character 15112361 trong UTF-8.<br>
+	 * <pre>
+	 * Output characters in range: 26152
+	 * Unicode Number (int): 26152
+	 * Unicode Number (hex): 6628
+	 * Raw Hex: E698A8
+	 * Decimal array: [-26, -104, -88]
+	 * Binary array: [1110 0110, 1001 1000, 1010 1000]
+	 * Character: 昨
+	 * </pre>
+	 * Tham khảo: http://dev.networkerror.org/utf8/
+	 */
+	@Test
+	public void testEncode26152(){
+		char c = '昨';
+		// Unicode Number (int)
+		assertEquals(26152, (int)c);
+		
+		// Unicode Number (hex)
+		assertEquals("6628", Integer.toHexString((int)c));
+		
+		
+		String str = String.valueOf(c);
+		// Raw Hex
+		assertEquals("e698a8", new String(Hex.encodeHex(str.getBytes())));
+		
+		byte[] b = str.getBytes();
+		// Binary array
+		assertEquals(-26, b[0]);
+		assertEquals(-104, b[1]);
+		assertEquals(-88, b[2]);
+		
+		String fromDbcs = DbcsFunctions.fromDbcs(str);
+		String dbcs1 = "";
+		String dbcs2 = "ð";
+		System.out.println( new String(Hex.encodeHex(dbcs1.getBytes())));
+		System.out.println( new String(Hex.encodeHex(dbcs2.getBytes())));
 	}
 	
 	@Test
