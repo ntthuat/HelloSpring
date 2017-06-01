@@ -1,0 +1,69 @@
+------------------------------------------------------------------------------------------
+-----BJB120R-----
+move(201604, bjarrl6.bja21d);
+bjarrlfDatabaseFile.setLower(bjarrl6.bja21d);
+ 
+bjarrlfDatabaseFile.readEqual(null, indArea.get(IND01), bjarrl6.bja21d);
+if (indArea.isOn(IND01)) {
+                moveLeft(HIVALUES, wgky2x);
+}
+ 
+while (indArea.isOff(IND01)) {
+                moveLeft(wgky1x, wkky1x);
+                
+                while (isEQ(wgky1x, wkky1x)) {
+                                moveLeft(wgky2x, wkky2x);
+                                bjw16p.clear();
+                                moveLeft(bjarrl6, bjw16p);
+                                
+                                while (isEQ(wgky2x, wkky2x)) {
+                                                ww114a.add(bjarrl6.bja14a);   //合計
+                                                ww115a.add(bjarrl6.bja15a);   //正味
+                                                ww117a.add(bjarrl6.bja17a);   //合計
+                                                ww140a.add(bjarrl6.bja40a);   //合計
+                                                ww214a.add(bjarrl6.bja14a);   //合計
+                                                ww215a.add(bjarrl6.bja15a);   //正味
+                                                ww217a.add(bjarrl6.bja17a);   //合計
+                                                ww240a.add(bjarrl6.bja40a);   //合計
+                                                
+                                                bjarrlfDatabaseFile.readEqual(null, indArea.get(IND01), bjarrl6.bja21d);
+                                                if (indArea.isOn(IND01)) {
+                                                                moveLeft(HIVALUES, wgky2x);
+                                                }
+                                }
+                                
+                                ccbcmlaDatabaseFile.setLower(atWkafn, atWkbec);
+                                ccbcmlaDatabaseFile.readEqual(null, indArea.get(IND03), atWkafn, atWkbec);
+                                while (isEQ(indArea.get(IND03), ZERO)) {
+                                                bjw16p.bw603a.add(ccbcmla.ccb14a);   //発注総額
+                                                ccbcmlaDatabaseFile.readEqual(null, indArea.get(IND03), atWkafn, atWkbec);
+                                }
+                                moveLeft(bjw16p.bw602c, bjarrl6.bja32c);
+                                bjarrl6DatabaseFile.setLower(bjarrl6.bja32c, atWkafn, atWkbec);
+                                bjarrl6DatabaseFile.readEqual(null, indArea.get(IND04), bjarrl6.bja32c, atWkafn, atWkbec);
+                                while (isEQ(indArea.get(IND04), ZERO)) {
+                                                if (isNE(bjarrl6.bja21d, ZERO)) {
+                                                                bjw16p.bw604a.add(bjarrl6.bja15a);   //査定総額
+                                                }
+                                                bjarrl6DatabaseFile.readEqual(null, indArea.get(IND04), bjarrl6.bja32c, atWkafn, atWkbec);
+                                }
+                                bjw16p is updated
+                                bjw16pDatabaseFile.write();
+                }
+                
+                bjerhl0DatabaseFile.chain(indArea.get(IND02), null, atWkafn);
+                if (indArea.isOff(IND02)) {
+                                bjerhl0DatabaseFile.update();
+                }
+}
+                
+hash0300();
+===========================================================================================================
+ 
+select * from HDDDBF.bjarrp where BJA21D like '201603%';
+select * from HDDDBF.bjarrp where BJA21D like '201603%';
+select * from outdata.bjerhp where bje05n like 'BJB120R%' order by bje03d desc;
+select * from (select bje03d, count(1) from outdata.bjerhp where bje05n like 'BJB120R%' group by bje03d) aaa order by bje03d desc; --107455
+select * from (select bje03d, count(1) from HDDDBF.bjerhp where bje05n like 'BJB120R%' group by bje03d) aaa order by bje03d desc; --3000
+select * from (select bje03d, count(1) from s_HDDDBF.bjerhp where bje05n like 'BJB120R%' group by bje03d) aaa order by bje03d desc; --3000
+select * from HDDDBF.bjerhp where bje05n like 'BJB120R%';
