@@ -23,19 +23,13 @@ public class BeanTest {
 	
 	@Test
 	public void testAppContext2() {
-		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("classpath:META-INF/spring/spring-config-datasource.xml");
-		context.close();
-	}
-
-	@Test
-	public void testAppContext3() {
-		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("classpath:META-INF/spring/transaction-cfg.xml");
+		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("classpath:META-INF/spring/bean-locations-using-hql.xml");
 		context.close();
 	}
 	
 	@Test
-	public void testAppContext4() {
-		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("classpath:META-INF/spring/dao-cfg.xml");
+	public void testAppContext3() {
+		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("classpath:hibernate/Employee.hbm.xml");
 		context.close();
 	}
 	

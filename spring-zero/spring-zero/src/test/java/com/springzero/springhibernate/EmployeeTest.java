@@ -15,10 +15,20 @@ public class EmployeeTest {
 	@Test
 	public void test(){
 		ApplicationContext appContext =
-		    	  new ClassPathXmlApplicationContext("classpath:META-INF/spring/dao-cfg.xml");
+		    	  new ClassPathXmlApplicationContext("classpath:META-INF/spring/bean-locations-using-hql.xml");
 	
-		EmployeeDaoImpl empl = (EmployeeDaoImpl)appContext.getBean("employeeDao");
+		EmployeeUsingHqlDaoImpl empl = (EmployeeUsingHqlDaoImpl)appContext.getBean("employeeUsingHqlDao");
 		List<Employee> e = empl.listEmployee();
+		System.out.println("end");
+	}
+	
+	@Test
+	public void test2(){
+		ApplicationContext appContext =
+		    	  new ClassPathXmlApplicationContext("classpath:META-INF/spring/bean-locations-using-hql.xml");
+	
+		EmployeeUsingHqlDaoImpl empl = (EmployeeUsingHqlDaoImpl)appContext.getBean("employeeUsingHqlDao");
+		Integer iii = empl.getMaxDeptId();
 		System.out.println("end");
 	}
 }
