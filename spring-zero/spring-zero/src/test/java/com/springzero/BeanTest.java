@@ -21,6 +21,24 @@ public class BeanTest {
 		context.close();
 	}
 	
+	@Test
+	public void testAppContext2() {
+		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("classpath:META-INF/spring/spring-config-datasource.xml");
+		context.close();
+	}
+
+	@Test
+	public void testAppContext3() {
+		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("classpath:META-INF/spring/transaction-cfg.xml");
+		context.close();
+	}
+	
+	@Test
+	public void testAppContext4() {
+		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("classpath:META-INF/spring/dao-cfg.xml");
+		context.close();
+	}
+	
 	/**
      * Chạy file này mà junit test xanh là ok, nghĩa là config springzero-test-context-program.xml không có lỗi compile
      */
