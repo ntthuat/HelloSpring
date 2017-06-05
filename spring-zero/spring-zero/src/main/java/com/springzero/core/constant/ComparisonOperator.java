@@ -34,10 +34,8 @@ public enum ComparisonOperator {
 	 * This Constructor is causing cyclic dependency which is resulting in
 	 * java.lang.ExceptionInInitializerError
 	 * 
-	 * @param rendered
-	 *            rendered
-	 * @param negated
-	 *            negated
+	 * @param rendered rendered
+	 * @param negated negated
 	 */
 	private ComparisonOperator(final String rendered, final ComparisonOperator negated) {
 		this.rendered = rendered;
@@ -48,10 +46,8 @@ public enum ComparisonOperator {
 	/**
 	 * Constructor
 	 * 
-	 * @param rendered
-	 *            rendered
-	 * @param strNegated
-	 *            strNegated
+	 * @param rendered rendered
+	 * @param strNegated strNegated
 	 */
 	private ComparisonOperator(final String rendered, final String strNegated) {
 		this.rendered = rendered;

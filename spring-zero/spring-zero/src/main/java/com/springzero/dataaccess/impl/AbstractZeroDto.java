@@ -1,7 +1,5 @@
 package com.springzero.dataaccess.impl;
 
-import org.apache.log4j.spi.LoggerFactory;
-
 import com.springzero.dataaccess.ZeroDto;
 
 /**

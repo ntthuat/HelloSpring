@@ -2,9 +2,9 @@ package com.springzero.lang;
 
 import org.junit.Test;
 
-import com.springzero.dao.EmployeeDao;
-import com.springzero.dao.EmployeeDaoImpl;
-import com.springzero.entity.EmployeeDto;
+import com.springzero.springjdbc.EmployeeDao;
+import com.springzero.springjdbc.EmployeeDaoImpl;
+import com.springzero.springjdbc.EmployeeDto;
 
 import junit.framework.Assert;
 

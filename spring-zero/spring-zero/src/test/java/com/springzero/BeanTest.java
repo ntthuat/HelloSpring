@@ -17,7 +17,7 @@ public class BeanTest {
      */
 	@Test
 	public void testAppContext() {
-		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("classpath:META-INF/spring/appContext.xml");
+		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("classpath:META-INF/spring/bean-dao-jdbc.xml");
 		context.close();
 	}
 	
