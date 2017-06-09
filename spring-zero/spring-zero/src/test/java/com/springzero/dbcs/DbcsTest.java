@@ -4,9 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.lang.Character.UnicodeScript;
 import java.nio.charset.Charset;
-import java.util.stream.Collector.Characteristics;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
@@ -114,6 +112,24 @@ public class DbcsTest {
 		byte[] b = str.getBytes();
 		assertEquals(-61, b[0]); // -61 nghĩa là 1100 0011
 		assertEquals(-80, b[1]); // -80 nghĩa là 1011 0000
+	}
+	
+	/**
+	 * Method này dùng để test character 127 trong bảng mã ASCII.<br>
+	 * <pre>
+	 * Output characters in range: 127
+	 * Unicode Number (int): 127
+	 * Unicode Number (hex): 7f
+	 * Raw Hex: c281
+	 * Character: DEL
+	 * </pre>
+	 * Tham khảo: http://dev.networkerror.org/utf8/
+	 */
+	@Test
+	public void testEncodeC281() throws DecoderException{
+		String str = "c281";
+		String resultApache = new String(Hex.decodeHex(str.toCharArray()));
+		System.out.println(resultApache);
 	}
 	
 	/**

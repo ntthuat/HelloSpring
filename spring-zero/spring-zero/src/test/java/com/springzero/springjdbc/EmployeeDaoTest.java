@@ -23,8 +23,6 @@ public class EmployeeDaoTest {
 	public void testEmployeeJdbc() {
 		ClassPathXmlApplicationContext appContext = new ClassPathXmlApplicationContext("classpath:META-INF/spring/bean-dao-jdbc.xml");
 		EmployeeDao employeeDao = appContext.getBean("employeeDao", EmployeeDaoImpl.class);
-		DataAccessBeans a = appContext.getBean("dataAccessBeans", DataAccessBeans.class);
-		a.testBean();
 		EmployeeDto employeeDto = employeeDao.getEmployee(1);
 		assertEquals(1, employeeDto.getId());
 		assertEquals("Robert", employeeDto.getName());

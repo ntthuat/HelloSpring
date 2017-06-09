@@ -22,6 +22,12 @@ public class BeanTest {
 	}
 	
 	@Test
+	public void testAppContext1() {
+		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("classpath:META-INF/spring/bean-dataaccess-application.xml");
+		context.close();
+	}
+	
+	@Test
 	public void testAppContext2() {
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("classpath:META-INF/spring/bean-locations-using-hql.xml");
 		context.close();
