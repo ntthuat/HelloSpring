@@ -1,11 +1,20 @@
 package com.springzero.hackerrank;
 
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Algorithms {
 
@@ -228,31 +237,225 @@ public class Algorithms {
 		return sum;
 	}
 	
-	public static void main(String[] args) {
+	/**
+	 * https://www.hackerrank.com/challenges/kangaroo
+	 */
+	public static String kangaroo(int x1, int v1, int x2, int v2){
+		double d = (double)(x1-x2)/(v2-v1);
+		String text = Double.toString(Math.abs(d));
+		int integerPlaces = text.indexOf('.');
+		text = text.substring(integerPlaces+1);
+		if (d>0 && text.equals("0")) {
+			return "YES";
+		}
+		return "NO";
+    }
+	
+	/**
+	 * Tìm ước số chung lớn nhất (greatest common divisor).
+	 */
+	private static int gcdThing(int a, int b) {
+	    BigInteger b1 = BigInteger.valueOf(a); //import java.math.BigInteger;
+	    BigInteger b2 = BigInteger.valueOf(b);
+	    BigInteger gcd = b1.gcd(b2);
+	    return gcd.intValue();
+	}
+	
+	/**
+	 * https://www.hackerrank.com/challenges/between-two-sets
+	 */
+	public static int betweenTwoSets(int[] a, int[] b){
+		int lcm = getLeastCommonMultiple(a);
+		int gcd = getGreatestCommonDivisor(b);
+		List<Integer> listCm = getListCommonMultiple(gcd);
+		bubbleSort(b);
+		int count = 0;
+		int i = 1;
+		int numberCount = lcm*i;
+		while (numberCount<b[0]) {
+			numberCount = lcm*i;
+			for (int j = 0; j < listCm.size(); j++) {
+				if (numberCount == listCm.get(j)) {
+					count++;
+					break;
+				}
+			}
+			i++;
+		}
+		return count;
+	}
+	
+	/*public static void main(String[] args) {
 		
-		/*Scanner in = new Scanner(System.in);
+		Scanner in = new Scanner(System.in);
 		int n = in.nextInt();
 		long[] ar = new long[n];
 		for (int ar_i = 0; ar_i < n; ar_i++) {
 			ar[ar_i] = in.nextLong();
 		}
 		long result = aVeryBigSum(n, ar);
-		System.out.println(result);*/
-		int[] array1 ={5, 4,10, 3, 6, 1};
-		int[] array2 ={5, 4,2, 3, 2, 1};
-		int sum =  twinArrays(array1,array2);
-		System.out.println(sum);
-		/*Scanner in = new Scanner(System.in);
-		int n = in.nextInt();
-		long[][] ar = new long[n][n];
-		for (int ar_i = 0; ar_i < n; ar_i++) {
-			for (int ar_j = 0; ar_j < n; ar_j++) {
-				ar[ar_i][ar_j] = in.nextLong();
+		System.out.println(result);
+	}*/
+	
+	/**
+	 * https://www.hackerrank.com/contests/w33/challenges/transform-to-palindrome
+	 */
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+		int k = 4;
+		int[] array1 = new int[k];
+		int[] array2 = new int[k];
+		Map<Integer, Set> map = new HashMap<>();
+		Set<Integer> set = new HashSet<>();
+		for(int a0 = 0; a0 < k; a0++){
+			int x = in.nextInt();
+            int y = in.nextInt();
+            if (x<y) {
+            	array1[a0] = x;
+            	array2[a0] = y;
+			} else {
+				array1[a0] = y;
+            	array2[a0] = x;
+			}
+            set.add(x);
+            set.add(y);
+            //addValueToMap(map,x,y);
+		}
+		bubbleSort2Array(array1,array2);
+		System.out.println(set.size());
+		int mapSize = 0;
+		
+		do {
+			for (int i = 0; i < k; i++) {
+				addValueToMap(map,array1[i],array2[i]);
+			}
+			for (Integer key: map.keySet()) {
+				Set<Integer> s = map.get(key);
+				mapSize += s.size();
+			}
+		} while (mapSize>set.size());
+		System.out.println(mapSize);
+		/*map = transform(map,set);*/
+		int[] a = {1, 4, 5, 7, 9, 8, 1, 3, 10, 4, 5, 10, 2, 7, 8};
+		for (int i = 0; i < a.length; i++) {
+			for (Integer key: map.keySet()) {
+				Set<Integer> s = map.get(key);
+				for (Integer integer : s) {
+					if (a[i] == integer) {
+						a[i] = key;
+					}
+				}
+				
 			}
 		}
-		long result = diagonalDifference(n, ar);
-		System.out.println(result);*/
+		int result = lengthLongestPalindromicSubsequence(a);
+		System.out.println(result);
 	}
+	
+	public static void addValueToMap(Map<Integer, Set> map, int x, int y){
+		boolean hasExist = false;
+		for (Integer key: map.keySet()) { //map.get(key));
+        	Set<Integer> s = map.get(key);
+        	for (Integer integer : s) {
+    			if (x == integer || y == integer) {
+    				s.add(x);
+    				s.add(y);
+    				hasExist = true;
+    				break;
+				}
+    		}
+        	if (hasExist) {
+        		break;
+			}
+		}
+		if (!hasExist) {
+        	Set<Integer> newSet = new HashSet<>();
+            newSet.add(x);
+            newSet.add(y);
+            map.put(x, newSet);
+		}
+	}
+	
+	/**
+	 * https://www.hackerrank.com/contests/w33/challenges/transform-to-palindrome
+	 */
+	public static Map transform(Map map, Set set){
+		return null;
+	}
+	
+	/**
+	 * Sắp xếp mảng 1 theo thứ tự từ nhỏ đến lớn, còn mảng 2 là bị ảnh hưởng theo
+	 */
+	public static void bubbleSort2Array(int[] a, int[] b){
+		int n = a.length;
+	    int temp = 0;
+	    int temp2 = 0;
+
+	    for (int i = 0; i < n; i++) {
+	        for (int j = 1; j < (n - i); j++) {
+
+	            if (a[j - 1] > a[j]) {
+	                temp = a[j - 1];
+	                temp2 = b[j - 1];
+	                
+	                a[j - 1] = a[j];
+	                b[j - 1] = b[j];
+	                
+	                a[j] = temp;
+	                b[j] = temp2;
+	            }
+
+	        }
+	    }
+	}
+	
+	/**
+	 * https://www.youtube.com/watch?v=V-sEwsca1ak
+	 */
+	public static int lengthLongestPalindromicSubsequence(final int[] input){
+		final int n = input.length;
+		int[][] T = new int[n][n];
+		for (int i = 0; i < n; i++) {
+			T[i][i] = 1;
+		}
+		int i = 0;
+		int start = 1;
+		int j = start;
+		start++;
+		while (true) {
+			if (j == n) {
+				i = 0;
+				j = start;
+				if (j==n) {
+					break;
+				}
+				start++;
+			}
+			if (input[i] == input[j]) {
+				T[i][j] = T[i + 1][j - 1] + 2;
+			} else {
+				T[i][j] = Math.max(T[i + 1][j], T[i][j - 1]);
+			}
+			i++;
+			j++;
+		}
+		return T[0][n - 1];
+	}
+	
+	/**
+	 * https://www.hackerrank.com/contests/w33/challenges/pattern-count
+	 */
+	public static int patternCount(String s){
+		int count = 0;
+		Pattern pattern = Pattern.compile("10+1"); //import java.util.regex.Pattern;
+		Matcher matcher = pattern.matcher(s); //import java.util.regex.Matcher;
+		while (matcher.find()) {
+			count++;
+			s = "1" + s.substring(matcher.end());
+			matcher = pattern.matcher(s);
+		}
+		return count;
+    }
 	
 	private static int[] getTwoLowestKeepIndex(int[] array) {
 	    int[] lowestValues = new int[2];
@@ -310,5 +513,62 @@ public class Algorithms {
 
 	        }
 	    }
+	}
+	
+	/**
+	 * Tìm ước số chung lớn nhất của nhiều số
+	 */
+	public static int getGreatestCommonDivisor(int[] input)
+	{
+		int result = input[0];
+	    for(int i = 1; i < input.length; i++) result = getGreatestCommonDivisor(result, input[i]);
+	    return result;
+	}
+	
+	/**
+	 * Tìm ước số chung lớn nhất của 2 ô
+	 */
+	public static int getGreatestCommonDivisor(int a, int b)
+	{
+	    while (b > 0)
+	    {
+	    	int temp = b;
+	        b = a % b; // % is remainder
+	        a = temp;
+	    }
+	    return a;
+	}
+	
+	/**
+	 * Tìm tất cả ước số của 1 số.
+	 */
+	public static List<Integer> getListCommonMultiple(int input){
+		List<Integer> list = new ArrayList<>(); //import java.util.List;
+											 //import java.util.ArrayList;
+		for (int i = 1; i <= input / 2; i++) {
+		    if (input % i == 0) {
+		        list.add(i);
+		    }
+		}
+		list.add(input);
+		return list;
+	}
+	
+	/**
+	 * Tìm bội số chung nhỏ nhất của 2 số (least common multiple)
+	 */
+	public static int getLeastCommonMultiple(int a, int b)
+	{
+	    return a * (b / getGreatestCommonDivisor(a, b));
+	}
+
+	/**
+	 * Tìm bội số chung nhỏ nhất của nhiều số (least common mutiple)
+	 */
+	public static int getLeastCommonMultiple(int[] input)
+	{
+		int result = input[0];
+	    for(int i = 1; i < input.length; i++) result = getLeastCommonMultiple(result, input[i]);
+	    return result;
 	}
 }
