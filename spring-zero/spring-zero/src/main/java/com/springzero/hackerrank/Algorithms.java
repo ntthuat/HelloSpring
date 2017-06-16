@@ -16,6 +16,12 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Class này dùng để viết các method for hackerrank.com
+ * 
+ * @author Thuat T Nguyen
+ * @version 06/13/2017
+ */
 public class Algorithms {
 
 	/**
@@ -302,40 +308,19 @@ public class Algorithms {
 	 */
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
-		int k = 4;
-		int[] array1 = new int[k];
-		int[] array2 = new int[k];
+		int k = 3;
 		Map<Integer, Set> map = new HashMap<>();
-		Set<Integer> set = new HashSet<>();
-		for(int a0 = 0; a0 < k; a0++){
+		List<Integer> list1 = new ArrayList<>();
+		List<Integer> list2 = new ArrayList<>();
+		for (int a0 = 0; a0 < k; a0++) {
 			int x = in.nextInt();
-            int y = in.nextInt();
-            if (x<y) {
-            	array1[a0] = x;
-            	array2[a0] = y;
-			} else {
-				array1[a0] = y;
-            	array2[a0] = x;
-			}
-            set.add(x);
-            set.add(y);
-            //addValueToMap(map,x,y);
+			int y = in.nextInt();
+			list1.add(x);
+			list2.add(y);
 		}
-		bubbleSort2Array(array1,array2);
-		System.out.println(set.size());
-		int mapSize = 0;
-		
-		do {
-			for (int i = 0; i < k; i++) {
-				addValueToMap(map,array1[i],array2[i]);
-			}
-			for (Integer key: map.keySet()) {
-				Set<Integer> s = map.get(key);
-				mapSize += s.size();
-			}
-		} while (mapSize>set.size());
-		System.out.println(mapSize);
-		/*map = transform(map,set);*/
+		while (list1.size()>0) {
+			addValueFrom2ListToMap(map, list1, list2);
+		}
 		int[] a = {1, 4, 5, 7, 9, 8, 1, 3, 10, 4, 5, 10, 2, 7, 8};
 		for (int i = 0; i < a.length; i++) {
 			for (Integer key: map.keySet()) {
@@ -348,39 +333,36 @@ public class Algorithms {
 				
 			}
 		}
-		int result = lengthLongestPalindromicSubsequence(a);
+		int result = findPalindrome(a);
 		System.out.println(result);
 	}
 	
-	public static void addValueToMap(Map<Integer, Set> map, int x, int y){
-		boolean hasExist = false;
-		for (Integer key: map.keySet()) { //map.get(key));
-        	Set<Integer> s = map.get(key);
-        	for (Integer integer : s) {
-    			if (x == integer || y == integer) {
-    				s.add(x);
-    				s.add(y);
-    				hasExist = true;
-    				break;
+	public static void addValueFrom2ListToMap(Map<Integer, Set> map, List<Integer> list1, List<Integer> list2) {
+		// add 2 first value from 2 list to map, then remove them.
+		Set<Integer> set = new HashSet<>();
+		final int key = list1.get(0);
+		set.add(list1.get(0));
+		set.add(list2.get(0));
+		map.put(key, set);
+		list1.remove(0);
+		list2.remove(0);
+
+		// add more values from 2 list to map if found
+		boolean hasFound = true;
+		loop: while (hasFound) {
+			for (Integer integer : set) {
+				for (int i = 0; i < list1.size(); i++) {
+					if (list1.get(i) == integer || list2.get(i) == integer) {
+						set.add(list1.get(i));
+						set.add(list2.get(i));
+						list1.remove(i);
+						list2.remove(i);
+						continue loop;
+					}
 				}
-    		}
-        	if (hasExist) {
-        		break;
 			}
+			hasFound = false;
 		}
-		if (!hasExist) {
-        	Set<Integer> newSet = new HashSet<>();
-            newSet.add(x);
-            newSet.add(y);
-            map.put(x, newSet);
-		}
-	}
-	
-	/**
-	 * https://www.hackerrank.com/contests/w33/challenges/transform-to-palindrome
-	 */
-	public static Map transform(Map map, Set set){
-		return null;
 	}
 	
 	/**
@@ -440,6 +422,39 @@ public class Algorithms {
 			j++;
 		}
 		return T[0][n - 1];
+	}
+	
+	public static int findPalindrome(final int[] input) {
+		int[][] LP = new int[input.length][input.length];
+		// LP[i][j] - length of palindrome from ith index to jth index
+		// all the characters in the string are palindrome by itself of length
+		// 1.
+		// So all LP[i][i] = 1
+		for (int i = 0; i < input.length; i++) {
+			LP[i][i] = 1;
+		}
+		for (int sublen = 2; sublen <= input.length; sublen++) {
+			for (int i = 0; i <= LP.length - sublen; i++) {
+				int j = i + sublen - 1;
+				if (input[i] == input[j] && sublen == 2) {
+					LP[i][j] = 2;
+				} else if (input[i] == input[j]) {
+					LP[i][j] = LP[i + 1][j - 1] + 2;
+				} else {
+					LP[i][j] = Math.max(LP[i + 1][j], LP[i][j - 1]);
+				}
+			}
+		}
+		return LP[0][LP.length - 1];
+	}
+
+	public void printMatrix(int[][] LP) {
+		for (int i = 0; i < LP.length; i++) {
+			for (int j = 0; j < LP.length; j++) {
+				System.out.print("  " + LP[i][j]);
+			}
+			System.out.println("");
+		}
 	}
 	
 	/**
