@@ -35,16 +35,64 @@ public class AlgorithmsTest {
 	@Test
 	public void testAddValueFrom2ListToMap() throws FileNotFoundException {
 		File file = new File(this.workDir + File.separator + "testCase1.txt");
+		// step 1: Lấy dữ liệu cho 2 list
 		Map<Integer, Set> map = new HashMap<>();
-		Scanner sc = new Scanner(file);
+		Scanner scanner = new Scanner(file);
+		int n = scanner.nextInt();
+        int k = scanner.nextInt();
+        int m = scanner.nextInt();
 		List<Integer> list1 = new ArrayList<>();
 		List<Integer> list2 = new ArrayList<>();
-		while (sc.hasNextInt()) {
-			int x = sc.nextInt();
-			int y = sc.nextInt();
+		for(int a0 = 0; a0 < k; a0++){
+			int x = scanner.nextInt();
+			int y = scanner.nextInt();
 			list1.add(x);
 			list2.add(y);
 		}
+		// step 2: nhóm các giá trị thay thế được cho nhau thành từng nhóm riêng lẻ
+		while (list1.size()>0) {
+			Algorithms.addValueFrom2ListToMap(map, list1, list2);
+		}
+		System.out.println(map);
+		
+		// lấy giá trị cần tính toán vào 1 array
+		int[] array = new int[m];
+        for(int a_i=0; a_i < m; a_i++){
+        	array[a_i] = scanner.nextInt();
+        }
+        for (int i = 0; i < array.length; i++) {
+			for (Integer key: map.keySet()) {
+				Set<Integer> s = map.get(key);
+				for (Integer integer : s) {
+					if (array[i] == (int)integer) {
+						array[i] = (int)key;
+					}
+				}
+				
+			}
+		}
+		int result = Algorithms.lengthLongestPalindromicSubsequence(array);
+		System.out.println(result);
+	}
+	
+	@Test
+	public void testWrong() throws FileNotFoundException {
+		File file = new File(this.workDir + File.separator + "testCase2.txt");
+		// step 1: Lấy dữ liệu cho 2 list
+		Map<Integer, Set> map = new HashMap<>();
+		Scanner scanner = new Scanner(file);
+		int n = scanner.nextInt();
+        int k = scanner.nextInt();
+        int m = scanner.nextInt();
+		List<Integer> list1 = new ArrayList<>();
+		List<Integer> list2 = new ArrayList<>();
+		for(int a0 = 0; a0 < k; a0++){
+			int x = scanner.nextInt();
+			int y = scanner.nextInt();
+			list1.add(x);
+			list2.add(y);
+		}
+		// step 2: nhóm các giá trị thay thế được cho nhau thành từng nhóm riêng lẻ
 		while (list1.size()>0) {
 			Algorithms.addValueFrom2ListToMap(map, list1, list2);
 		}

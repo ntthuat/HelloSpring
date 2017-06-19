@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -291,22 +292,138 @@ public class Algorithms {
 		return count;
 	}
 	
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		
-		Scanner in = new Scanner(System.in);
+		/*Scanner in = new Scanner(System.in);
 		int n = in.nextInt();
 		long[] ar = new long[n];
 		for (int ar_i = 0; ar_i < n; ar_i++) {
 			ar[ar_i] = in.nextLong();
+		}*/
+		/*int[] s = {1, 2, 1, 3, 2 };
+		int count = birthdayChocolate(s, 3, 2);*/
+		
+		int[] s = {1, 7,7,7, 4, 4, 4, 5, 5, 5, 3};
+		int count = getWorstPopularElement(s);
+		System.out.println(count);
+	}
+	
+	/**
+	 * https://www.hackerrank.com/challenges/the-birthday-bar
+	 */
+	public static int birthdayChocolate(int[] s, int d, int m){
+		int count = 0;
+		for (int i = 0; i <= s.length-m; i++) {
+			int sum = 0;
+			for (int j = i; j <i+ m; j++) {
+				sum+= s[j];
+			}
+			if (d==sum) {
+				count++;
+			}
 		}
-		long result = aVeryBigSum(n, ar);
-		System.out.println(result);
-	}*/
+		return count;
+	}
+	
+	/**
+	 * Viết kiểu này chạy tốn performance quá.
+	 * 
+	 * https://www.hackerrank.com/challenges/migratory-birds
+	 */
+	public static int getPopularElement(int[] a)
+	{
+	  int count = 1, tempCount;
+	  int popular = a[0];
+	  int temp = 0;
+	  for (int i = 0; i < (a.length - 1); i++)
+	  {
+	    temp = a[i];
+	    tempCount = 0;
+	    for (int j = 1; j < a.length; j++)
+	    {
+	      if (temp == a[j])
+	        tempCount++;
+	    }
+	    if (tempCount > count)
+	    {
+	      popular = temp;
+	      count = tempCount;
+	    }
+	  }
+	  return popular;
+	}
+	
+	/**
+	 * https://www.hackerrank.com/challenges/migratory-birds
+	 */
+	public static int getWorstPopularElement(int[] a) {
+		Map<Integer, Integer> map = new HashMap<>();
+		for (int i = 0; i < a.length; i++) {
+			boolean key = map.containsKey(a[i]);
+			if (key) {
+				map.put(a[i], map.get(a[i])+1);
+			} else {
+				map.put(a[i], 1);
+			}
+		}
+		int min = Integer.MAX_VALUE;
+		int count = 0;
+		for (Integer key : map.keySet()) {
+			if (count==map.get(key) && min>key) {
+				min = key;
+			}
+			if (count<map.get(key)) {
+				min = key;
+				count = map.get(key);
+			}
+		}
+		return min;
+	}
+	
+	public static int divisibleSumPairs(int k, int[] array) {
+		int count = 0;
+        for (int i = 0; i < array.length-1; i++) {
+			for (int j = i+1; j < array.length; j++) {
+				if ((array[i]+array[j])%k==0) {
+					count++;
+				}
+			}
+		}
+		return count;
+    }
+	
+	/**
+	 * https://www.hackerrank.com/challenges/breaking-best-and-worst-records
+	 */
+	public static void getMaxBreakingRecords(List<Integer> list, final int number){
+		if (list.isEmpty()) {
+			list.add(number);
+			return;
+		}
+		int lastIndex = list.size()-1;
+		if (number>list.get(lastIndex)) {
+			list.add(number);
+		}
+	}
+	
+	/**
+	 * https://www.hackerrank.com/challenges/breaking-best-and-worst-records
+	 */
+	public static void getMinBreakingRecords(List<Integer> list, final int number){
+		if (list.isEmpty()) {
+			list.add(number);
+			return;
+		}
+		int lastIndex = list.size()-1;
+		if (number<list.get(lastIndex)) {
+			list.add(number);
+		}
+	}
 	
 	/**
 	 * https://www.hackerrank.com/contests/w33/challenges/transform-to-palindrome
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
 		int k = 3;
 		Map<Integer, Set> map = new HashMap<>();
@@ -335,10 +452,10 @@ public class Algorithms {
 		}
 		int result = findPalindrome(a);
 		System.out.println(result);
-	}
+	}*/
 	
-	public static void addValueFrom2ListToMap(Map<Integer, Set> map, List<Integer> list1, List<Integer> list2) {
 		// add 2 first value from 2 list to map, then remove them.
+	public static void addValueFrom2ListToMap(Map<Integer, Set> map, List<Integer> list1, List<Integer> list2) {
 		Set<Integer> set = new HashSet<>();
 		final int key = list1.get(0);
 		set.add(list1.get(0));
@@ -349,20 +466,24 @@ public class Algorithms {
 
 		// add more values from 2 list to map if found
 		boolean hasFound = true;
+		Set<Integer> tempSet = new HashSet<>();
 		loop: while (hasFound) {
 			for (Integer integer : set) {
-				for (int i = 0; i < list1.size(); i++) {
-					if (list1.get(i) == integer || list2.get(i) == integer) {
+				for (int i = list1.size()-1; i >=0; i--) {
+					if (list1.get(i) == (int)integer || list2.get(i) == (int) integer) {
 						set.add(list1.get(i));
 						set.add(list2.get(i));
 						list1.remove(i);
 						list2.remove(i);
-						continue loop;
 					}
 				}
+				tempSet.add(integer);
+				set.remove(integer);
+				continue loop;
 			}
 			hasFound = false;
 		}
+		set.addAll(tempSet);
 	}
 	
 	/**
