@@ -569,7 +569,7 @@ public class Algorithms {
 		return LP[0][LP.length - 1];
 	}
 
-	public void printMatrix(int[][] LP) {
+	public static void printMatrix(int[][] LP) {
 		for (int i = 0; i < LP.length; i++) {
 			for (int j = 0; j < LP.length; j++) {
 				System.out.print("  " + LP[i][j]);

@@ -53,7 +53,6 @@ public class AlgorithmsTest {
 		while (list1.size()>0) {
 			Algorithms.addValueFrom2ListToMap(map, list1, list2);
 		}
-		System.out.println(map);
 		
 		// lấy giá trị cần tính toán vào 1 array
 		int[] array = new int[m];
@@ -71,7 +70,7 @@ public class AlgorithmsTest {
 				
 			}
 		}
-		int result = Algorithms.lengthLongestPalindromicSubsequence(array);
+		int result = Algorithms.findPalindrome(array);
 		System.out.println(result);
 	}
 	
@@ -97,5 +96,34 @@ public class AlgorithmsTest {
 			Algorithms.addValueFrom2ListToMap(map, list1, list2);
 		}
 		System.out.println(map);
+	}
+	
+	@Test
+	public void testTransformToPalindrome() throws FileNotFoundException{
+		File file = new File(this.workDir + File.separator + "testCase2.txt");
+		Scanner scanner = new Scanner(file);
+		int n = scanner.nextInt();
+        int k = scanner.nextInt();
+        int m = scanner.nextInt();
+        TransformToPalindrome tft = new TransformToPalindrome(n+1);
+		for(int a0 = 0; a0 < k; a0++){
+			int x = scanner.nextInt();
+			int y = scanner.nextInt();
+			tft.addEdge(x, y);
+			tft.addEdge(y, x);
+		}
+		int cc = 1;
+		for (int i = 1; i <= n; i++) {
+			if (tft.mark[i]==0) {
+				tft.DFS(i,cc);
+				cc++;
+			}
+		}
+		int[] array = new int[m];
+        for(int a_i=0; a_i < m; a_i++){
+        	array[a_i] = scanner.nextInt();
+        }
+        int result = TransformToPalindrome.findPalindrome(array, tft.mark);
+        System.out.println(result);
 	}
 }
