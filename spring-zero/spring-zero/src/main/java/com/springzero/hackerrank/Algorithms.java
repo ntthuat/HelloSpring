@@ -303,9 +303,44 @@ public class Algorithms {
 		/*int[] s = {1, 2, 1, 3, 2 };
 		int count = birthdayChocolate(s, 3, 2);*/
 		
-		int[] s = {1, 7,7,7, 4, 4, 4, 5, 5, 5, 3};
-		int count = getWorstPopularElement(s);
-		System.out.println(count);
+		System.out.println(dayOfTheProgrammer(1700));
+	}
+	
+	/**
+	 * https://www.hackerrank.com/challenges/day-of-the-programmer
+	 */
+	public static String dayOfTheProgrammer(final int year){
+		if (year>1918) {
+			boolean leapYear = year%400==0 || (year%4==0&&year%100!=0);
+			if (leapYear) {
+				return "12.09."+year;
+			} else {
+				return "13.09."+year;
+			}
+		}
+		if (year<1918) {
+			boolean leapYear = year%4==0;
+			if (leapYear) {
+				return "12.09."+year;
+			} else {
+				return "13.09."+year;
+			}
+		}
+		return "26.09.1918";
+	}
+	
+	/**
+	 * https://www.hackerrank.com/challenges/bon-appetit
+	 */
+	public static int bonAppetit(int k, int b, int[] array){
+		int sum = 0;
+		for (int i = 0; i < array.length; i++) {
+			sum += array[i];
+		}
+		sum = sum - array[k];
+		int moneyEachPerson = sum/2;
+		int charge = b - moneyEachPerson;
+		return charge;
 	}
 	
 	/**
