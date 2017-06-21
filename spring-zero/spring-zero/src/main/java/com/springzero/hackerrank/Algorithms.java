@@ -1,5 +1,6 @@
 package com.springzero.hackerrank;
 
+import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -55,61 +56,6 @@ public class Algorithms {
 			sumDiagonal2 += array[i][n-i-1]; // diagonal from right to left
 		}
 		return Math.abs(sumDiagonal1-sumDiagonal2);
-	}
-	
-	/**
-	 * https://www.hackerrank.com/challenges/plus-minus
-	 */
-	private static double percentInArray(final String comparison, final int[] array){
-		final int n = array.length;
-		int count = 0;
-		for (int i = 0; i < n; i++) {
-			switch (comparison) {
-			case "plus":
-				if (array[i]>0) {
-					count++;
-				}
-				break;
-			case "minus":
-				if (array[i]<0) {
-					count++;
-				}
-				break;
-			case "zero":
-				if (array[i]==0) {
-					count++;
-				}
-				break;
-			default:
-				break;
-			}
-		}
-		final double result =(double)count/n;
-		return result;
-	}
-	
-	/**
-	 * Trả về percent số dương trong array.
-	 * https://www.hackerrank.com/challenges/plus-minus
-	 */
-	public static double percentPlusInArray(final int[] array){
-		return percentInArray("plus", array);
-	}
-	
-	/**
-	 * Trả về percent số âm trong array.
-	 * https://www.hackerrank.com/challenges/plus-minus
-	 */
-	public static double percentMinusInArray(final int[] array){
-		return percentInArray("minus", array);
-	}
-	
-	/**
-	 * Trả về percent số zero trong array.
-	 * https://www.hackerrank.com/challenges/plus-minus
-	 */
-	public static double percentZeroInArray(final int[] array){
-		return percentInArray("zero", array);
 	}
 	
 	/**
@@ -186,7 +132,6 @@ public class Algorithms {
 		try {
 			date = time12hourFormat.parse(time);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return time24hourFormat.format(date);
@@ -245,20 +190,6 @@ public class Algorithms {
 	}
 	
 	/**
-	 * https://www.hackerrank.com/challenges/kangaroo
-	 */
-	public static String kangaroo(int x1, int v1, int x2, int v2){
-		double d = (double)(x1-x2)/(v2-v1);
-		String text = Double.toString(Math.abs(d));
-		int integerPlaces = text.indexOf('.');
-		text = text.substring(integerPlaces+1);
-		if (d>0 && text.equals("0")) {
-			return "YES";
-		}
-		return "NO";
-    }
-	
-	/**
 	 * Tìm ước số chung lớn nhất (greatest common divisor).
 	 */
 	private static int gcdThing(int a, int b) {
@@ -294,71 +225,56 @@ public class Algorithms {
 	
 	public static void main(String[] args) {
 		
-		/*Scanner in = new Scanner(System.in);
-		int n = in.nextInt();
+		/*Scanner in = new Scanner(System.in);*/
+		/*int n = in.nextInt();
 		long[] ar = new long[n];
 		for (int ar_i = 0; ar_i < n; ar_i++) {
 			ar[ar_i] = in.nextLong();
 		}*/
+		/*String a = in.next();
+		System.out.println(a);*/
+		
 		/*int[] s = {1, 2, 1, 3, 2 };
 		int count = birthdayChocolate(s, 3, 2);*/
+		int[] a = {3, 1};
+		int[] b = {5, 2, 8};
+		System.out.println(electronicsShop(a,b,10));
+	}
+	
+	public static int electronicsShop(int[] array1, int[] array2, int s){
+		int max_so_far =-1;
 		
-		System.out.println(dayOfTheProgrammer(1700));
+		for (int i = 0; i < array1.length; i++) {
+			for (int j = 0; j < array2.length; j++) {
+				if (array1[i]+array2[j]<=s && max_so_far<(array1[i]+array2[j])) {
+					max_so_far = array1[i]+array2[j];
+				}
+				if (max_so_far==s) {
+					return s;
+				}
+			}
+		}
+		return max_so_far;
 	}
 	
 	/**
-	 * https://www.hackerrank.com/challenges/day-of-the-programmer
+	 * http://www.geeksforgeeks.org/?p=576
 	 */
-	public static String dayOfTheProgrammer(final int year){
-		if (year>1918) {
-			boolean leapYear = year%400==0 || (year%4==0&&year%100!=0);
-			if (leapYear) {
-				return "12.09."+year;
-			} else {
-				return "13.09."+year;
-			}
-		}
-		if (year<1918) {
-			boolean leapYear = year%4==0;
-			if (leapYear) {
-				return "12.09."+year;
-			} else {
-				return "13.09."+year;
-			}
-		}
-		return "26.09.1918";
-	}
-	
-	/**
-	 * https://www.hackerrank.com/challenges/bon-appetit
-	 */
-	public static int bonAppetit(int k, int b, int[] array){
-		int sum = 0;
-		for (int i = 0; i < array.length; i++) {
-			sum += array[i];
-		}
-		sum = sum - array[k];
-		int moneyEachPerson = sum/2;
-		int charge = b - moneyEachPerson;
-		return charge;
-	}
-	
-	/**
-	 * https://www.hackerrank.com/challenges/the-birthday-bar
-	 */
-	public static int birthdayChocolate(int[] s, int d, int m){
-		int count = 0;
-		for (int i = 0; i <= s.length-m; i++) {
-			int sum = 0;
-			for (int j = i; j <i+ m; j++) {
-				sum+= s[j];
-			}
-			if (d==sum) {
-				count++;
-			}
-		}
-		return count;
-	}
+	public static int maxSubArraySum(int a[])
+    {
+        int size = a.length;
+        int max_so_far = Integer.MIN_VALUE, max_ending_here = 0;
+ 
+        for (int i = 0; i < size; i++)
+        {
+            max_ending_here = max_ending_here + a[i];
+            if (max_so_far < max_ending_here)
+                max_so_far = max_ending_here;
+            if (max_ending_here < 0)
+                max_ending_here = 0;
+        }
+        return max_so_far;
+    }
 	
 	/**
 	 * Viết kiểu này chạy tốn performance quá.
@@ -455,41 +371,7 @@ public class Algorithms {
 		}
 	}
 	
-	/**
-	 * https://www.hackerrank.com/contests/w33/challenges/transform-to-palindrome
-	 */
-	/*public static void main(String[] args) {
-		Scanner in = new Scanner(System.in);
-		int k = 3;
-		Map<Integer, Set> map = new HashMap<>();
-		List<Integer> list1 = new ArrayList<>();
-		List<Integer> list2 = new ArrayList<>();
-		for (int a0 = 0; a0 < k; a0++) {
-			int x = in.nextInt();
-			int y = in.nextInt();
-			list1.add(x);
-			list2.add(y);
-		}
-		while (list1.size()>0) {
-			addValueFrom2ListToMap(map, list1, list2);
-		}
-		int[] a = {1, 4, 5, 7, 9, 8, 1, 3, 10, 4, 5, 10, 2, 7, 8};
-		for (int i = 0; i < a.length; i++) {
-			for (Integer key: map.keySet()) {
-				Set<Integer> s = map.get(key);
-				for (Integer integer : s) {
-					if (a[i] == integer) {
-						a[i] = key;
-					}
-				}
-				
-			}
-		}
-		int result = findPalindrome(a);
-		System.out.println(result);
-	}*/
-	
-		// add 2 first value from 2 list to map, then remove them.
+	// add 2 first value from 2 list to map, then remove them.
 	public static void addValueFrom2ListToMap(Map<Integer, Set> map, List<Integer> list1, List<Integer> list2) {
 		Set<Integer> set = new HashSet<>();
 		final int key = list1.get(0);
@@ -545,39 +427,6 @@ public class Algorithms {
 
 	        }
 	    }
-	}
-	
-	/**
-	 * https://www.youtube.com/watch?v=V-sEwsca1ak
-	 */
-	public static int lengthLongestPalindromicSubsequence(final int[] input){
-		final int n = input.length;
-		int[][] T = new int[n][n];
-		for (int i = 0; i < n; i++) {
-			T[i][i] = 1;
-		}
-		int i = 0;
-		int start = 1;
-		int j = start;
-		start++;
-		while (true) {
-			if (j == n) {
-				i = 0;
-				j = start;
-				if (j==n) {
-					break;
-				}
-				start++;
-			}
-			if (input[i] == input[j]) {
-				T[i][j] = T[i + 1][j - 1] + 2;
-			} else {
-				T[i][j] = Math.max(T[i + 1][j], T[i][j - 1]);
-			}
-			i++;
-			j++;
-		}
-		return T[0][n - 1];
 	}
 	
 	public static int findPalindrome(final int[] input) {
