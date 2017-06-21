@@ -216,4 +216,39 @@ public class AlgorithmsNoImportant {
 		}
 		return count;
 	}
+	
+	//////////////////////////////////////////////////////////////////////////
+	
+	public static int electronicsShop(int[] array1, int[] array2, int s){
+		int max_so_far =-1;
+		
+		for (int i = 0; i < array1.length; i++) {
+			for (int j = 0; j < array2.length; j++) {
+				if (array1[i]+array2[j]<=s && max_so_far<(array1[i]+array2[j])) {
+					max_so_far = array1[i]+array2[j];
+				}
+				if (max_so_far==s) {
+					return s;
+				}
+			}
+		}
+		return max_so_far;
+	}
+	
+	//////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * https://www.hackerrank.com/challenges/cats-and-a-mouse
+	 */
+	public static String TwoCatsAndAMouse(final int catA,final int catB,final int mouse){
+		final int distanceA = Math.abs(mouse-catA);
+		final int distanceB = Math.abs(mouse-catB);
+		if (distanceA==distanceB) {
+			return "Mouse C";
+		}
+		if (distanceA>distanceB) {
+			return "Cat B";
+		}
+		return "Cat A";
+	}
 }

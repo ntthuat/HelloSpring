@@ -238,23 +238,6 @@ public class Algorithms {
 		int count = birthdayChocolate(s, 3, 2);*/
 		int[] a = {3, 1};
 		int[] b = {5, 2, 8};
-		System.out.println(electronicsShop(a,b,10));
-	}
-	
-	public static int electronicsShop(int[] array1, int[] array2, int s){
-		int max_so_far =-1;
-		
-		for (int i = 0; i < array1.length; i++) {
-			for (int j = 0; j < array2.length; j++) {
-				if (array1[i]+array2[j]<=s && max_so_far<(array1[i]+array2[j])) {
-					max_so_far = array1[i]+array2[j];
-				}
-				if (max_so_far==s) {
-					return s;
-				}
-			}
-		}
-		return max_so_far;
 	}
 	
 	/**

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.core.io.support.PropertiesLoaderSupport;
+/*import org.springframework.core.io.support.PropertiesLoaderSupport;*/
 
 /**
  * This class is designed to manipulate how a transformed program can be loaded, called or unloaded. In short, it's like
@@ -19,7 +19,8 @@ import org.springframework.core.io.support.PropertiesLoaderSupport;
  * @version 05/17/2017
  *
  */
-public class ProgramManager extends PropertiesLoaderSupport implements InitializingBean, DisposableBean, ApplicationContextAware {
+// comment extends PropertiesLoaderSupport vì cái này không phù hợp với spring 4.6 mình đã tải
+public class ProgramManager /*extends PropertiesLoaderSupport*/ implements InitializingBean, DisposableBean, ApplicationContextAware {
 
 	/**
 	 * Logger declaration
