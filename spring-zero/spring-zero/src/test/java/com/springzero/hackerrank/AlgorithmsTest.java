@@ -15,7 +15,7 @@ import org.junit.Test;
 import com.springzero.hackerrank.Algorithms;
 
 /**
- * Test lgorithms
+ * Test Algorithms
  * 
  * @author Thuat T Nguyen
  * @version 06/13/2017
