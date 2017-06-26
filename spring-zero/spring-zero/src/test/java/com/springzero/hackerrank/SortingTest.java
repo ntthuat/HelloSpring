@@ -2,6 +2,10 @@ package com.springzero.hackerrank;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
 import org.junit.Before;
@@ -27,18 +31,39 @@ public class SortingTest {
 	}
 
 	@Test
-	public void testBigSorting() throws FileNotFoundException {
+	public void testBigSorting1() throws FileNotFoundException {
 		File file = new File(this.workDir + File.separator + "BigSortingTestCase1.txt");
 		Scanner in = new Scanner(file);
 		int n = in.nextInt();
+		List<String> list = new ArrayList<>();
 		String[] unsorted = new String[n];
         for(int unsorted_i=0; unsorted_i < n; unsorted_i++){
-            unsorted[unsorted_i] = in.next();
+            list.add(in.next());
         }
         // your code goes here
-        Sorting.bubbleSort(unsorted);
-        for(int unsorted_i=0; unsorted_i < n; unsorted_i++){
-            System.out.println(unsorted[unsorted_i]);
-        }
+        list.sort(new Comparator<String>() {
+        	@Override
+        	public int compare(String s1, String s2) {
+        		if (s1.length() < s2.length()) return -1;
+        		if (s1.length() > s2.length()) return 1;
+        		for (int i = 0; i < s1.length(); i++)
+                {
+        			char c1 = s1.charAt(i);
+        			char c2 = s2.charAt(i);
+        			if (c1 < c2) return -1;
+        			if (c1 > c2) return 1;
+                }
+        		return 0;
+        	}
+        });
+        for (int i = 0; i < list.size(); i++) {
+			System.out.println(list.get(i));
+		}
+	}
+	
+	@Test
+	public void testInsertionSort2(){
+		int[] array = {1, 4, 3, 5, 6, 2};
+		Sorting.insertionSort2(array);
 	}
 }
