@@ -66,4 +66,11 @@ public class SortingTest {
 		int[] array = {1, 4, 3, 5, 6, 2};
 		Sorting.insertionSort2(array);
 	}
+	
+	@Test
+	public void testQuickSort(){
+		int[] array = {0, -3, 6, 4, -10, 8, -5, 2, -7};
+		Sorting.qsort(array,0,4);
+		Sorting.printArray(array);
+	}
 }
