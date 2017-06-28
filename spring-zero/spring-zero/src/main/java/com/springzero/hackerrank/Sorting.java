@@ -132,15 +132,11 @@ public class Sorting {
 		} else {
 			int pivot = a[si];
 			int i = si + 1;
-			int tmp;
 
 			// partition array
 			for (int j = si + 1; j <= ei; j++) {
 				if (pivot > a[j]) {
-					tmp = a[j];
-					a[j] = a[i];
-					a[i] = tmp;
-
+					swap(a,i,j);
 					i++;
 				}
 			}

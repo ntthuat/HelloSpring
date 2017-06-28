@@ -70,7 +70,14 @@ public class SortingTest {
 	@Test
 	public void testQuickSort(){
 		int[] array = {0, -3, 6, 4, -10, 8, -5, 2, -7};
-		Sorting.qsort(array,0,4);
+		Sorting.qsort(array,0,array.length-1);
+		Sorting.printArray(array);
+	}
+	
+	@Test
+	public void testQuickSort2(){
+		int[] array = {5, 8, 1, 3, 7, 9, 2};
+		Sorting.qsort(array,0,array.length-1);
 		Sorting.printArray(array);
 	}
 }
