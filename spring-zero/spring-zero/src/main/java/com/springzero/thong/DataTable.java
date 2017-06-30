@@ -1,18 +1,20 @@
 package com.springzero.thong;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class DataTable {
 	
 	private Map<String, List<String>> graph;
+	private Map<String, List<String>> output;
 	private Map<String, String> connection;
 	private int totalNode = 0;
 	public DataTable() {
 		graph = new HashMap<>();
+		output = new HashMap<>();
 		connection = new HashMap<>();
 	}
 	
@@ -26,61 +28,35 @@ public class DataTable {
 				graph.get(pid).add(id);
 			}
 		}
+		output.put(name, new LinkedList<>());
 		connection.put(id, name);
 		totalNode++;
 	}
 	
-	private static long dfs(String root, Map<String, List<String>> graph, boolean[] visited, long count) {
-        visited[Integer.parseInt(root)] = true;
-
-        List<String> neighbors = graph.get(root);
+	private void dfs(String root, String node) {
+        List<String> neighbors = graph.get(node);
         if (neighbors==null) {
-			return 0;
+			return;
 		}
         for (String adj : neighbors) {
-            if (!visited[Integer.parseInt(adj)]) {
-            	graph.get(root).add(adj);
-                count = 1 + dfs(adj, graph, visited, count);
-            }
+            output.get(connection.get(root)).add(connection.get(adj));
+            dfs(root, adj);
         }
 
-        return count;
     }
 	
 	private void processDataTable() {
-        /*long ans = 0;
-
-        boolean[] visited = new boolean[totalNode];
-        for (int node = 0; node < totalNode; node++) {
-            if (!visited[node]) {
-                long clusterSize = dfs(Integer.toString(node), graph, visited, 1);
-            }
-        }*/
-		List<String> parent = new ArrayList<>();
-		for(String key : graph.keySet()){
-			List<String> list = graph.get(key);
-			getAllChild(list, parent);
-		}
-        for (int i = 0; i < totalNode; i++) {
-			List<String> list = graph.get(Integer.toString(i));
-			if (list==null) {
-				
+        for (int root = 0; root < totalNode; root++) {
+        	dfs(Integer.toString(root),Integer.toString(root));
+        }
+        for (Entry<String, List<String>> entry : output.entrySet()){
+        	if (!entry.getValue().isEmpty()) {
+        		System.out.println(entry.getKey() + "=" + entry.getValue());
+			} else {
+				System.out.println(entry.getKey() + "=null");
 			}
-		}
-
+        }
     }
-	public List<String> getAllChild(List<String> list,List<String> parent){
-		for(int i= 0;i<list.size();i++){
-			if(graph.containsKey(list.get(i))){
-				getAllChild(graph.get(list.get(i)),parent);
-				
-				
-			}else {
-				parent.add(list.get(i));
-			}
-		}
-		return parent; 
-	}
 	public static void main(String[] args) {
 		DataTable dt = new DataTable();
 		dt.addRow("0", "A", null);
@@ -91,7 +67,6 @@ public class DataTable {
 		dt.addRow("6", "F", "4");
 		dt.addRow("3", "G", "0");
 		dt.processDataTable();
-		System.out.println("end");
 	}
 	
 }
