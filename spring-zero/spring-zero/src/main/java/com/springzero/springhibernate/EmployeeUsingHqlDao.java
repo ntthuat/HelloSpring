@@ -7,6 +7,6 @@ import java.util.List;
  * @version 06/02/2017
  */
 public interface EmployeeUsingHqlDao {
-	 public List<Employee> listEmployee() ;
+	 public List<Employee> listEmployee();
 	 public Integer getMaxDeptId();
 }

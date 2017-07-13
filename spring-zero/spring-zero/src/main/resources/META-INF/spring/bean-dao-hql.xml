@@ -17,8 +17,13 @@
 		<property name="sessionFactory" ref="mySessionFactory" />
 	</bean>
 	
-	<!-- Khai báo bean cho Dao -->
+	<!-- Khai báo bean cho HQL Dao -->
    <bean id="employeeUsingHqlDao" class="com.springzero.springhibernate.EmployeeUsingHqlDaoImpl" >
+   		<property name="sessionFactory" ref="mySessionFactory"></property>
+   </bean>
+   
+   <!-- Khai báo bean cho Native SQL Dao -->
+   <bean id="employeeUsingNativeSqlDao" class="com.springzero.springhibernate.EmployeeUsingNativeSqlDaoImpl" >
    		<property name="sessionFactory" ref="mySessionFactory"></property>
    </bean>
 

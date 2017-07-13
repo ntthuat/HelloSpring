@@ -40,7 +40,6 @@ public class EmployeeUsingHqlDaoImpl implements EmployeeUsingHqlDao {
 	      String sql = "Select max(e.id) from Employee e";
 	      Query query = session.createQuery(sql);
 	      Integer maxDeptId = (Integer) query.uniqueResult();
-	      System.out.println(maxDeptId);
 	      if (maxDeptId == null) {
 	          return 0;
 	      }
