@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.springzero.transaction.TransactionMode;
+
 /**
  * This config class holds the objects to access the transaction manager and classes to perform jdbc operations.
  * 
@@ -18,6 +20,21 @@ public class DataAccessConfig implements InitializingBean{
 	 * Static instance to allow static access. This is initialised when Spring configuration is loaded.
 	 */
 	private static DataAccessConfig sInstance;
+	
+	/**
+	 * TransactionMode tự định nghĩa chứ không phải TransactionMode của Spring.
+	 */
+	private TransactionMode transactionMode;
+	
+	public static TransactionMode getTransactionMode() {
+		return sInstance.transactionMode;
+	}
+
+	@Autowired
+	public void setTransactionMode(
+	        @Value("${zero.dataaccess.transactionMode:FRAMEWORK}") final TransactionMode transactionMode) {
+		this.transactionMode = transactionMode;
+	}
 	
 	/**
 	 * DB schema name used by transformed application. If multiple schema might be used, then it's default schema.

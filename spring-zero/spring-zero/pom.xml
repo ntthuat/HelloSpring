@@ -72,11 +72,11 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j-version}</version>
 		</dependency>
-		<dependency>
+<!-- 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>${slf4j-version}</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
@@ -157,7 +157,27 @@
 			<artifactId>hibernate</artifactId>
 			<version>3.2.7.ga</version>
 		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.10.19</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-core -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>1.2.2</version>
+		</dependency>
 	</dependencies>
+
+
 
 	<build>
 		<pluginManagement>
@@ -172,14 +192,10 @@
 				</plugin>
 				<!-- Config: Maven Tomcat Plugin -->
 				<!-- http://mvnrepository.com/artifact/org.apache.tomcat.maven/tomcat7-maven-plugin -->
-			<!-- 	<plugin>
-					<groupId>org.apache.tomcat.maven</groupId>
-					<artifactId>tomcat7-maven-plugin</artifactId>
-					<version>2.2</version>
-					Config: contextPath and Port (Default - /SpringMVCHibernateTransaction 
-						: 8080)
-					<configuration> <path>/</path> <port>8899</port> </configuration>
-				</plugin> -->
+				<!-- <plugin> <groupId>org.apache.tomcat.maven</groupId> <artifactId>tomcat7-maven-plugin</artifactId> 
+					<version>2.2</version> Config: contextPath and Port (Default - /SpringMVCHibernateTransaction 
+					: 8080) <configuration> <path>/</path> <port>8899</port> </configuration> 
+					</plugin> -->
 			</plugins>
 
 		</pluginManagement>
