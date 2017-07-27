@@ -1,0 +1,12 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+
+	<!-- Import bean datasource -->
+	<import resource="bean-datasource-using-hibernate.xml"/>
+
+	<!-- Import bean dao -->
+	<import resource="bean-dao-hibernate.xml"/>
+
+</beans>
