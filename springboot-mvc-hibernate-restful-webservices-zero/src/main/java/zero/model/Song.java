@@ -5,6 +5,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
+
+import java.io.Serializable;
+
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -13,7 +16,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "song", catalog = "zero")
-public class Song implements java.io.Serializable {
+public class Song implements Serializable {
 	/**
 	 * 
 	 */
@@ -45,7 +48,6 @@ public class Song implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "id", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -127,4 +129,9 @@ public class Song implements java.io.Serializable {
 		this.type = type;
 	}
 
+	@Override
+	public String toString() {
+		return "Product (" + getPath() + ", " + getShortName() + ", " + getTitle() + ", " + getArtist() + ", " + 
+				getLength() + getSize() + getBitRate() + getType() + ")";
+	}
 }

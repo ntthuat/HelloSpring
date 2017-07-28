@@ -1,2 +1,5 @@
-zero\hello\Application.class
-zero\hello\GreetingController.class
+zero\model\Song.class
+zero\service\SongService.class
+hello\GreetingController.class
+hello\Application.class
+zero\repository\SongRepository.class
