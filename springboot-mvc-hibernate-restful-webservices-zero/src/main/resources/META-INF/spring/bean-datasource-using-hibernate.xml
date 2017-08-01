@@ -13,6 +13,10 @@
 		http://www.springframework.org/schema/data/repository 
         http://www.springframework.org/schema/data/repository/spring-repository-1.5.xsd">
 
+	<context:component-scan base-package="zero.*" />
+
+	<jpa:repositories base-package="zero.repository" />
+
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location">
@@ -28,18 +32,18 @@
 		<property name="url" value="${dbUrl}" />
 		<property name="driverClassName" value="${dbDriver}" />
 	</bean>
-	
+
 	<jpa:repositories base-package="zero.repository" />
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="dataSource" ref="dataSource" />
+		<property name="dataSource" ref="myDataSource" />
 		<property name="packagesToScan" value="zero.model" />
 		<property name="jpaVendorAdapter">
-         	<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
-      	</property>
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+		</property>
 	</bean>
 	<bean id="mySessionFactory"
-		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 
 		<property name="dataSource" ref="myDataSource" />
 
