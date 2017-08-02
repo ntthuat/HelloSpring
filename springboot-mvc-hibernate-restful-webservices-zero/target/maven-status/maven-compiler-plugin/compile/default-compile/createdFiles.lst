@@ -1,4 +1,5 @@
 zero\model\Song.class
+zero\controller\SongController.class
 zero\service\SongService.class
 hello\GreetingController.class
 hello\Application.class
