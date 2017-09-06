@@ -1,0 +1,43 @@
+﻿1. Enable Flashback on Oracle
+	1.1 Enabling Logging for Flashback Database
+		SQL> SHUTDOWN IMMEDIATE;
+		SQL> STARTUP MOUNT;
+		SQL> alter database archivelog;
+	1.2 Change backup setting
+		SQL> ALTER SYSTEM SET DB_RECOVERY_FILE_DEST_SIZE = 100G;
+		SQL> ALTER SYSTEM SET DB_RECOVERY_FILE_DEST = ‘/dba/backup/’;
+	1.2 Enable Flashback
+		SQL> ALTER DATABASE FLASHBACK ON;
+2. Create Flashback restore point
+	SQL> create restore point CLEAN_DB guarantee flashback database;
+3. Restore Flashback restore point
+	3.1 Stop and mount DB
+		SQL> shutdown immediate;
+		SQL> startup mount;
+	3.2 Restore
+		SQL> flashback database to restore point CLEAN_DB;
+	3.3 Start Oracle alter restore
+		SQL> alter database open resetlogs;
+4. More
+	4.1 Check archivelog status
+		SQL> archive log list;
+	4.2	Show flashback point was created
+		SQL> select * from v$restore_point;
+	4.3 Disable Flashback
+		SQL> shutdown immediate;
+		SQL> startup mount;
+		SQL> ALTER DATABASE FLASHBACK OFF;
+		SQL> alter database open;
+	4.5 drop restore point
+		shutdown immediate;
+		startup mount;
+		DROP RESTORE POINT <name of point>;
+	4.4 Disable archivelog
+		shutdown immediate;
+		startup mount;
+		alter database noarchivelog;
+	4.6 Delete log:
+		rman target /
+		backup archivelog all delete input;
+		delete backup;
+		delete copy;

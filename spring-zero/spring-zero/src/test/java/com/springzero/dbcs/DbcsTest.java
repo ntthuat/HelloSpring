@@ -166,8 +166,8 @@ public class DbcsTest {
 		assertEquals(-88, b[2]);
 		
 		String fromDbcs = DbcsFunctions.fromDbcs(str);
-		String dbcs1 = "";
-		String dbcs2 = "ð";
+		String dbcs1 = "鹿児島東";
+		String dbcs2 = "鹿児島東  ";
 		System.out.println( new String(Hex.encodeHex(dbcs1.getBytes())));
 		System.out.println( new String(Hex.encodeHex(dbcs2.getBytes())));
 	}
