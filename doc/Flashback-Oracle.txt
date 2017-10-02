@@ -1,4 +1,4 @@
--- ALTER DATABASE OPEN;
+﻿-- ALTER DATABASE OPEN;
 A. Enabling Logging for Flashback Database
 1. Start SQL*Plus and ensure that the database is mounted, but not open. For example:
 	SQL> SHUTDOWN IMMEDIATE;
@@ -39,8 +39,7 @@ B. Sizing the Flash Recovery Area to Include Flashback Logs
 	deleted from the recovery area to make room.
 C. Managing Space For Flashback Logs in the Flash Recovery Area
 D. Determining the Current Window for Flashback Database
-	SQL> SELECT OLDEST_FLASHBACK_SCN, OLDEST_FLASHBACK_TIME 
-      FROM V$FLASHBACK_DATABASE_LOG;
+	SQL> SELECT OLDEST_FLASHBACK_SCN, OLDEST_FLASHBACK_TIME FROM V$FLASHBACK_DATABASE_LOG;
 	  
 E. Restore Whole DB
 	RMAN>  STARTUP MOUNT

@@ -32,6 +32,8 @@
 		shutdown immediate;
 		startup mount;
 		DROP RESTORE POINT <name of point>;
+
+		example: DROP RESTORE POINT CLEAN_DB;
 	4.4 Disable archivelog
 		shutdown immediate;
 		startup mount;
