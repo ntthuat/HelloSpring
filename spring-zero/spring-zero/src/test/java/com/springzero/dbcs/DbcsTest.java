@@ -61,6 +61,26 @@ public class DbcsTest {
 	}
 	
 	@Test
+	public void testLength(){
+		String str = "督促確認"; // length is 12
+		byte[] b = str.getBytes();
+		System.out.println(b.length);
+		
+		String s1 = "ｦｧｨｩｪｫｬｭｮｯｰ_\"‾"; // length is 38
+		s1 = "ｰ";
+		b = s1.getBytes();
+		System.out.println(b.length);
+		
+		String s2 = "ｵｱｲｳｴｵﾔﾕﾖﾂ--ﾞ-";
+		s2 = "-";
+		b = s2.getBytes();
+		System.out.println(b.length);
+		
+		System.out.println( new String(Hex.encodeHex(s1.getBytes())));
+		System.out.println( new String(Hex.encodeHex(s2.getBytes())));
+	}
+	
+	@Test
 	public void testSpace2Bytes() {
 		String space1Byte = " ";
 		String result = new String(Hex.encodeHex(space1Byte.getBytes()));

@@ -1,0 +1,22 @@
+<?xml version ="1.0" encoding ="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- Khai báo tạo datasource cho class NamedParameterUtilsTest -->
+	<bean id="namedParameterUtilsTest" class="com.springzero.inmemory.batch.NamedParameterUtilsTest">
+        <property name="dataSource"><ref bean="jdbcDataSource"/></property>
+    </bean>
+
+	<!-- Khai báo tạo datasource cho class NamedParameterUtilsTest -->
+	<bean id="jdbcDataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="username" value="${dbUsername}" />
+		<property name="password" value="${dbPassword}" />
+		<property name="url" value="${dbUrl}" />
+		<property name="driverClassName" value="${dbDriver}" />
+	</bean>
+	
+	<context:property-placeholder location="classpath:config/dbInfo.properties" />
+</beans>
