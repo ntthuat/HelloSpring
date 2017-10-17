@@ -4,10 +4,22 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
+	<!-- <context:annotation-config/> -->
+
 	<!-- Khai báo tạo datasource cho class NamedParameterUtilsTest -->
 	<bean id="namedParameterUtilsTest" class="com.springzero.inmemory.batch.NamedParameterUtilsTest">
-        <property name="dataSource"><ref bean="jdbcDataSource"/></property>
-    </bean>
+	<!-- Property bên dưới phục vụ lấy datasource, ở đây mình bỏ qua lấy dataSource mà getter luôn connection
+	<property name="dataSource">
+		<ref bean="jdbcDataSource" />
+	</property> -->
+	
+	<!-- Property bên dưới là ví dụ của hàm getter -->
+	<property name="connection">
+		<bean factory-bean="jdbcDataSource" factory-method="getConnection">
+			<!-- <constructor-arg value="bar"/> -->
+		</bean>
+	</property>
+	</bean>
 
 	<!-- Khai báo tạo datasource cho class NamedParameterUtilsTest -->
 	<bean id="jdbcDataSource"

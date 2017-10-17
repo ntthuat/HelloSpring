@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -22,23 +23,26 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
  */
 public class NamedParameterUtilsTest {
 	
-	private DataSource dataSource;
+	/*@Autowired
+	private DataSource jdbcDataSource;*/ // Để làm được cái autowired này, cần biến class này thành instance, mà mình chưa làm được
 	
-	private Connection conn;
+	private Connection connection;
 	
-	public DataSource getDataSource() {
-        return dataSource;
+	public void setConnection(Connection connection){
+		this.connection = connection;
+	}
+	
+	public Connection getConnection() {
+        return connection;
     }
  
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-	
 	@Before
 	public void setUp() throws SQLException{
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:META-INF/spring/bean-dao-jdbc.xml");
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:META-INF/spring/bean-dao-jdbc-2.xml");
 		NamedParameterUtilsTest test = (NamedParameterUtilsTest) context.getBean("namedParameterUtilsTest");
-		conn = test.getDataSource().getConnection();
+		connection = test.getConnection();
+		/*jdbcDataSource = context.getBean(requiredType)*/
+		/*connection = jdbcDataSource.getConnection();*/
 	}
 	
 	@Test
@@ -49,7 +53,7 @@ public class NamedParameterUtilsTest {
 		String finalQuery = new PreparedStatementCreatorFactory(NamedParameterUtils.substituteNamedParameters(parsedSql,
                 source), NamedParameterUtils.buildSqlTypeArray(parsedSql, source))
                 .newPreparedStatementCreator(NamedParameterUtils.buildValueArray(parsedSql, source, null))
-                .createPreparedStatement(conn).toString();
+                .createPreparedStatement(connection).toString();
 		System.out.println("---End testParseSqlStatement---");
 	}
 }

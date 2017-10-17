@@ -20,9 +20,4 @@
 	<!-- Component này chỉ dùng cho test -->
 	<context:component-scan base-package="com.springzero.dataaccess.config"></context:component-scan>
 	
-	<!-- Khai báo tạo datasource cho class NamedParameterUtilsTest -->
-	<bean id="namedParameterUtilsTest" class="com.springzero.inmemory.batch.NamedParameterUtilsTest">
-        <property name="dataSource"><ref bean="myBasicDataSource"/></property>
-    </bean>
-	
 </beans>
