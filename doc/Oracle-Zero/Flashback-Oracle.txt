@@ -1,0 +1,108 @@
+﻿-- ALTER DATABASE OPEN;
+A. Enabling Logging for Flashback Database
+1. Start SQL*Plus and ensure that the database is mounted, but not open. For example:
+	SQL> SHUTDOWN IMMEDIATE;
+	SQL> STARTUP MOUNT;
+1A. check and enabled ArchiveLog
+	SQL> archive log list;
+	SQL> alter database archivelog;
+2. Optionally, set theDB_FLASHBACK_RETENTION_TARGET to the length of the desired flashback window in minutes:
+	SQL> ALTER SYSTEM SET DB_FLASHBACK_RETENTION_TARGET=4320; # 3 days
+3. Enable the Flashback Database feature for the whole database:
+3A. Enabling a Flash Recovery Area
+
+This statement sets the disk limit for recovery area to 100 GB:
+
+	SQL> ALTER SYSTEM SET DB_RECOVERY_FILE_DEST_SIZE = 100G;
+
+	This statement sets the recovery area destination:
+	SQL> ALTER SYSTEM SET DB_RECOVERY_FILE_DEST = ‘/dba/backup/’;
+	
+	SQL> ALTER DATABASE FLASHBACK ON;
+B. Sizing the Flash Recovery Area to Include Flashback Logs
+1. Estimating Disk Space Requirements for Flashback Database Logs
+	The V$FLASHBACK_DATABASE_LOG view can help you estimate how much space to add to your flash recovery area for flashback logs. 
+	After you have enabled logging for Flashback Database and set a flashback retention target, allow the database to run under a 
+	normal workload for a while, to generate a representative sample of flashback logs. Then run the following query:
+	
+	SQL> SELECT ESTIMATED_FLASHBACK_SIZE FROM V$FLASHBACK_DATABASE_LOG;
+	
+	The result is an estimate of the disk space needed to meet the current flashback retention target, 
+	based on the database workload since Flashback Database was enabled. Add the amount of disk space 
+	specified in $FLASHBACK_DATABASE_LOG.ESTIMATED_FLASHBACK_SIZE to your flash recovery area size, 
+	to hold the expected database flashback logs.
+
+	Space usage in the flash recovery area is always balanced among backups and archived logs which must be kept 
+	according to the retention policy, and other files which may be subject to deletion, such as flashback logs 
+	and backups already backed up to tape but still cached on disk. If you have not allocated enough space in your flash 
+	recovery area to store your flashback logs and still meet your other backup retention requirements, flashback logs may be 
+	deleted from the recovery area to make room.
+C. Managing Space For Flashback Logs in the Flash Recovery Area
+D. Determining the Current Window for Flashback Database
+	SQL> SELECT OLDEST_FLASHBACK_SCN, OLDEST_FLASHBACK_TIME FROM V$FLASHBACK_DATABASE_LOG;
+	  
+E. Restore Whole DB
+	RMAN>  STARTUP MOUNT
+	
+
+	
+	
+Problem: 
+----------------------------------------------------------------------------------------------------------
+Often while conducting benchmarking tests, it is required to load a clean database before the start of a new run. One way to ensure a clean database is to recreate the entire database before each test run, but depending on the size of it, this approach may be very time consuming or inefficient.
+
+Solution: 
+----------------------------------------------------------------------------------------------------------
+This article describes how to use Oracle’s flashback feature to quickly restore a database to a state that existed just before running the workload. More specifically, this article describes steps on how to use the ‘guaranteed restore points’.
+
+Restore point: 
+Restore point is nothing but a name associated with a timestamp or an SCN of the database. One can create either a normal restore point or a guaranteed restore point. The difference between the two is that guaranteed restore point allows you to flashback to the restore point regardless of the DB_FLASHBACK_RETENTION_TARGET initialization parameter i.e. it is always available (assuming you have enough space in the flash recovery area).
+
+NOTE: In this article Flashback logging was not turned ON.
+
+Guaranteed Restore point:
+
+Prerequisites: Creating a guaranteed restore point requires the following prerequisites:
+
+The user must have the SYSDBA system privileges
+Must have created a flash recovery area
+The database must be in ARCHIVELOG mode
+Create a guaranteed restore point:
+After you have created or migrated a fresh database, first thing to do is to create a guaranteed restore point so you can flashback to it each time before you start a new workload. The steps are as under:
+
+$> su – oracle
+$> sqlplus / as sysdba;
+Find out if ARCHIVELOG is enabled
+SQL> select log_mode from v$database;
+If step 3 shows that ARCHIVELOG is not enabled then continue else skip to step 8 below.
+SQL> shutdown immediate;
+SQL> startup mount;
+SQL> alter database archivelog;
+SQL> alter database open;
+SQL> create restore point CLEAN_DB guarantee flashback database;
+where CLEAN_DB is the name given to the guaranteed restore point.
+Viewing the guaranteed restore point
+SQL> select * from v$restore_point;
+
+Verify the information about the newly created restore point. Also, note down the SCN# for reference and we will refer to it as “reference SCN#”
+
+Flashback to the guaranteed restore point
+Now, in order to restore your database to the guaranteed restore point, follow the steps below:
+
+$> su – oracle
+$> sqlplus / as sysdba;
+SQL> select current_scn from v$database;
+SQL> shutdown immediate;
+SQL> startup mount;
+SQL> select * from v$restore_point;
+SQL> flashback database to restore point CLEAN_DB;
+SQL> alter database open resetlogs;
+SQL> select current_scn from v$database;
+Compare the SCN# from step 9 above to the reference SCN#.
+
+NOTE: The SCN# from step 9 above may not necessarily be the exact SCN# as the reference SCN# but it will be close enough.
+
+ALTER PLUGGABLE DATABASE KOD551 OPEN; 
+
+
+	

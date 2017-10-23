@@ -1,13 +1,14 @@
 package com.springzero.java8.stream;
 
-import java.util.List;import ch.qos.logback.core.net.SyslogOutputStream;
-
+import java.util.List;
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.Period;
+import java.time.Period; // Ví dụ bây giờ là 18:00, Period add 1 day là tới 18:00 hôm sau
+						 // Duration add 1 day là tới 19:00 hôm sau
 import java.util.ArrayList;
 
 /**
+ * Chạy thử phương thức stream().filter
  * 
  * @author tnguyen443
  * @version 10/20/2017
@@ -25,7 +26,7 @@ public class AppFilter {
 	}
 	
 	public static void main(String[] args) {
-		//setUp
+		//set up
 		setUp();
 		
 		// Loc va in ra man hinh cac sv co ho la Nguyen , sinh vao thang 01, nam 1992
@@ -45,10 +46,9 @@ public class AppFilter {
 		// Loc va in ra man hinh cac sinh vien co tuoi <= 25, gia su thoi diem
 		// hien tai la 2016-DECEMBER-20
 		students.stream().filter(student -> {
-			LocalDate currentLocalDate = LocalDate.of(2016, Month.DECEMBER, 20);
+			LocalDate current = LocalDate.now();
 			LocalDate dateOfBirth = student.getDateOfBirth();
-			Period period = Period.between(dateOfBirth, currentLocalDate);
-
+			Period period = Period.between(dateOfBirth, current);
 			return period.getYears() >= 25;
 		}).forEach(System.out::println);
 	}

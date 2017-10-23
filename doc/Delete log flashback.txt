@@ -1,9 +1,0 @@
-[‎8/‎16/‎2017 5:01 PM]  Le, Thai:  
-95 ok roi do em
-a chỉ e cái này
-D:\app\csc\diag\rdbms\daito\daito\trace 
- 
-[‎8/‎16/‎2017 5:06 PM]  Le, Thai:  
->rman target / 
-backup archivelog all delete input; 
- 
