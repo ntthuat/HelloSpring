@@ -26,7 +26,7 @@ public class DbcsTest {
 	 */
 	@Test
 	public void TestExample() throws DecoderException {
-		String str = "a昨大昨";
+		/*String str = "a昨大昨";
 		char a = '大';
 		System.out.println(str.charAt(1));
 		System.out.println(a);
@@ -46,6 +46,19 @@ public class DbcsTest {
 		System.out.println(new String(Hex.encodeHex(space1byte.getBytes())));
 		String space2byte = "　";
 		System.out.println(new String(Hex.encodeHex(space2byte.getBytes())));
+		String xString = "x";
+		System.out.println(new String(Hex.encodeHex(xString.getBytes())));*/
+		String xDbcs = "和６×洋６×ＤＫ　　　　　 ";
+		char[] array = xDbcs.toCharArray();
+		char c;
+		for (int i = 0; i < array.length; i++) {
+			c = array[i];
+			if (!(c > 0xFF)) {
+				System.out.println("true");
+				System.out.println(new String(Hex.encodeHex(String.valueOf(array[i]).getBytes())));
+			}
+		}
+		
 	}
 	
 	@Test
