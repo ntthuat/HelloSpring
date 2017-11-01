@@ -1,0 +1,87 @@
+<configuration>
+	<!-- context name for the application -->
+	<contextName>daito</contextName>
+	<!--
+		System properties must be provided!!!
+		 BASE_LOG_DIR - the base directory of log file
+		 TIMESTAMP - timestamp in yyyyMMddhhmmss
+	 -->
+	<property name="log.dir" value="${BASE_LOG_DIR}/app" />
+	<property name="log.file.prefix" value="statistic" />
+	<!-- JOB name should be the top level clp name -->
+	<property name="log.file.suffix" value="${JOB_NAME}-${TIMESTAMP}" />
+	<property name="console.level" value="WARN" />
+	<!-- Message pattern -->
+	<property name="message.pattern" value="%d %level %mdc [%thread] %logger{0} %ex - %msg%n" />
+
+	<!-- use console output only -->
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>${console.level}</level>
+		</filter>
+		<encoder>
+			<pattern>${message.pattern}</pattern>
+		</encoder>
+	</appender>
+	<!-- Program Dump Logger -->
+	<appender name="ProgramDumpFile" class="ch.qos.logback.core.FileAppender">
+		<File>${log.dir}/app-program-dump-${log.file.suffix}.log</File>
+		<append>true</append>
+		<encoder>
+			<pattern>${message.pattern}</pattern>
+		</encoder>
+	</appender>
+	<!-- QRE Statistic -->
+	<appender name="qreLogFile" class="ch.qos.logback.core.FileAppender">
+		<File>${log.dir}/qre-${log.file.suffix}.log</File>
+		<append>true</append>
+		<encoder>
+			<pattern>${message.pattern}</pattern>
+		</encoder>
+	</appender>
+	<!-- statistic csv file -->
+	<appender name="qreStatisticLog" class="ch.qos.logback.core.FileAppender">
+		<File>${log.dir}/qre-${log.file.suffix}-statistic.csv</File>
+		<append>true</append>
+		<encoder>
+			<pattern>%d, %level, %mdc, [%thread], %logger{0}, %ex, %msg,%n</pattern>
+		</encoder>
+	</appender>
+	<!-- Logger definition -->
+	<logger name="com.csc.qre.core.loggers.ProgramDump" level="INFO" additivity="false">
+		<appender-ref ref="ProgramDumpFile" />
+	</logger>
+	<logger name="com.csc.qre.core.loggers.Statistics" level="INFO" additivity="false">
+		<appender-ref ref="qreLogFile" />
+		<appender-ref ref="qreStatisticLog" />
+	</logger>
+	<!-- Logger definition -->
+	<logger name="com.csc.qre.core.loggers.Configurations" level="INFO" additivity="false">
+		<appender-ref ref="qreLogFile" />
+	</logger>
+	<logger name="com.csc.qre.core.loggers.DbStatistics" level="INFO" additivity="false">
+		<appender-ref ref="qreLogFile" />
+	</logger>
+	<!-- print out programs from CLP calls on the fly 
+	<logger name="com.csc.qre.iseries.lang.cl.ClCommandExecutor" level="INFO">
+		<appender-ref ref="qreLogFile" />
+	</logger>
+	-->
+	<logger name="com.csc.qre.core.util.JarManifestInfo" level="INFO" additivity="false">
+		<appender-ref ref="qreLogFile" />
+	</logger>
+	
+	<!-- print error static in case of any CL command -->
+	<logger name="com.csc.qre.iseries.lang.cl.ClCommandExecutor" level="DEBUG" additivity="false">
+		<appender-ref ref="qreLogFile" />
+	</logger>
+
+	<logger name="com.csc.qre.iseries.dataaccess.inmemory" level="INFO" additivity="false">
+		<appender-ref ref="qreLogFile" />
+	</logger>
+
+	<root level="${console.level}">
+		<appender-ref ref="CONSOLE" />
+	</root>
+</configuration>

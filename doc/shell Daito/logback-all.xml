@@ -1,0 +1,75 @@
+<configuration>
+	<!-- context name for the application -->
+	<contextName>daito</contextName>
+
+	<property name="log.dir" value="log" />
+	<property name="log.file" value="statistic" />
+	<property name="console.level" value="WARN" />
+	<!-- Message pattern -->
+	<property name="message.pattern" value="%d %level %mdc [%thread] %logger{0} %ex - %msg%n" />
+
+	<!-- use console output only -->
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>${console.level}</level>
+		</filter>
+		<encoder>
+			<pattern>${message.pattern}</pattern>
+		</encoder>
+	</appender>
+	<!-- hibernate statistic -->
+	<appender name="hibernateStatisticFile"
+		class="ch.qos.logback.core.FileAppender">
+		<File>${log.dir}/${log.file}-hibernate.log</File>
+		<append>true</append>
+		<encoder>
+			<Pattern>${message.pattern}</Pattern>
+		</encoder>
+	</appender>
+	
+	<!-- QRE Statistic -->
+	<appender name="qreStatisticFile"
+		class="ch.qos.logback.core.FileAppender">
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${log.dir}/${log.file}-qre.log</File>
+		<append>true</append>
+		<encoder>
+			<pattern>${message.pattern}</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- Hibernate All Trace -->
+	<appender name="hibernateAll"
+		class="ch.qos.logback.core.FileAppender">
+		<File>${log.dir}/hibernate-all.log</File>
+		<append>true</append>
+		<encoder>
+			<pattern>${message.pattern}</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- Logger definition -->
+	<logger name="org.hibernate.type" level="INFO">
+		<appender-ref ref="hibernateAll" />
+	</logger>
+	<logger name="org.hibernate" level="DEBUG">
+		<appender-ref ref="hibernateAll" />
+	</logger>
+	<logger name="org.hibernate.transaction" level="DEBUG">
+		<appender-ref ref="hibernateAll" />
+	</logger>
+	<logger name="org.hibernate.jdbc" level="DEBUG">
+		<appender-ref ref="hibernateAll" />
+	</logger>
+	
+	<logger name="com.csc.qre.core.loggers.Statistics" level="INFO">
+		<appender-ref ref="qreStatisticFile" />
+	</logger>
+	<logger name="org.hibernate.stat" level="INFO">
+		<appender-ref ref="hibernateStatisticFile" />
+	</logger>
+	<root level="${console.level}">
+		<appender-ref ref="CONSOLE" />
+	</root>
+</configuration>

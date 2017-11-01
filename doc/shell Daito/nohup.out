@@ -1,0 +1,127 @@
+opt= + e
+opt= + j
+opt= + f
+opt= + v
+/media/dkdata/KNA431
+/media/dkdata/KNA431/stats
+2017-10-28 19:04:42,778 INFO  [73675] : [./runjob.sh] BASE_DIR is /media/dkdata/KNA431
+2017-10-28 19:04:42,779 INFO  [73675] : [./runjob.sh] BASE_LOG_DIR is /media/dkdata/KNA431/stats
+2017-10-28 19:04:42,780 INFO  [73675] : [./runjob.sh] SERVER_ID is VM2
+2017-10-28 19:04:42,783 INFO  [73675] : [./runjob.sh] Deleting all logs files ...
+/media/dkdata/KNA431
+/media/dkdata/KNA431/stats
+2017-10-28 19:04:42,787 INFO  [73685] : [./deleteLogs.sh] BASE_DIR is /media/dkdata/KNA431
+2017-10-28 19:04:42,789 INFO  [73685] : [./deleteLogs.sh] BASE_LOG_DIR is /media/dkdata/KNA431/stats
+2017-10-28 19:04:42,790 INFO  [73685] : [./deleteLogs.sh] SERVER_ID is VM2
+2017-10-28 19:04:42,799 INFO  [73696] : [./execute_KNA431.sh] --- Start Step Ajv110c
+./commons.sh: line 178: ./execute.sh: Permission denied
+2017-10-28 19:04:42,801 INFO  [73696] : [./execute_KNA431.sh] --- Step Ajv110c is finished with error = 126
+2017-10-28 19:04:42,803 INFO  [73675] : [./runjob.sh] Compressing all logs files ...
+/media/dkdata/KNA431
+/media/dkdata/KNA431/stats
+2017-10-28 19:04:42,807 INFO  [73701] : [./zipLogs.sh] BASE_DIR is /media/dkdata/KNA431
+2017-10-28 19:04:42,808 INFO  [73701] : [./zipLogs.sh] BASE_LOG_DIR is /media/dkdata/KNA431/stats
+2017-10-28 19:04:42,809 INFO  [73701] : [./zipLogs.sh] SERVER_ID is VM2
+creating /media/dkdata/KNA431/stats/archive/LOGS_VM2_20171028_190442.zip
+  adding: media/dkdata/KNA431/stats/app/ (stored 0%)
+  adding: media/dkdata/KNA431/stats/archive/ (stored 0%)
+  adding: media/dkdata/KNA431/stats/archive/log/ (stored 0%)
+  adding: media/dkdata/KNA431/stats/archive/log/LOGS_VM2_20171021_231307.zip (stored 0%)
+  adding: media/dkdata/KNA431/stats/archive/log/LOGS_VM2_20171025_202235.zip (stored 0%)
+  adding: media/dkdata/KNA431/stats/awr/ (stored 0%)
+  adding: media/dkdata/KNA431/stats/nmon/ (stored 0%)
+  adding: media/dkdata/KNA431/stats/timer/ (stored 0%)
+  adding: media/dkdata/KNA431/stats/yourkit/ (stored 0%)
+2017-10-28 19:04:42,816 INFO  [73675] : [./runjob.sh] --- Complete Job KNA431
+opt= + e
+opt= + j
+opt= + f
+opt= + v
+/media/dkdata/KNA431
+/media/dkdata/KNA431/stats
+2017-10-28 19:05:06,306 INFO  [73711] : [./runjob.sh] BASE_DIR is /media/dkdata/KNA431
+2017-10-28 19:05:06,307 INFO  [73711] : [./runjob.sh] BASE_LOG_DIR is /media/dkdata/KNA431/stats
+2017-10-28 19:05:06,308 INFO  [73711] : [./runjob.sh] SERVER_ID is VM2
+2017-10-28 19:05:06,310 INFO  [73711] : [./runjob.sh] Deleting all logs files ...
+/media/dkdata/KNA431
+/media/dkdata/KNA431/stats
+2017-10-28 19:05:06,313 INFO  [73721] : [./deleteLogs.sh] BASE_DIR is /media/dkdata/KNA431
+2017-10-28 19:05:06,314 INFO  [73721] : [./deleteLogs.sh] BASE_LOG_DIR is /media/dkdata/KNA431/stats
+2017-10-28 19:05:06,315 INFO  [73721] : [./deleteLogs.sh] SERVER_ID is VM2
+2017-10-28 19:05:06,323 INFO  [73732] : [./execute_KNA431.sh] --- Start Step Ajv110c
+./commons.sh: line 178: ./execute.sh: Permission denied
+2017-10-28 19:05:06,325 INFO  [73732] : [./execute_KNA431.sh] --- Step Ajv110c is finished with error = 126
+2017-10-28 19:05:06,327 INFO  [73711] : [./runjob.sh] Compressing all logs files ...
+/media/dkdata/KNA431
+/media/dkdata/KNA431/stats
+2017-10-28 19:05:06,330 INFO  [73737] : [./zipLogs.sh] BASE_DIR is /media/dkdata/KNA431
+2017-10-28 19:05:06,331 INFO  [73737] : [./zipLogs.sh] BASE_LOG_DIR is /media/dkdata/KNA431/stats
+2017-10-28 19:05:06,332 INFO  [73737] : [./zipLogs.sh] SERVER_ID is VM2
+creating /media/dkdata/KNA431/stats/archive/LOGS_VM2_20171028_190506.zip
+  adding: media/dkdata/KNA431/stats/app/ (stored 0%)
+  adding: media/dkdata/KNA431/stats/archive/ (stored 0%)
+  adding: media/dkdata/KNA431/stats/archive/log/ (stored 0%)
+  adding: media/dkdata/KNA431/stats/archive/log/LOGS_VM2_20171021_231307.zip (stored 0%)
+  adding: media/dkdata/KNA431/stats/archive/log/LOGS_VM2_20171025_202235.zip (stored 0%)
+  adding: media/dkdata/KNA431/stats/awr/ (stored 0%)
+  adding: media/dkdata/KNA431/stats/nmon/ (stored 0%)
+  adding: media/dkdata/KNA431/stats/timer/ (stored 0%)
+  adding: media/dkdata/KNA431/stats/yourkit/ (stored 0%)
+2017-10-28 19:05:06,338 INFO  [73711] : [./runjob.sh] --- Complete Job KNA431
+opt= + e
+opt= + j
+opt= + f
+opt= + v
+/media/dkdata/KNA431
+/media/dkdata/KNA431/stats
+2017-10-28 19:12:17,557 INFO  [74187] : [./runjob.sh] BASE_DIR is /media/dkdata/KNA431
+2017-10-28 19:12:17,559 INFO  [74187] : [./runjob.sh] BASE_LOG_DIR is /media/dkdata/KNA431/stats
+2017-10-28 19:12:17,560 INFO  [74187] : [./runjob.sh] SERVER_ID is VM2
+2017-10-28 19:12:17,563 INFO  [74187] : [./runjob.sh] Deleting all logs files ...
+/media/dkdata/KNA431
+/media/dkdata/KNA431/stats
+2017-10-28 19:12:17,568 INFO  [74197] : [./deleteLogs.sh] BASE_DIR is /media/dkdata/KNA431
+2017-10-28 19:12:17,570 INFO  [74197] : [./deleteLogs.sh] BASE_LOG_DIR is /media/dkdata/KNA431/stats
+2017-10-28 19:12:17,571 INFO  [74197] : [./deleteLogs.sh] SERVER_ID is VM2
+2017-10-28 19:12:17,581 INFO  [74208] : [./execute_KNA431.sh] --- Start Step Ajv110c
+console log= /media/dkdata/KNA431/stats/app/qre-AJV110C-20171028_191217.log
+2017-10-28 19:12:17,591 INFO  [74210] : [./execute.sh] Release Number: .version - .timestamp
+2017-10-28 19:12:18,154 INFO  [74210] : [./execute.sh]  ======>>>>> START KNA431 AJV110C with environment profile env.oracle
+*****************TASKSET***********: taskset -c 0-7
+2017-10-28 19:12:18,159 INFO  [74286] : [./jsm.sh] number of parameters = 4
+2017-10-28 19:12:18,160 INFO  [74286] : [./jsm.sh]  jobstream = VM2_KNA431
+2017-10-28 19:12:18,160 INFO  [74286] : [./jsm.sh]  jobname = KNA431
+2017-10-28 19:12:18,161 INFO  [74286] : [./jsm.sh]  jobstep = AJV110C
+2017-10-28 19:12:18,162 INFO  [74286] : [./jsm.sh]  commandToTime = java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000 -Xmx32g -Xms32g -XX:NewRatio=1  -classpath ./java:./java/*  -Djava.security.egd=file:///dev/urandom -Dqre.batch.app.context.path=classpath:/META-INF/spring/app-batch-context.xml -Dqre.batch.job.writeExitCode=false -Dqre.batch.app.name=AH008001 -Dqre.batch.user.name=OPR001 -Dqre.batch.user.password=OPR001 -Dlogback.configurationFile=logback-default.xml -Dspring.profiles.active=env.oracle -DBASE_LOG_DIR=/media/dkdata/KNA431/stats -DTIMESTAMP=20171028_191217 -DJOB_NAME=AJV110C com.csc.qre.service.CommandLineBatchController com.daito.as01.hxx.clp.ajv.procedure.Ajv110c
+2017-10-28 19:12:18,164 INFO  [74286] : [./jsm.sh] LOG FILE /media/dkdata/KNA431/stats/timer/VM2_KNA431.txt does not exist - creating ...
+Listening for transport dt_socket at address: 8000
+Listening for transport dt_socket at address: 8000
+2017-10-28 19:15:54,615 ERROR  [main] Ajv120r  - zzz.zzzp02:DH008DFB
+2017-10-28 19:12:18,165 INFO  [74286] : [./jsm.sh] JOB,STEP,START,FINISH,COMMAND,%U,%S,%P,%E,%e,%I,%O,%r,%s,%M,%K,%D,%X,%Z,%F,%R,%W,%c,%w
+2017-10-28 19:16:45,872 INFO  [74286] : [./jsm.sh] KNA431,AJV110C,10/28/2017 19:12:18,10/28/2017 19:16:45,"java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000 -Xmx32g -Xms32g -XX:NewRatio=1 -classpath ./java:./java/* -Djava.security.egd=file:///dev/urandom -Dqre.batch.app.context.path=classpath:/META-INF/spring/app-batch-context.xml -Dqre.batch.job.writeExitCode=false -Dqre.batch.app.name=AH008001 -Dqre.batch.user.name=OPR001 -Dqre.batch.user.password=OPR001 -Dlogback.configurationFile=logback-default.xml -Dspring.profiles.active=env.oracle -DBASE_LOG_DIR=/media/dkdata/KNA431/stats -DTIMESTAMP=20171028_191217 -DJOB_NAME=AJV110C com.csc.qre.service.CommandLineBatchController com.daito.as01.hxx.clp.ajv.procedure.Ajv110c", 53.93,4.17,21%,4:27.70,267.70,0,2433608,0,0,8985288,0,0,0,4096,77,430184,0,411,22113
+2017-10-28 19:16:45,878 INFO  [74286] : [./jsm.sh] ----------------------------------------------------
+143
+2017-10-28 19:16:45,880 INFO  [74210] : [./execute.sh]  ======>>>>> FINISHED AT: 20171028_191645
+143
+2017-10-28 19:16:45,881 INFO  [74208] : [./execute_KNA431.sh] --- Step Ajv110c is finished with error = 143
+2017-10-28 19:16:45,883 INFO  [74187] : [./runjob.sh] Compressing all logs files ...
+/media/dkdata/KNA431
+/media/dkdata/KNA431/stats
+2017-10-28 19:16:45,888 INFO  [74525] : [./zipLogs.sh] BASE_DIR is /media/dkdata/KNA431
+2017-10-28 19:16:45,889 INFO  [74525] : [./zipLogs.sh] BASE_LOG_DIR is /media/dkdata/KNA431/stats
+2017-10-28 19:16:45,890 INFO  [74525] : [./zipLogs.sh] SERVER_ID is VM2
+creating /media/dkdata/KNA431/stats/archive/LOGS_VM2_20171028_191217.zip
+  adding: media/dkdata/KNA431/stats/app/ (stored 0%)
+  adding: media/dkdata/KNA431/stats/app/app-program-dump-AJV110C-20171028_191217.log (stored 0%)
+  adding: media/dkdata/KNA431/stats/app/qre-AJV110C-20171028_191217-statistic.csv (deflated 96%)
+  adding: media/dkdata/KNA431/stats/app/qre-AJV110C-20171028_191217.log (deflated 94%)
+  adding: media/dkdata/KNA431/stats/archive/ (stored 0%)
+  adding: media/dkdata/KNA431/stats/archive/log/ (stored 0%)
+  adding: media/dkdata/KNA431/stats/archive/log/LOGS_VM2_20171021_231307.zip (stored 0%)
+  adding: media/dkdata/KNA431/stats/archive/log/LOGS_VM2_20171025_202235.zip (stored 0%)
+  adding: media/dkdata/KNA431/stats/awr/ (stored 0%)
+  adding: media/dkdata/KNA431/stats/nmon/ (stored 0%)
+  adding: media/dkdata/KNA431/stats/timer/ (stored 0%)
+  adding: media/dkdata/KNA431/stats/timer/VM2_KNA431.txt (deflated 36%)
+  adding: media/dkdata/KNA431/stats/yourkit/ (stored 0%)
+2017-10-28 19:16:45,902 INFO  [74187] : [./runjob.sh] --- Complete Job KNA431
