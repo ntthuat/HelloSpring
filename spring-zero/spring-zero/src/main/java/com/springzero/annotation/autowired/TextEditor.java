@@ -18,7 +18,7 @@ public class TextEditor {
 		System.out.println("Inside TextEditor constructor.");
 	}
 
-	@Autowired // Ví dụ 2 đặt autowired ở hàm property
+	@Autowired // Ví dụ 2 đặt autowired ở hàm property (cái này là theo name)
 	private SpellChecker spellChecker;
 
 	/*@Autowired*/ // Ví dụ 1 đặt autowired ở hàm set
