@@ -45,5 +45,3 @@ class Tell2 extends Speak implements Truth{
 	}
 	
 }
-
-
