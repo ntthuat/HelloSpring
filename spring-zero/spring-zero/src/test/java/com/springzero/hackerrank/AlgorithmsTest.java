@@ -1,5 +1,6 @@
 package com.springzero.hackerrank;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -8,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -126,4 +129,25 @@ public class AlgorithmsTest {
         int result = TransformToPalindrome.findPalindrome(array, tft.mark);
         System.out.println(result);
 	}
+	
+	@Test
+	public void testThang(){
+		String s = "  FROM      HDDDBF.ARRSGL1 T01             ";
+		System.out.println(patternCount(s));
+	}
+	
+	private static Pattern pattern = Pattern.compile(".*\\s*(FROM|from)\\s*(\\w*\\.\\w*).*"); 
+	
+	public static int patternCount(String s){
+		int count = 0;
+		Matcher matcher = pattern.matcher(s); //import java.util.regex.Matcher;
+		while (matcher.find()) {
+			
+			count++;
+			s = "1" + s.substring(matcher.end());
+			matcher = pattern.matcher(s);
+		}
+		return count;
+    }
+	
 }
