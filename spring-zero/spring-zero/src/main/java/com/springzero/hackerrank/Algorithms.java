@@ -124,7 +124,6 @@ public class Algorithms {
 	public static String convert12hourTo24hour(String time){
 		SimpleDateFormat time12hourFormat = new SimpleDateFormat("hh:mm:ss a");
 		SimpleDateFormat time24hourFormat = new SimpleDateFormat("HH:mm:ss");
-	    final String tailTime = time.substring(7);
 	    if (time.charAt(0)!=' ') {
 			time = time.substring(0, 8) + " " + time.substring(8);
 		}

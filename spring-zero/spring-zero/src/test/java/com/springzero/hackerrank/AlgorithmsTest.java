@@ -130,24 +130,4 @@ public class AlgorithmsTest {
         System.out.println(result);
 	}
 	
-	@Test
-	public void testThang(){
-		String s = "  FROM      HDDDBF.ARRSGL1 T01             ";
-		System.out.println(patternCount(s));
-	}
-	
-	private static Pattern pattern = Pattern.compile(".*\\s*(FROM|from)\\s*(\\w*\\.\\w*).*"); 
-	
-	public static int patternCount(String s){
-		int count = 0;
-		Matcher matcher = pattern.matcher(s); //import java.util.regex.Matcher;
-		while (matcher.find()) {
-			
-			count++;
-			s = "1" + s.substring(matcher.end());
-			matcher = pattern.matcher(s);
-		}
-		return count;
-    }
-	
 }
