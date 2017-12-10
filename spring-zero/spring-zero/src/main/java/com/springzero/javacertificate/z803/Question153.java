@@ -2,7 +2,7 @@ package com.springzero.javacertificate.z803;
 
 public class Question153 {
 	public static void main(String[] args) {
-		int [][] arr = new int[2][0];
+		int [][] arr = new int[2][3];
 		arr[0] = new int[3];
 		arr[0][0] = 1;
 		arr[0][1] = 2;
