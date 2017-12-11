@@ -6,15 +6,3 @@ public class Question200 {
 		((Star)s).doStuff();
 	}
 }
-
-class Star {
-	public void doStuff(){
-		System.out.println("Star");
-	}
-}
-
-class Sun extends Star {
-	public void doStuff(){
-		System.out.println("Sun");
-	}
-}
