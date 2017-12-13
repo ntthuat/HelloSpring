@@ -27,6 +27,13 @@ public class Question140 {
 		} else {
 			System.out.println("Not equal");
 		}
+		String s = "abc";
+		String s2 = new String("abc");
+		String s3 = "abc";
+		String s4 = new String("abc");
+		System.out.println(s==s2);
+		System.out.println(s==s3);
+		System.out.println(s2==s4);
 	}
 
 }
