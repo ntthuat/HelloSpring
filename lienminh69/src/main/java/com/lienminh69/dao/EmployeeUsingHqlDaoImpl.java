@@ -17,7 +17,7 @@ import com.lienminh69.entity.Employee;
  */
 @Transactional // Transactional nói cho Spring biết về việc quản lý các transaction khi các method này được gọi
 public class EmployeeUsingHqlDaoImpl implements EmployeeUsingHqlDao {
-	
+
 	@Autowired
 	@Qualifier("mySessionFactory")
 	private SessionFactory sessionFactory;
@@ -25,24 +25,69 @@ public class EmployeeUsingHqlDaoImpl implements EmployeeUsingHqlDao {
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-	
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Employee> listEmployee() {
-		Session session = this.sessionFactory.getCurrentSession();
-		List<Employee> list = (List<Employee>)session.createQuery("from Employee").list();
+		final Session session = this.sessionFactory.getCurrentSession();
+		final String sql = "from Employee where 1=1";
+		final Query query = session.createQuery(sql);
+		final List<Employee> list = (List<Employee>) query.list();
 		return list;
+	}
+
+	@Override
+	public Integer getMaxEmployeetId() {
+		final Session session = this.sessionFactory.getCurrentSession();
+		final String sql = "Select max(e.id) from Employee e where 1=1";
+		final Query query = session.createQuery(sql);
+		final Integer maxEmployeeId = (Integer) query.uniqueResult();
+		if (maxEmployeeId == null) {
+			return 0;
+		}
+		return maxEmployeeId;
 	}
 	
 	@Override
-	public Integer getMaxDeptId() {
-	      Session session = this.sessionFactory.getCurrentSession();
-	      String sql = "Select max(e.id) from Employee e";
-	      Query query = session.createQuery(sql);
-	      Integer maxDeptId = (Integer) query.uniqueResult();
-	      if (maxDeptId == null) {
-	          return 0;
-	      }
-	      return maxDeptId;
-	  }
+	public Employee findEmployeeByName(final String name) {
+		final Session session = this.sessionFactory.getCurrentSession();
+		final String sql = "from Employee where name = :name";
+		final Query query = session.createQuery(sql);
+		query.setParameter("name", name);
+		final Employee employee = (Employee) query.uniqueResult();
+		return employee;
+	}
+	
+	/**
+	 * result = 1 when successful, result = 0 when not successful
+	 */
+	@Override
+	public int deleteEmployeeByName(final String name) {
+		final Session session = this.sessionFactory.getCurrentSession();
+		final String sql = "delete Employee where name = :name";
+		final Query query = session.createQuery(sql);
+		query.setParameter("name", name);
+		final int result = query.executeUpdate();
+		return result;
+	}
+	
+	@Override
+	public void saveEmployee(final Employee employee) {
+		final Session session = this.sessionFactory.getCurrentSession();
+		session.save(employee);
+	}
+	
+	/**
+	 * result = 1 when successful, result = 0 when not successful
+	 */
+	@Override
+	public int updateNameEmploye(final String name, final String updatedName) {
+		final Session session = this.sessionFactory.getCurrentSession();
+		final String sql = "update Employee set name =:updatedName where name = :name";
+		final Query query = session.createQuery(sql);
+		query.setParameter("updatedName", updatedName);
+		query.setParameter("name", name);
+		final int result = query.executeUpdate();
+		return result;
+	}
 }

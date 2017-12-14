@@ -18,12 +18,12 @@ import com.lienminh69.entity.Employee;
 public class EmployeeUsingHqlDaoTest {
 	
 	private ApplicationContext appContext;
-	private EmployeeUsingHqlDaoImpl empl;
+	private EmployeeUsingHqlDaoImpl employeeDao;
 	
 	@Before
 	public void setUp(){
 		appContext = new ClassPathXmlApplicationContext("classpath:META-INF/spring/bean-locations-using-hql.xml");
-		empl = (EmployeeUsingHqlDaoImpl)appContext.getBean("employeeUsingHqlDao");
+		employeeDao = (EmployeeUsingHqlDaoImpl)appContext.getBean("employeeUsingHqlDao");
 	}
 	
 	/**
@@ -36,7 +36,7 @@ public class EmployeeUsingHqlDaoTest {
 	 */
 	@Test
 	public void testListEmployee(){
-		List<Employee> e = empl.listEmployee();
+		List<Employee> e = employeeDao.listEmployee();
 		assertEquals("Robert", e.get(0).getName());
 		assertEquals("Max", e.get(1).getName());
 		assertEquals("Thuat", e.get(2).getName());
@@ -44,8 +44,54 @@ public class EmployeeUsingHqlDaoTest {
 	}
 	
 	@Test
-	public void test2(){
-		Integer maxDeptId = empl.getMaxDeptId();
-		assertEquals(4, maxDeptId.intValue());
+	public void testMaxEmployeeId(){
+		Integer maxEmployeetId = employeeDao.getMaxEmployeetId();
+		assertEquals(4, maxEmployeetId.intValue());
+	}
+	
+	@Test
+	public void testFindEmployeeByName(){
+		Employee employee = employeeDao.findEmployeeByName("Thuat");
+		assertEquals(3, employee.getId());
+		assertEquals("Thuat", employee.getName());
+	}
+	
+	@Test
+	public void testDeleteEmployeeByName(){
+		// Backup before deleting
+		Employee employeeBak = employeeDao.findEmployeeByName("Thuat");
+		
+		int result = employeeDao.deleteEmployeeByName("Thuat");
+		assertEquals(1, result);
+		Employee employee = employeeDao.findEmployeeByName("Thuat");
+		assertNull(employee);
+		
+		// Create after deleting
+		employeeDao.saveEmployee(employeeBak);
+		employee = employeeDao.findEmployeeByName("Thuat");
+		assertNotNull(employee);
+	}
+	
+	@Test
+	public void testSaveEmployee(){
+		Employee e = new Employee(5, "Test");
+		employeeDao.saveEmployee(e);
+		Employee employee = employeeDao.findEmployeeByName("Test");
+		assertNotNull(employee);
+		
+		// Delete after saving
+		int result = employeeDao.deleteEmployeeByName("Test");
+		assertEquals(1, result);
+		employee = employeeDao.findEmployeeByName("Test");
+		assertNull(employee);
+	}
+	
+	@Test
+	public void testUpdateNameEmployee(){
+		int result = employeeDao.updateNameEmploye("Thuat", "ThuatTest");
+		assertEquals(1, result);
+		
+		result = employeeDao.updateNameEmploye("ThuatTest", "Thuat");
+		assertEquals(1, result);
 	}
 }
