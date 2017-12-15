@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Implementation-Title: lienminh69
 Implementation-Version: 0.1.0
-Built-By: nguye
+Built-By: tnguyen443
 Implementation-Vendor-Id: org.springframework
-Build-Jdk: 1.8.0_152
+Build-Jdk: 1.8.0_144
 Implementation-URL: http://projects.spring.io/spring-boot/lienminh69/
 Created-By: Maven Integration for Eclipse
 Implementation-Vendor: Pivotal Software, Inc.

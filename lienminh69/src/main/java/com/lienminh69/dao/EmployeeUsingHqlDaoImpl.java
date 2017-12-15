@@ -2,9 +2,11 @@ package com.lienminh69.dao;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +37,16 @@ public class EmployeeUsingHqlDaoImpl implements EmployeeUsingHqlDao {
 		final List<Employee> list = (List<Employee>) query.list();
 		return list;
 	}
-
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Employee> listEmployeeUsingCriteria(){
+		final Session session = this.sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(Employee.class);
+		final List<Employee> list = (List<Employee>) criteria.list();
+		return list;
+	}
+	
 	@Override
 	public Integer getMaxEmployeetId() {
 		final Session session = this.sessionFactory.getCurrentSession();
@@ -46,6 +57,23 @@ public class EmployeeUsingHqlDaoImpl implements EmployeeUsingHqlDao {
 			return 0;
 		}
 		return maxEmployeeId;
+	}
+	
+	/**
+	 * Projections is used for: rowCount, min, max, average, sum
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public Integer getMaxEmployeeIdUsingCriteria() {
+		final Session session = this.sessionFactory.getCurrentSession();
+		final Criteria criteria = session.createCriteria(Employee.class);
+		criteria.setProjection(Projections.max("id"));
+		criteria.setMaxResults(1);
+		final List<Integer> list = criteria.list();
+		if (list == null) {
+			return 0;
+		}
+		return list.get(0);
 	}
 	
 	@Override
@@ -89,5 +117,27 @@ public class EmployeeUsingHqlDaoImpl implements EmployeeUsingHqlDao {
 		query.setParameter("name", name);
 		final int result = query.executeUpdate();
 		return result;
+	}
+	
+	/**
+	 * 
+	 * If can not find record, method return null
+	 */
+	@Override
+	public Employee getEmployeeUsingSessionGetViaId(final int id){
+		final Session session = this.sessionFactory.getCurrentSession();
+		Employee employee = (Employee)session.get(Employee.class, id);
+		return employee;
+	}
+	
+	/**
+	 * 
+	 * If can not find record, method throws an exception
+	 */
+	@Override
+	public Employee getEmployeeUsingSessionLoadViaId(final int id){
+		final Session session = this.sessionFactory.getCurrentSession();
+		Employee employee = (Employee)session.load(Employee.class, id);
+		return employee;
 	}
 }

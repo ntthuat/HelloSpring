@@ -44,8 +44,23 @@ public class EmployeeUsingHqlDaoTest {
 	}
 	
 	@Test
-	public void testMaxEmployeeId(){
+	public void testListEmployeeUsingCriteria(){
+		List<Employee> e = employeeDao.listEmployeeUsingCriteria();
+		assertEquals("Robert", e.get(0).getName());
+		assertEquals("Max", e.get(1).getName());
+		assertEquals("Thuat", e.get(2).getName());
+		assertEquals("Nick", e.get(3).getName());
+	}
+	
+	@Test
+	public void testGetMaxEmployeeId(){
 		Integer maxEmployeetId = employeeDao.getMaxEmployeetId();
+		assertEquals(4, maxEmployeetId.intValue());
+	}
+	
+	@Test
+	public void testGetMaxEmployeeIdUsingCriteria(){
+		Integer maxEmployeetId = employeeDao.getMaxEmployeeIdUsingCriteria();
 		assertEquals(4, maxEmployeetId.intValue());
 	}
 	
@@ -93,5 +108,12 @@ public class EmployeeUsingHqlDaoTest {
 		
 		result = employeeDao.updateNameEmploye("ThuatTest", "Thuat");
 		assertEquals(1, result);
+	}
+	
+	@Test
+	public void testGetEmployeeUsingSessionGetViaId(){
+		Employee e = employeeDao.getEmployeeUsingSessionGetViaId(2);
+		assertEquals(2, e.getId());
+		assertEquals("Max", e.getName());
 	}
 }
