@@ -2,8 +2,8 @@ package com.springzero.lang;
 
 import org.junit.Test;
 
-import com.springzero.springjdbc.EmployeeDao;
-import com.springzero.springjdbc.EmployeeDaoImpl;
+import com.springzero.springjdbc.EmployeeUsingJdbcDao;
+import com.springzero.springjdbc.EmployeeUsingJdbcDaoImpl;
 import com.springzero.springjdbc.EmployeeDto;
 
 import junit.framework.Assert;
@@ -78,8 +78,8 @@ public class JdbczeroFunctionTest {
 		}
 		
 		// Scenario 4: test method Class<?>.isAssignableFrom(Class<?>)
-		assertTrue(EmployeeDao.class.isAssignableFrom(EmployeeDaoImpl.class));
-		assertFalse(EmployeeDaoImpl.class.isAssignableFrom(EmployeeDao.class));
+		assertTrue(EmployeeUsingJdbcDao.class.isAssignableFrom(EmployeeUsingJdbcDaoImpl.class));
+		assertFalse(EmployeeUsingJdbcDaoImpl.class.isAssignableFrom(EmployeeUsingJdbcDao.class));
 		
 		// Scenario 5:
 		for (Field f1 : fields) {
