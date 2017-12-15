@@ -3,7 +3,9 @@ package com.springzero.springjdbc;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,15 +23,26 @@ import org.springframework.stereotype.Component;
 @Component("employeeUsingJdbcDao")
 public class EmployeeUsingJdbcDaoImpl implements EmployeeUsingJdbcDao{
 	
-	private JdbcTemplate myJdbcTemplate;
+	private JdbcTemplate jdbcTemplate;
 	
 	public JdbcTemplate getJdbcTemplate() {
-		return myJdbcTemplate;
+		return jdbcTemplate;
 	}
 	
 	@Autowired
 	public void setJdbcTemplate(DataSource dataSource) {
-		this.myJdbcTemplate = new JdbcTemplate(dataSource);
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
+	}
+	
+	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	
+	public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate() {
+		return namedParameterJdbcTemplate;
+	}
+	
+	@Autowired
+	public void setNamedParameterJdbcTemplate(DataSource dataSource) {
+		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 	}
 	
 	@Override
@@ -36,7 +50,17 @@ public class EmployeeUsingJdbcDaoImpl implements EmployeeUsingJdbcDao{
 		final String sql = "SELECT * FROM employee WHERE id = ?";
 		final Object[] args = new Object[]{id};
 		final EmployeeMapper mapper = new EmployeeMapper();
-		final EmployeeDto employeeDto = myJdbcTemplate.queryForObject(sql, args, mapper);
+		final EmployeeDto employeeDto = jdbcTemplate.queryForObject(sql, args, mapper);
+		return employeeDto;
+	}
+	
+	@Override
+	public EmployeeDto getEmployeeUsingNamedParameterJdbcTemplate(final int id) {
+		final String sql = "SELECT * FROM employee WHERE id=:id";
+		Map<String, Object> argsMap = new HashMap<>();
+		argsMap.put("id", id);
+		final EmployeeMapper mapper = new EmployeeMapper();
+		final EmployeeDto employeeDto = namedParameterJdbcTemplate.queryForObject(sql, argsMap, mapper);
 		return employeeDto;
 	}
 	
@@ -47,7 +71,7 @@ public class EmployeeUsingJdbcDaoImpl implements EmployeeUsingJdbcDao{
 		final EmployeeMapper mapper = new EmployeeMapper();
 		final EmployeeDto employeeDto;
 		try {
-			employeeDto = myJdbcTemplate.queryForObject(sql, args, mapper);
+			employeeDto = jdbcTemplate.queryForObject(sql, args, mapper);
 		} catch (DataAccessException e) {
 			return null;
 		}
@@ -56,9 +80,20 @@ public class EmployeeUsingJdbcDaoImpl implements EmployeeUsingJdbcDao{
 	}
 	
 	@Override
+	public EmployeeDto getEmployeeUsingNamedParameterJdbcTemplate(final String name, final int id) {
+		final String sql = "SELECT * FROM employee WHERE name=:name and id=:id";
+		Map<String, Object> argsMap = new HashMap<>();
+		argsMap.put("name", name);
+		argsMap.put("id", id);
+		final EmployeeMapper mapper = new EmployeeMapper();
+		final EmployeeDto employeeDto = namedParameterJdbcTemplate.queryForObject(sql, argsMap, mapper);
+		return employeeDto;
+	}
+	
+	@Override
 	public List<EmployeeDto> listEmployee(){
 		final String sql = "SELECT id, name FROM employee WHERE 1=1";
-		final List<EmployeeDto> list = myJdbcTemplate.query(sql, new ResultSetExtractor<List<EmployeeDto>>() {
+		final List<EmployeeDto> list = jdbcTemplate.query(sql, new ResultSetExtractor<List<EmployeeDto>>() {
 			
 			@Override
 			public List<EmployeeDto> extractData(ResultSet rs) throws SQLException, DataAccessException {
@@ -77,13 +112,21 @@ public class EmployeeUsingJdbcDaoImpl implements EmployeeUsingJdbcDao{
 	@Override
 	public void saveEmployee(final String name, final int id) {
 		final String sql = "INSERT INTO employee (name, id) VALUES(?, ?)";
-		myJdbcTemplate.update(sql, name, id);
+		jdbcTemplate.update(sql, name, id);
 	}
 	
 	@Override
 	public void deleteEmployee(final String name, final int id) {
 		final String sql = "DELETE FROM employee WHERE name=? and id=?";
-		myJdbcTemplate.update(sql, name, id);
+		jdbcTemplate.update(sql, name, id);
+	}
+	
+	@Override
+	public int getRowCountEmployee(){
+		final String sql = "SELECT COUNT(1) FROM employee WHERE 1=?";
+		final int count = jdbcTemplate.queryForObject(
+                sql, new Object[] {1}, Integer.class);
+		return count;
 	}
 	
 }

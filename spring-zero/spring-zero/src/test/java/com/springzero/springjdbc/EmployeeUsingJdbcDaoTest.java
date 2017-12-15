@@ -28,7 +28,6 @@ public class EmployeeUsingJdbcDaoTest {
 		employeeDao = (EmployeeUsingJdbcDaoImpl)appContext.getBean("employeeUsingJdbcDao");
 	}
 	
-	
 	/**
      * Test thử xem lấy được 1 row trong table employee trong database db_employee không.<br>
      */
@@ -44,6 +43,13 @@ public class EmployeeUsingJdbcDaoTest {
 	}
 	
 	@Test
+	public void testGetEmployeeUsingNamedParameterJdbcTemplate() {
+		EmployeeDto employeeDto = employeeDao.getEmployeeUsingNamedParameterJdbcTemplate(1);
+		assertEquals(1, employeeDto.getId());
+		assertEquals("Robert", employeeDto.getName());
+	}
+	
+	@Test
 	public void testEmployeeJdbcViaNameAndId() {
 		EmployeeDto employeeDto = employeeDao.getEmployee("Thuat", 3);
 		assertEquals(3, employeeDto.getId());
@@ -52,6 +58,13 @@ public class EmployeeUsingJdbcDaoTest {
 		employeeDto = employeeDao.getEmployee("Max", 2);
 		assertEquals(2, employeeDto.getId());
 		assertEquals("Max", employeeDto.getName());
+	}
+	
+	@Test
+	public void testEmployeeJdbcViaNameAndIdUsingNamedParameterJdbcTemplate() {
+		EmployeeDto employeeDto = employeeDao.getEmployeeUsingNamedParameterJdbcTemplate("Thuat", 3);
+		assertEquals(3, employeeDto.getId());
+		assertEquals("Thuat", employeeDto.getName());
 	}
 	
 	@Test
@@ -78,6 +91,12 @@ public class EmployeeUsingJdbcDaoTest {
 		employeeDao.deleteEmployee("Test", 5);
 		employeeDto = employeeDao.getEmployee("Test", 5);
 		assertNull(employeeDto);
+	}
+	
+	@Test
+	public void testGetRowCountEmployee() {
+		final int count = employeeDao.getRowCountEmployee();
+		assertEquals(10004, count);
 	}
 	
 	/*@Test

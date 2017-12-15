@@ -9,12 +9,16 @@ import java.util.List;
 public interface EmployeeUsingJdbcDao {
 	
 	public EmployeeDto getEmployee(final int id);
+	public EmployeeDto getEmployeeUsingNamedParameterJdbcTemplate(final int id);
 	
 	public EmployeeDto getEmployee(final String name,final int id);
+	public EmployeeDto getEmployeeUsingNamedParameterJdbcTemplate(final String name, final int id);
 	
 	public List<EmployeeDto> listEmployee();
 	
 	public void saveEmployee(final String name, final int id);
 	
 	public void deleteEmployee(final String name, final int id);
+	
+	public int getRowCountEmployee();
 }
