@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -29,7 +30,7 @@ public class EmployeeUsingJdbcDaoImpl implements EmployeeUsingJdbcDao{
 		return jdbcTemplate;
 	}
 	
-	@Autowired
+	@Autowired // Bắt buộc phải bỏ Autowired ở đây, vì datasource là bỏ vào tham số, nên cần vào context bean để kiếm datasouce thích hợp với type để bỏ vào đây
 	public void setJdbcTemplate(DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}

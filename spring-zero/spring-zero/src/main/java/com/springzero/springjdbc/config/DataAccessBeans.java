@@ -6,6 +6,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -28,22 +29,23 @@ public class DataAccessBeans implements InitializingBean {
 	 */
 	private static DataAccessBeans sInstance;
 	
-	/** main application DataSource */
-	private DataSource applicationDataSource;
+	private JdbcTemplate jdbcTemplate;
+	
+	public static JdbcTemplate getJdbcTemplate() {
+		return sInstance.jdbcTemplate;
+	}
+	
+	@Autowired // Bắt buộc phải bỏ Autowired ở đây, vì datasource là bỏ vào tham số, nên cần vào context bean để kiếm datasouce thích hợp với type để bỏ vào đây
+	public void setJdbcTemplate(DataSource dataSource) {
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
+	}
+	
+	@Autowired
+	private DataSource myBasicDataSource;
 	
 	public static DataSource getApplicationDataSource() {
-		return sInstance.applicationDataSource;
+		return sInstance.myBasicDataSource;
 	}
-	
-	@Autowired(required=false)
-	@Qualifier(SpringBeanNamesData.APPLICATION_DATA_SOURCE)
-	public void setApplicationDataSource(final DataSource applicationDataSource) {
-		this.applicationDataSource = applicationDataSource;
-	}
-	
-	// Cái này cần tìm hiểu kỹ hơn về DataAccessContext
-	/** applicationJdbcOperations */
-	private NamedParameterJdbcTemplate applicationJdbcOperations;
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
