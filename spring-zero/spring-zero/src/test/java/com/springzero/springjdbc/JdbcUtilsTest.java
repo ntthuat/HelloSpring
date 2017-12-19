@@ -2,6 +2,7 @@ package com.springzero.springjdbc;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -9,14 +10,16 @@ import com.springzero.springjdbc.config.DataAccessBeans;
 
 public class JdbcUtilsTest {
 	private ApplicationContext appContext;
-	private EmployeeUsingJdbcDaoImpl employeeDao;
-	private DataAccessBeans dataAccessBeans;
+	/*private EmployeeUsingJdbcDaoImpl employeeDao;*/
+	
+	/*private DataAccessBeans dataAccessBeans;*/
 	
 	@Before
 	public void setUp(){
 		appContext = new ClassPathXmlApplicationContext("classpath:META-INF/spring/bean-dao-jdbc.xml");
-		employeeDao = (EmployeeUsingJdbcDaoImpl) appContext.getBean("employeeUsingJdbcDao");
-		dataAccessBeans = (DataAccessBeans) appContext.getBean("dataAccessBeans");
+		/*appContext = new ClassPathXmlApplicationContext("classpath:META-INF/spring/bean-dao-jdbc.xml");*/
+		/*employeeDao = (EmployeeUsingJdbcDaoImpl) appContext.getBean("employeeUsingJdbcDao");*/
+		/*dataAccessBeans = (DataAccessBeans) appContext.getBean("dataAccessBeans");*/
 	}
 	
 	

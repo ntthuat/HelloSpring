@@ -7,7 +7,7 @@
 	<context:property-placeholder location="classpath:config/dbInfo.properties" />
 
 	<bean id="myBasicDataSource" class="org.apache.commons.dbcp.BasicDataSource"
-		destroy-method="close">
+		destroy-method="close" autowire="byType">
 		<property name="username" value="${dbUsername}" />
 		<property name="password" value="${dbPassword}" />
 		<property name="url" value="${dbUrl}" />

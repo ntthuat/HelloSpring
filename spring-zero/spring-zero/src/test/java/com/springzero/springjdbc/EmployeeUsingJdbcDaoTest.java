@@ -5,8 +5,12 @@ import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.apache.commons.dbcp.BasicDataSource;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -20,12 +24,21 @@ import com.springzero.springjdbc.EmployeeDto;
 public class EmployeeUsingJdbcDaoTest {
 	
 	private ApplicationContext appContext;
-	private EmployeeUsingJdbcDaoImpl employeeDao;
+	private EmployeeUsingJdbcDao employeeDao;
+	
+	@Autowired
+	private DataSource myasicDataSource;
+	
+	public DataSource getBasicDataSource() {
+		return myasicDataSource;
+	}
 	
 	@Before
 	public void setUp(){
 		appContext = new ClassPathXmlApplicationContext("classpath:META-INF/spring/bean-dao-jdbc.xml");
 		employeeDao = (EmployeeUsingJdbcDaoImpl)appContext.getBean("employeeUsingJdbcDao");
+		EmployeeUsingJdbcDaoTest mp = (EmployeeUsingJdbcDaoTest)appContext.getBean("mp");
+		System.out.println(mp.getBasicDataSource());
 	}
 	
 	/**

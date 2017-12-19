@@ -15,7 +15,8 @@ public class MainApp {
 		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:META-INF/spring/autowired.xml");
 		TextEditor te = (TextEditor) context.getBean("textEditor");
 		te.spellCheck();
-		
+		System.out.println(te.getSpellChecker());
+		System.out.println(te.getDriverManagerDataSource());
 		/*Kết quả: Với autowired cho setter
 		1. Vừa load bean lên thì TextEditor đã được khởi tạo
 		2. Vừa load bean lên thì SpellChecker đã được khởi tạo

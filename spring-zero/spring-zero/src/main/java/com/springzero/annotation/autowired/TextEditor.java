@@ -3,6 +3,7 @@ package com.springzero.annotation.autowired;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 /**
  * 
@@ -12,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TextEditor {
 
 	@Autowired
-	private DataSource jdbcDataSource;
+	private DriverManagerDataSource jdbcDataSource;
 	
 	public TextEditor() {
 		System.out.println("Inside TextEditor constructor.");
@@ -22,9 +23,9 @@ public class TextEditor {
 	private SpellChecker spellChecker;
 
 	/*@Autowired*/ // Ví dụ 1 đặt autowired ở hàm set
-	public void setSpellChecker(SpellChecker spellChecker) {
+	/*public void setSpellChecker(SpellChecker spellChecker) {
 		this.spellChecker = spellChecker;
-	}
+	}*/
 
 	public SpellChecker getSpellChecker() {
 		return spellChecker;
@@ -32,5 +33,9 @@ public class TextEditor {
 
 	public void spellCheck() {
 		spellChecker.checkSpelling();
+	}
+	
+	public DriverManagerDataSource getDriverManagerDataSource() {
+		return jdbcDataSource;
 	}
 }
