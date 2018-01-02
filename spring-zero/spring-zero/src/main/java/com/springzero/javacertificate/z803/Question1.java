@@ -3,18 +3,12 @@ package com.springzero.javacertificate.z803;
 import java.io.IOException;
 
 public class Question1 {
-	public static void main(String[] args) throws IOException {
-		/*try {
+	public static void main(String[] args) {
+		try {
 			doSomething();
-		} catch (RuntimeException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
-		}*/
-		int i = 5;
-		System.out.println(System.identityHashCode(i));
-		int abc = 5;
-		System.out.println(System.identityHashCode(abc));
-		abc = 10;
-		System.out.println(System.identityHashCode(abc));
+		}
 	}
 	
 	static void doSomething() throws IOException{
