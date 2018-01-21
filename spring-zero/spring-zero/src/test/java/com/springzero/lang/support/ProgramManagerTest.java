@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  *
  */
 @ContextConfiguration({ "classpath:spring/qre-test-context-program.xml" })
-@RunWith(SpringJUnit4ClassRunner.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
 @DirtiesContext
 public class ProgramManagerTest {
 	

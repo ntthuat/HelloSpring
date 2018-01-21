@@ -17,9 +17,9 @@ import com.springzero.dataaccess.config.DataAccessConfig;
  * @version 04/19/2017
  */
 @ContextConfiguration({ "classpath:/META-INF/spring/bean-dataaccess-application.xml" })
-@RunWith(SpringJUnit4ClassRunner.class)
-@DirtiesContext 
-// DirtiesContext: Test annotation which indicates that the ApplicationContext associated with a test is dirty 
+//@RunWith(SpringJUnit4ClassRunner.class)
+@DirtiesContext
+// DirtiesContext: Test annotation which indicates that the ApplicationContext associated with a test is dirty
 // and should therefore be closed and removed from the context cache. Nghĩa là cái context này sẽ được đóng và remove ra khỏi cache after finish.
 public class TransactionModeTest implements ApplicationContextAware{
 	
