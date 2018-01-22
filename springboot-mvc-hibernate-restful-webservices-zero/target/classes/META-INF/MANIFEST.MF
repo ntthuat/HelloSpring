@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Implementation-Title: springboot-mvc-hibernate-restful-webservices-zer
  o
 Implementation-Version: 0.1.0
-Built-By: tnguyen443
+Built-By: tnthien
 Implementation-Vendor-Id: org.springframework
-Build-Jdk: 1.8.0_144
+Build-Jdk: 1.8.0_20
 Implementation-URL: http://projects.spring.io/spring-boot/springboot-m
  vc-hibernate-restful-webservices-zero/
 Created-By: Maven Integration for Eclipse
