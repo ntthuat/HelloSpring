@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+ "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.vogella.jersey.first.User" table="user">
+	
+	<meta attribute="class-description">
+			This class contains the employee detail.
+		</meta>
+		<id name="id" type="int" column="id">
+		</id>
+		<property name="name" column="name" type="string"/>
+		<property name="password" column="password" type="string"/>
+		<property name="type_account" column="type_account" type="string"/>
+		<property name="fullname" column="fullname" type="string"/>
+		<property name="classPerson" column="classPerson" type="string"/>
+		
+	</class>
+</hibernate-mapping>

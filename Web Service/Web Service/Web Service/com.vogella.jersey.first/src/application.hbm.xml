@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+ "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+<class name="com.vogella.jersey.first.application" table="application">
+
+<meta attribute="class-description">
+This class contains the application detail.
+</meta>
+<id name="id_application" type="int" column="id_application">
+</id>
+<property name="id_user" column=" id_user" type="int" />
+<property name="start_day" column="start_day" type="date" />
+<property name="end_day" column="end_day" type="date" />
+<property name="reason" column="reason" type="string" />
+<property name="status" column="status" type="string" />
+</class>
+</hibernate-mapping>

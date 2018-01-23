@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+ "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.vogella.jersey.first.account" table="account">
+	
+	<meta attribute="class-description">
+			This class contains the employee detail.
+		</meta>
+		<id name="accountID" type="int" column="accountID">
+		</id>
+		<property name="accountType" column="accountType" type="string"/>
+		<property name="creationDate" column="creationDate" type="date"/>
+		<property name="balance" column="balance" type="double"/>
+
+	</class>
+</hibernate-mapping>

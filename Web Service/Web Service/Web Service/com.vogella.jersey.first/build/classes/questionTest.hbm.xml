@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+ "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.vogella.jersey.first.questionTest" table="questiontest">
+	
+	<meta attribute="class-description">
+			This class contains the questionTest detail.
+		</meta>
+		<id name="id" type="int" column="id">
+		</id>
+		<property name="content" column="content" type="string"/>
+		<property name="type" column="type" type="string"/>
+		<property name="answerA" column="answerA" type="string"/>
+		<property name="answerB" column="answerB" type="string"/>
+		<property name="answerC" column="answerC" type="string"/>
+		<property name="answerD" column="answerD" type="string"/>
+		<property name="trueAnswer" column="trueAnswer" type="string"/>
+
+	</class>
+</hibernate-mapping>
