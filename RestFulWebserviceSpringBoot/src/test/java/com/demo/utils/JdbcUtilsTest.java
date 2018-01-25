@@ -9,7 +9,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class JdbcUtilsTest {
 	
-	/*private ApplicationContext appContext;
+	private ApplicationContext appContext;
 	
 	private static final int rowCountGIndividu = 18174;
 	
@@ -18,12 +18,12 @@ public class JdbcUtilsTest {
 		appContext = new ClassPathXmlApplicationContext("classpath:META-INF/spring/bean-dao-jdbc.xml");
 	}
 	
-	*//**
+	/**
      * Test get row count in table "gen$huis.g_individu"<br>
-     *//*
+     */
 	@Test
 	public void testEmployeeJdbc() {
 		int count = JdbcUtils.getRowCount("gen$huis", "g_individu");
 		assertEquals(rowCountGIndividu, count);
-	}*/
+	}
 }

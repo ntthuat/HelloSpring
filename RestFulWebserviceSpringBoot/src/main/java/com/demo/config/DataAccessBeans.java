@@ -14,11 +14,11 @@ import org.springframework.stereotype.Component;
  * @version 01/24/2018
  */
 @Component("dataAccessBeans")
-public class DataAccessBeans/* implements InitializingBean */{
+public class DataAccessBeans implements InitializingBean {
 
 	/**
 	 * Static instance to allow static access. This is initialized when Spring configuration is loaded.
-	 *//*
+	 */
 	private static DataAccessBeans sInstance;
 	
 	private JdbcTemplate jdbcTemplate;
@@ -46,6 +46,6 @@ public class DataAccessBeans/* implements InitializingBean */{
 	
 	public String testBean(){
 		return "success";
-	}*/
+	}
 
 }

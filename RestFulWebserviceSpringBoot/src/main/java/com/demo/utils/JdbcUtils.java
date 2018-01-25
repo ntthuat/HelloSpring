@@ -13,7 +13,7 @@ import com.demo.config.DataAccessBeans;
  */
 public class JdbcUtils{
 	
-	/*private static JdbcTemplate myJdbcTemplate;
+	private static JdbcTemplate myJdbcTemplate;
 	
 	public static int getRowCount(final String schema, final String table) {
 		myJdbcTemplate = DataAccessBeans.getJdbcTemplate();
@@ -21,5 +21,5 @@ public class JdbcUtils{
 		final String sql = "SELECT COUNT(1) FROM " + schema+ "." + table +" WHERE 1=?";
 		int count = myJdbcTemplate.queryForObject(sql, new Object[] {1}, Integer.class);
 		return count;
-	}*/
+	}
 }
