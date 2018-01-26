@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
  * @version 01/24/2018
  *
  */
-public class Message {
+public class MessageRequest {
 	
 	/**
 	 * Customer external reference<br>

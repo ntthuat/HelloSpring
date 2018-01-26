@@ -24,7 +24,7 @@ public class MessageResponse {
 	 * </pre>
 	 */
 	@Size(max = 64)
-	private String msgStatus;
+	private MessageStatus msgStatus;
 	
 	/**
 	 * Refinfo<br>
@@ -116,14 +116,14 @@ public class MessageResponse {
 	@Size(max = 10)
 	private String creditorName;
 
-	public String getMsgStatus() {
+	public MessageStatus getMsgStatus() {
 		return msgStatus;
 	}
 
-	public void setMsgStatus(String msgStatus) {
+	public void setMsgStatus(MessageStatus msgStatus) {
 		this.msgStatus = msgStatus;
 	}
-
+	
 	public String getMsgRefInfo() {
 		return msgRefInfo;
 	}

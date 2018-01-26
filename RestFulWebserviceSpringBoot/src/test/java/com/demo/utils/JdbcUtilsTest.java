@@ -18,11 +18,17 @@ public class JdbcUtilsTest {
 		appContext = new ClassPathXmlApplicationContext("classpath:META-INF/spring/bean-dao-jdbc.xml");
 	}
 	
+	private static String abc;
+	public static void init() {
+		abc = "abd";
+	}
+	
 	/**
      * Test get row count in table "gen$huis.g_individu"<br>
      */
 	@Test
 	public void testEmployeeJdbc() {
+		System.out.println(abc);
 		int count = JdbcUtils.getRowCount("gen$huis", "g_individu");
 		assertEquals(rowCountGIndividu, count);
 	}
