@@ -17,7 +17,7 @@ import com.demo.entity.Student;
  * @version 01/23/2018
  */
 @SpringBootApplication
-@ComponentScan({"com.demo.controller", "hello"})
+@ComponentScan({"com.demo.controller", "hello", "com.demo.dao.impl"})
 public class Application {
 	
 	private static ApplicationContext appContext;
@@ -25,7 +25,7 @@ public class Application {
 	public static HashMap<Long, Student> hmStudent;
 
 	public static void main(String[] args) {
-		/*setUp();*/
+		setUp();
 		hmStudent = new HashMap<Long, Student>();
 		Student one = new Student("John", "math");
 		hmStudent.put(new Long(one.getId()), one);

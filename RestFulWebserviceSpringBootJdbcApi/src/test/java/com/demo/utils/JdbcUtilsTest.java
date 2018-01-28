@@ -11,10 +11,11 @@ public class JdbcUtilsTest {
 	
 	private ApplicationContext appContext;
 	
-	private static final int rowCountGIndividu = 18174;
+	private static final int rowCountGIndividu = 1;
 	
 	@Before
 	public void setUp(){
+		System.out.println("Thuat");
 		appContext = new ClassPathXmlApplicationContext("classpath:META-INF/spring/bean-dao-jdbc.xml");
 	}
 	
@@ -28,8 +29,7 @@ public class JdbcUtilsTest {
      */
 	@Test
 	public void testEmployeeJdbc() {
-		System.out.println(abc);
-		int count = JdbcUtils.getRowCount("gen$huis", "g_individu");
+		int count = JdbcUtils.getRowCount("MAIN_USER", "STUDENT");
 		assertEquals(rowCountGIndividu, count);
 	}
 }

@@ -8,6 +8,9 @@ import java.util.Date;
  */
 public class Student {
 
+	/** STUDENT_TABLE table */
+	public static final String STUDENT_TABLE = "student";
+	
 	private long id;
 	private String name;
 	private String subject;
