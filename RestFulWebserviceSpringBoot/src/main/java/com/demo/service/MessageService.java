@@ -3,16 +3,12 @@ package com.demo.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import javax.sql.DataSource;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.stereotype.Service;
 
 import com.demo.dao.MessageDao;
-import com.demo.dao.impl.MessageDaoImpl;
 import com.demo.model.MessageRequest;
 import com.demo.model.MessageResponse;
 
@@ -22,22 +18,11 @@ import com.demo.model.MessageResponse;
  * @version 01/24/2018
  * 
  */
+@Service
 public class MessageService {
 	
-	private ApplicationContext appContext;
-	private MessageDao messageDao;
-	
 	@Autowired
-	private DataSource datasource;
-	
-	public DataSource getDataSource() {
-		return datasource;
-	}
-	
-	public void setUp(){
-		appContext = new ClassPathXmlApplicationContext("classpath:META-INF/spring/bean-dataaccess-application.xml");
-		messageDao = (MessageDaoImpl)appContext.getBean("messageDao");
-	}
+	private MessageDao messageDao;
 	
 	public static HashMap<Integer, MessageRequest> hmMessage;
 	
@@ -46,9 +31,6 @@ public class MessageService {
 	public static List<MessageRequest> listMessage;
 
 	public HashMap<Integer, MessageRequest> getMessage(String cusExRef) {
-		if (appContext == null) {
-			setUp();
-		}
 		hmMessage = new HashMap<>();
 		final MessageRequest messageRequest;
 		if (cusExRef == null) {
@@ -64,12 +46,8 @@ public class MessageService {
 	public HashMap<Integer, MessageRequest> getMessageFullParameter(String cusExRef, String cusName, String casRef,
 			String msgBoxDirIn, String msgBoxDirOut, String msgFromDat, String msgToDat, String msgSearchBy,
 			Boolean msgUnread, String msgFilter) {
-		if (appContext == null) {
-			setUp();
-		}
 		hmMessage = new HashMap<>();
 		final MessageRequest messageRequest;
-		System.out.println(cusExRef);
 		messageRequest = messageDao.getMessage(cusExRef, cusName, casRef, msgBoxDirIn, msgBoxDirOut, msgFromDat,
 				msgToDat, msgSearchBy, msgUnread, msgFilter);
 
@@ -78,20 +56,37 @@ public class MessageService {
 	}
 	
 	public List<MessageRequest> getListMessageRequest() {
-		if (appContext == null) {
-			setUp();
-		}
 		listMessage = new ArrayList<>();
 		listMessage = messageDao.getListMessage("TEST_GNAC3YKW2JA2002697");
 		return listMessage;
 	}
 	
 	public MessageResponse getMessageResponse() {
-		if (appContext == null) {
-			setUp();
-		}
 		final MessageResponse message;
 		message = messageDao.getMessageResponse("A3048843");
 		return message;
+	}
+	
+	public List<Map<String, Object>> getMessage(MessageRequest messageRequest) {
+		return messageDao.getMessage(messageRequest);
+	}
+	
+	public List<MessageResponse> getListMessage(MessageRequest messageRequest) {
+		List<Map<String, Object>> messageRequestList = messageDao.getMessage(messageRequest);
+		List<MessageResponse> messageResponseList = new ArrayList<>();
+		for (Map<String, Object> messageRequestMap : messageRequestList) {
+			MessageResponse messageResponse = setMessageResponseFromMessageRequest(messageRequestMap);
+			messageResponseList.add(messageResponse);
+		}
+		return messageResponseList;
+	}
+	
+	private MessageResponse setMessageResponseFromMessageRequest(Map<String, Object> messageRequestMap){
+		MessageResponse messageResponse = new MessageResponse();
+		messageResponse.setCasRef((String)messageRequestMap.get("casRef"));
+		messageResponse.setDbName((String)messageRequestMap.get("dbName"));
+		messageResponse.setCreditorName((String)messageRequestMap.get("creditorName"));
+		messageResponse.setMsgRefInfo((String)messageRequestMap.get("msgRefInfo"));
+		return messageResponse;
 	}
 }

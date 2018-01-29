@@ -1,6 +1,7 @@
 package com.demo.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.demo.model.MessageRequest;
 import com.demo.model.MessageResponse;
@@ -24,4 +25,6 @@ public interface MessageDao {
 			final String msgSearchBy, final Boolean msgUnread, final String msgFilter);
 	
 	public MessageResponse getMessageResponse(final String msgRefInfo);
+	
+	public List<Map<String, Object>> getMessage(MessageRequest messageRequest);
 }

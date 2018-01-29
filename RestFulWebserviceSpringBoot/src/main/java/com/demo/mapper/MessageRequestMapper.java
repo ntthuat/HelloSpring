@@ -13,7 +13,7 @@ import com.demo.model.MessageRequest;
  * @version 01/24/2018
  *
  */
-public class MessageMapper implements RowMapper<MessageRequest> {
+public class MessageRequestMapper implements RowMapper<MessageRequest> {
 
 	/**
 	 * @param rs the ResultSet to map (pre-initialized for the current row)

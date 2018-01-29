@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.demo.dao.MessageDao;
@@ -22,9 +23,12 @@ import com.demo.model.MessageResponse;
  * @version 01/24/2018
  * 
  */
+@Component
 public class MessageService {
 	
 	private ApplicationContext appContext;
+	
+	@Autowired
 	private MessageDao messageDao;
 	
 	@Autowired
@@ -46,9 +50,9 @@ public class MessageService {
 	public static List<MessageRequest> listMessage;
 
 	public HashMap<Integer, MessageRequest> getMessage(String cusExRef) {
-		if (appContext == null) {
+		/*if (appContext == null) {
 			setUp();
-		}
+		}*/
 		hmMessage = new HashMap<>();
 		final MessageRequest messageRequest;
 		if (cusExRef == null) {
@@ -64,9 +68,9 @@ public class MessageService {
 	public HashMap<Integer, MessageRequest> getMessageFullParameter(String cusExRef, String cusName, String casRef,
 			String msgBoxDirIn, String msgBoxDirOut, String msgFromDat, String msgToDat, String msgSearchBy,
 			Boolean msgUnread, String msgFilter) {
-		if (appContext == null) {
+		/*if (appContext == null) {
 			setUp();
-		}
+		}*/
 		hmMessage = new HashMap<>();
 		final MessageRequest messageRequest;
 		System.out.println(cusExRef);
@@ -78,18 +82,18 @@ public class MessageService {
 	}
 	
 	public List<MessageRequest> getListMessageRequest() {
-		if (appContext == null) {
+		/*if (appContext == null) {
 			setUp();
-		}
+		}*/
 		listMessage = new ArrayList<>();
 		listMessage = messageDao.getListMessage("TEST_GNAC3YKW2JA2002697");
 		return listMessage;
 	}
 	
 	public MessageResponse getMessageResponse() {
-		if (appContext == null) {
+		/*if (appContext == null) {
 			setUp();
-		}
+		}*/
 		final MessageResponse message;
 		message = messageDao.getMessageResponse("A3048843");
 		return message;

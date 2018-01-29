@@ -3,6 +3,7 @@ package com.demo.dao;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -64,5 +65,24 @@ public class MessageDaoTest {
 		MessageResponse message = messageDao.getMessageResponse("A3048843");
 		assertEquals("0310170002", message.getCasRef());
 		System.out.println(message);
+	}
+	
+	@Test
+	public void testGetMessage2() {
+		MessageRequest messageRequest = new MessageRequest();
+		messageRequest.setCusExRef("TEST_GNAC3YKW2JA2002697");
+		List<Map<String, Object>> list = messageDao.getMessage(messageRequest);
+		assertEquals(161, list.size());
+	}
+	
+	@Test
+	public void testGetMessage3() {
+		MessageRequest messageRequest = new MessageRequest();
+		messageRequest.setCusExRef("TEST_GNAC3YKW2JA2002697");
+		messageRequest.setCusName("DEPARTEMENT SINISTRE");
+		messageRequest.setCasRef("1406160015");
+		List<Map<String, Object>> list = messageDao.getMessage(messageRequest);
+		assertEquals(6, list.size());
+		
 	}
 }
