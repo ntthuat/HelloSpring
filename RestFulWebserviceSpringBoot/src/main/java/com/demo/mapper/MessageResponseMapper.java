@@ -14,7 +14,7 @@ public class MessageResponseMapper implements RowMapper<MessageResponse> {
 		MessageResponse message = new MessageResponse();
 		message.setCasExRef(rs.getString("casExRef"));
 		message.setMsgRefInfo(rs.getString("msgRefInfo"));
-		message.setMsgDat(rs.getString("msgDat"));
+		message.setMsgDat(rs.getDate("msgDat"));
 		message.setCasRef(rs.getString("casRef"));
 		return message;
 	}

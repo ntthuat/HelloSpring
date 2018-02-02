@@ -1,6 +1,7 @@
 package com.demo.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.demo.dao.MessageDao;
 import com.demo.model.MessageRequest;
 import com.demo.model.MessageResponse;
+import com.demo.model.MessageStatus;
+import com.demo.utils.MessageUtils;
 
 /**
  * 
@@ -63,7 +66,7 @@ public class MessageService {
 	
 	public MessageResponse getMessageResponse() {
 		final MessageResponse message;
-		message = messageDao.getMessageResponse("A3048843");
+		message = messageDao.getMessageResponse("A600O5AQ");
 		return message;
 	}
 	
@@ -83,10 +86,28 @@ public class MessageService {
 	
 	private MessageResponse setMessageResponseFromMessageRequest(Map<String, Object> messageRequestMap){
 		MessageResponse messageResponse = new MessageResponse();
+		
+		MessageStatus messageStatus = new MessageStatus();
+		messageStatus.setAnswerRequested(MessageUtils.getBoolean((String)messageRequestMap.get("isReplyReq")));
+		messageStatus.setAttachment(MessageUtils.getBoolean((String)messageRequestMap.get("isAttachment")));
+		messageStatus.setUrgent(MessageUtils.getBoolean((String)messageRequestMap.get("isUrgent")));
+		messageStatus.setImportant(MessageUtils.getBoolean((String)messageRequestMap.get("isImportant")));
+		messageStatus.setToRead(MessageUtils.getBoolean((String)messageRequestMap.get("isRead")));
+		
 		messageResponse.setCasRef((String)messageRequestMap.get("casRef"));
 		messageResponse.setDbName((String)messageRequestMap.get("dbName"));
 		messageResponse.setCreditorName((String)messageRequestMap.get("creditorName"));
 		messageResponse.setMsgRefInfo((String)messageRequestMap.get("msgRefInfo"));
+		messageResponse.setMsgDat((Date)messageRequestMap.get("msgDat"));
+		messageResponse.setMsgFrom((String)messageRequestMap.get("msgFrom"));
+		messageResponse.setMsgTo((String)messageRequestMap.get("msgTo"));
+		messageResponse.setMsgSubject((String)messageRequestMap.get("msgSubject"));
+		messageResponse.setCasExRef((String)messageRequestMap.get("casExRef"));
+		
+		messageRequestMap.put("msgStatus", messageStatus.toString());
+		
+		messageResponse.setMsgStatus((String)messageRequestMap.get("msgStatus"));
+		
 		return messageResponse;
 	}
 }

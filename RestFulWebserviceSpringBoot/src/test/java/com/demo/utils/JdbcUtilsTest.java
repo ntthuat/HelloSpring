@@ -7,13 +7,11 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.demo.config.DataAccessBeans;
-
 public class JdbcUtilsTest {
 	
 	private ApplicationContext appContext;
 	
-	private static final int rowCountGIndividu = 18234;
+	private static final int rowCountGIndividu = 18265;
 	
 	@Before
 	public void setUp(){

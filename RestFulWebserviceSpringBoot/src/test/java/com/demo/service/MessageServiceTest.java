@@ -3,16 +3,12 @@ package com.demo.service;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.demo.dao.MessageDao;
-import com.demo.dao.impl.MessageDaoImpl;
 import com.demo.model.MessageRequest;
 import com.demo.model.MessageResponse;
 
@@ -36,7 +32,15 @@ public class MessageServiceTest {
 	@Test
 	public void test() {
 		MessageResponse message = messageService.getMessageResponse();
-		assertEquals("0310170002", message.getCasRef());
+		assertEquals("1508140002", message.getCasRef());
 		System.out.println(message);
+	}
+	
+	@Test
+	public void testListMessages() {
+		MessageRequest rq = new MessageRequest();
+		List<MessageResponse> list = messageService.getListMessage(rq);
+		System.out.println(list.size());
+		
 	}
 }

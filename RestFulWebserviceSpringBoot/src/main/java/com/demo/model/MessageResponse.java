@@ -1,5 +1,7 @@
 package com.demo.model;
 
+import java.util.Date;
+
 import javax.validation.constraints.Size;
 
 /**
@@ -24,7 +26,7 @@ public class MessageResponse {
 	 * </pre>
 	 */
 	@Size(max = 64)
-	private MessageStatus msgStatus;
+	private String msgStatus;
 	
 	/**
 	 * Refinfo<br>
@@ -53,8 +55,7 @@ public class MessageResponse {
 	 * CDM: Message. Message date
 	 * </pre>
 	 */
-	@Size(max = 10)
-	private String msgDat;
+	private Date msgDat;
 	
 	/**
 	 * From<br>
@@ -116,11 +117,11 @@ public class MessageResponse {
 	@Size(max = 10)
 	private String creditorName;
 
-	public MessageStatus getMsgStatus() {
+	public String getMsgStatus() {
 		return msgStatus;
 	}
 
-	public void setMsgStatus(MessageStatus msgStatus) {
+	public void setMsgStatus(String msgStatus) {
 		this.msgStatus = msgStatus;
 	}
 	
@@ -140,11 +141,11 @@ public class MessageResponse {
 		this.casExRef = casExRef;
 	}
 
-	public String getMsgDat() {
+	public Date getMsgDat() {
 		return msgDat;
 	}
 
-	public void setMsgDat(String msgDat) {
+	public void setMsgDat(Date msgDat) {
 		this.msgDat = msgDat;
 	}
 

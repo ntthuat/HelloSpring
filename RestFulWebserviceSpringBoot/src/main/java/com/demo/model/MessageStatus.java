@@ -7,40 +7,26 @@ package com.demo.model;
  *
  */
 public class MessageStatus {
-	
+
 	/**
 	 * Message is to be read
 	 */
 	private Boolean isToRead;
-	
+
 	/**
 	 * To indicate from a sender that a message is ‘urgent’ when a message is sent
 	 */
 	private Boolean isUrgent;
-	
+
 	/**
-	 * To indicate from a recipient that a message is ‘important’, when a message is received.
+	 * To indicate from a recipient that a message is ‘important’, when a message is
+	 * received.
 	 */
 	private Boolean isImportant;
-	
-	/**
-	 * 'I': Do not display alert:
-	 * O - Do not display alert
-	 * N or null - Display alert
-	 * 
-	 * else: Answer requested: 
-	 * ‘A’ - already replied
-	 * ‘R’ - reply required
-	 * ‘N’ - new message (not read)
-	 */
-	private String answerRequested;
-	
-	/**
-	 * Indicate if the message has attachment 
-	 * ‘A’ - means has attachment 
-	 * null - no attachment
-	 */
-	private String attachment;
+
+	private Boolean answerRequested;
+
+	private Boolean attachment;
 
 	public Boolean getToRead() {
 		return isToRead;
@@ -66,19 +52,56 @@ public class MessageStatus {
 		this.isImportant = isImportant;
 	}
 
-	public String getAnswerRequested() {
+	public Boolean getAnswerRequested() {
 		return answerRequested;
 	}
 
-	public void setAnswerRequested(String answerRequested) {
+	public void setAnswerRequested(Boolean answerRequested) {
 		this.answerRequested = answerRequested;
 	}
 
-	public String getAttachment() {
+	public Boolean getAttachment() {
 		return attachment;
 	}
 
-	public void setAttachment(String attachment) {
+	public void setAttachment(Boolean attachment) {
 		this.attachment = attachment;
 	}
+
+	public String toString() {
+		String msgStatus = "";
+
+		msgStatus += parseBoolean(getToRead()) + "|";
+		msgStatus += parseBoolean(getUrgent()) + "|";
+		msgStatus += parseBoolean(getImportant()) + "|";
+		msgStatus += parseReplyReqBoolean(getAnswerRequested()) + "|";
+		msgStatus += parseAttachmentBoolean(getAttachment());
+
+		return msgStatus;
+	}
+
+	private static String parseBoolean(Boolean val) {
+		if (val != null && val == true) {
+			return "O";
+		} else {
+			return "N";
+		}
+	}
+
+	public static String parseReplyReqBoolean(Boolean val) {
+		if (val != null && val == true) {
+			return "R";
+		} else {
+			return "N";
+		}
+	}
+
+	public static String parseAttachmentBoolean(Boolean val) {
+		if (val != null && val == true) {
+			return "A";
+		} else {
+			return "N";
+		}
+	}
+
 }

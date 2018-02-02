@@ -1,6 +1,5 @@
 package com.demo.dao.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import com.demo.constant.TableConstants;
 import com.demo.dao.MessageDao;
 import com.demo.mapper.MessageRequestMapper;
 import com.demo.mapper.MessageResponseMapper;
@@ -140,8 +140,115 @@ public class MessageDaoImpl implements MessageDao {
 		return message;
 	}
 	
+	private String buildSELECTStatementSQL() {
+		StringJoiner selectSQL = new StringJoiner(TableConstants.COMMA_SP);
+		selectSQL.add(TableConstants.t_elements_temp + ".refdoss" + " casRef");
+		selectSQL.add(TableConstants.g_information_temp + ".refinfo" + " msgRefInfo");
+		selectSQL.add(TableConstants.g_individu_temp + ".refext" + " cusExRef");
+		selectSQL.add(TableConstants.g_individu_temp + ".nom" + " creditorName");
+		selectSQL.add("dbi.nom" + " dbName");
+		selectSQL.add(TableConstants.g_information_temp + ".dtsaisie_dt" + " msgDat");
+		selectSQL.add(TableConstants.g_information_temp + ".refemetteur" + " msgFrom");
+		selectSQL.add(TableConstants.g_information_temp + ".encodeur" + " msgTo");
+		selectSQL.add(TableConstants.g_information_temp + ".libelinfo" + " msgSubject");
+		selectSQL.add(TableConstants.g_information_temp + ".typedoc" + " isRead");
+		selectSQL.add(TableConstants.g_information_temp + ".fg_urgent" + " isUrgent");
+		selectSQL.add(TableConstants.g_information_temp + ".fg_important" + " isImportant");
+		selectSQL.add(TableConstants.g_information_temp + ".str_10_1" + " isReplyReq");
+		selectSQL.add(TableConstants.g_information_temp + ".typemetteur" + " isAttachment");
+		selectSQL.add(TableConstants.t_intervenants_temp + ".refdossext" + " casExRef");
+		return selectSQL.toString();
+	}
+	
 	/**
-	 * for test: TEST_GNAC3YKW2JA2002697
+	 * Build FROM Statement SQL
+	 * 
+	 * @param tables
+	 * @return
+	 */
+	private String buildWHEREStatementSQL(MessageRequest messageRequest) {
+		StringJoiner whereSQL = new StringJoiner(" AND ");
+		whereSQL.add("1=1");
+		if (messageRequest.getCusName() != null) {
+			whereSQL.add("(cusi.nom LIKE :cusName)");
+		}
+		if (messageRequest.getCusExRef() != null) {
+			whereSQL.add("(cusi.refext LIKE :cusExRef)");
+		}
+		if (messageRequest.getCasRef() != null) {
+			whereSQL.add("(elem.refdoss LIKE :casRef)");
+		}
+		if (messageRequest.getMsgBoxDirIn() != null) {
+			whereSQL.add("(msg.encodeur LIKE :msgBoxDirIn)");
+		}
+		if (messageRequest.getMsgBoxDirOut() != null) {
+			whereSQL.add("(msg.refemetteur LIKE :msgBoxDirOut)");
+		}
+		if (messageRequest.getMsgFromDat() != null) {
+			whereSQL.add("(msg.dtsaisie_dt >= to_date(:msgFromDat, 'YYYY-MM-DD'))");
+		}
+		if (messageRequest.getMsgToDat() != null) {
+			whereSQL.add("(msg.dtsaisie_dt >= to_date(:msgToDat, 'YYYY-MM-DD') + 1)");
+		}
+		if (messageRequest.getMsgUnread() !=null ) {
+			if (messageRequest.getMsgUnread() == true) {
+				whereSQL.add("(nvl(msg.typedoc, 'N') = 'N')");
+			}
+		}
+		if (messageRequest.getMsgSearchBy() != null) {
+			if (messageRequest.getMsgSearchBy().equals("from")) {
+				whereSQL.add("(msg.refemetteur LIKE :msgFilter)");
+			}
+			if (messageRequest.getMsgSearchBy().equals("to")) {
+				whereSQL.add("(msg.encodeur LIKE :msgFilter)");
+			}
+			if (messageRequest.getMsgSearchBy().equals("subject")) {
+				whereSQL.add("(msg.libelinfo LIKE :msgFilter)");
+			}
+			if (messageRequest.getMsgSearchBy().equals("case")) {
+				whereSQL.add("(elem.refdoss LIKE :msgFilter OR msg.refext2 LIKE :msgFilter)");
+			}
+			if (messageRequest.getMsgSearchBy().equals("debtor")) {
+				whereSQL.add("(dbi.nom LIKE :msgFilter)");
+			}
+		}
+		
+		whereSQL.add("(customer.reftype = 'CL')");
+		
+		whereSQL.add("(debtor.reftype = 'DB')");
+		whereSQL.add("(debtor.refindividu = dbi.refindividu)");
+		whereSQL.add("(elem.refdoss = debtor.refdoss (+))");
+		
+		whereSQL.add("(elem.typeelem = 'ms')");
+		whereSQL.add("("+TableConstants.t_intervenants_temp + ".refindividu" + "=" + TableConstants.g_individu_temp + ".refindividu"+")");
+		whereSQL.add("("+TableConstants.t_elements_temp + ".refdoss" + "=" + TableConstants.t_intervenants_temp + ".refdoss (+)"+")");
+		whereSQL.add("("+TableConstants.g_information_temp + ".refinfo" + "=" + TableConstants.t_elements_temp + ".refelem"+")");
+		/*s*/
+		return whereSQL.toString();
+	}
+	
+	/**
+	 * Build FROM Statement SQL
+	 * 
+	 * @param tables
+	 * @return
+	 */
+	private String buildFROMStatementSQL(final String...tables ) {
+		StringJoiner fromSQL = new StringJoiner(TableConstants.COMMA_SP);
+		for (String table : tables) {
+			fromSQL.add(table + TableConstants.SPACE + TableConstants.tableMap.get(table));
+		}
+		
+		fromSQL.add("t_intervenants debtor");
+		fromSQL.add("g_individu dbi");
+		
+		return fromSQL.toString();
+	}
+	
+	/**
+	 * for test: 
+	 * cusExRef=TEST_GNAC3YKW2JA2002697
+	 * casRef=1406160015
 	 * 
 	 * @param messageRequest
 	 * @return
@@ -149,75 +256,7 @@ public class MessageDaoImpl implements MessageDao {
 	@Override
 	public List<Map<String, Object>> getMessage(MessageRequest messageRequest) {
 		Map<String, Object> argsMap = new HashMap<>();
-		StringBuffer statementSQL = new StringBuffer();
-		statementSQL.append(" SELECT ");
-		
-		StringJoiner selectSQL = new StringJoiner(", ");
-		selectSQL.add("g_indi.refext cusExRef");
-		selectSQL.add("g_indi.nom cusName");
-		selectSQL.add("g_indi.nom dbName");
-		selectSQL.add("g_indi.nom creditorName");
-		selectSQL.add("t_ele.refdoss casRef");
-		selectSQL.add("g_infor.encodeur msgBoxDirIn");
-		selectSQL.add("g_infor.refemetteur msgBoxDirOut");
-		selectSQL.add("g_infor.dtsaisie_dt msgFromDat");
-		selectSQL.add("g_infor.dtsaisie_dt msgToDat");
-		selectSQL.add("g_infor.typedoc msgUnread");
-		selectSQL.add("g_infor.refinfo msgRefInfo");
-		statementSQL.append(selectSQL.toString());
-		
-		statementSQL.append(" FROM ");
-		
-		StringJoiner fromSQL = new StringJoiner(", ");
-		fromSQL.add("g_individu g_indi");
-		fromSQL.add("g_information g_infor");
-		fromSQL.add("t_intervenants t_inter");
-		fromSQL.add("t_elements t_ele");
-		statementSQL.append(fromSQL.toString());
-		
-		statementSQL.append(" WHERE ");
-		
-		StringJoiner whereSQL = new StringJoiner(" AND ");
-		whereSQL.add("1=1");
-		if (messageRequest.getCusExRef() != null) {
-			whereSQL.add("g_indi.refext=:cusExRef");
-			argsMap.put("cusExRef", messageRequest.getCusExRef());
-		}
-		if (messageRequest.getCusName() != null) {
-			whereSQL.add("g_indi.nom=:cusName");
-			argsMap.put("cusName", messageRequest.getCusName());
-		}
-		if (messageRequest.getCasRef() != null) {
-			whereSQL.add("t_ele.refdoss=:casRef");
-			argsMap.put("casRef", messageRequest.getCasRef());
-		}
-		if (messageRequest.getMsgBoxDirIn() != null) {
-			whereSQL.add("g_infor.encodeur=:msgBoxDirIn");
-			argsMap.put("msgBoxDirIn", messageRequest.getMsgBoxDirIn());
-		}
-		if (messageRequest.getMsgBoxDirOut() != null) {
-			whereSQL.add("g_infor.refemetteur=:msgBoxDirOut");
-			argsMap.put("msgBoxDirOut", messageRequest.getMsgBoxDirOut());
-		}
-		if (messageRequest.getMsgFromDat() != null) {
-			whereSQL.add("g_infor.dtsaisie_dt=:msgFromDat");
-			argsMap.put("msgFromDat", messageRequest.getMsgFromDat());
-		}
-		if (messageRequest.getMsgToDat() != null) {
-			whereSQL.add("g_infor.dtsaisie_dt=:msgToDat");
-			argsMap.put("msgToDat", messageRequest.getMsgToDat());
-		}
-		if (messageRequest.getMsgUnread() != null) {
-			whereSQL.add("g_infor.typedoc=:msgUnread");
-			argsMap.put("msgUnread", messageRequest.getMsgUnread());
-		}
-		whereSQL.add("t_inter.refindividu = g_indi.refindividu");
-		whereSQL.add("t_ele.refdoss = t_inter.refdoss");
-		whereSQL.add("t_ele.refdoss = t_inter.refdoss");
-		whereSQL.add("g_infor.refinfo = t_ele.refelem");
-		statementSQL.append(whereSQL.toString());
-		
-		List<Map<String, Object>> list = new ArrayList<>();
+		argsMap.put("cusExRef", messageRequest.getCusExRef());
 		argsMap.put("cusName", messageRequest.getCusName());
 		argsMap.put("casRef", messageRequest.getCasRef());
 		argsMap.put("msgBoxDirIn", messageRequest.getMsgBoxDirIn());
@@ -226,7 +265,25 @@ public class MessageDaoImpl implements MessageDao {
 		argsMap.put("msgToDat", messageRequest.getMsgToDat());
 		argsMap.put("msgUnread", messageRequest.getMsgUnread());
 		argsMap.put("msgFilter", messageRequest.getMsgFilter());
-		list = namedParameterJdbcTemplate.queryForList(statementSQL.toString(), argsMap);
-		return list;
+		argsMap.put("msgSearchBy", messageRequest.getMsgSearchBy());
+		
+		StringBuffer statementSQL = new StringBuffer();
+		
+		// build SELECT statement SQL
+		statementSQL.append(" SELECT ");
+		statementSQL.append(buildSELECTStatementSQL());
+		
+		// build FROM statement SQL
+		statementSQL.append(" FROM ");
+		statementSQL.append(buildFROMStatementSQL(TableConstants.g_individu, TableConstants.g_information, TableConstants.t_intervenants, TableConstants.t_elements));
+		
+		// build WHERE statement SQL
+		statementSQL.append(" WHERE ");
+		statementSQL.append(buildWHEREStatementSQL(messageRequest));
+		
+		statementSQL.append(" ORDER BY elem.refdoss, msg.dtsaisie_dt DESC NULLS LAST");
+		
+		System.out.println(statementSQL.toString());
+		return namedParameterJdbcTemplate.queryForList(statementSQL.toString(), argsMap);
 	}
 }
