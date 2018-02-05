@@ -78,10 +78,10 @@ public class MessageDaoTest {
 	@Test
 	public void testGetMessage3() {
 		MessageRequest messageRequest = new MessageRequest();
-		messageRequest.setCusExRef("67457547");
+		messageRequest.setCusExRef("40300383");
 		/*messageRequest.setCasRef("1406160015");*/
 		List<Map<String, Object>> list = messageDao.getMessage(messageRequest);
-		assertEquals(0, list.size());
+		assertEquals(2, list.size());
 	}
 	
 	/**

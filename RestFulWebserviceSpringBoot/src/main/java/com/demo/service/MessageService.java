@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,8 @@ import com.demo.utils.MessageUtils;
  */
 @Service
 public class MessageService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(MessageService.class);
 	
 	@Autowired
 	private MessageDao messageDao;
@@ -75,6 +79,9 @@ public class MessageService {
 	}
 	
 	public List<MessageResponse> getListMessage(MessageRequest messageRequest) {
+		
+		logger.info("Going to getListMessage...");
+		
 		List<Map<String, Object>> messageRequestList = messageDao.getMessage(messageRequest);
 		List<MessageResponse> messageResponseList = new ArrayList<>();
 		for (Map<String, Object> messageRequestMap : messageRequestList) {

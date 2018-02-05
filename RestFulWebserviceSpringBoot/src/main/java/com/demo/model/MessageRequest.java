@@ -2,67 +2,82 @@ package com.demo.model;
 
 import javax.validation.constraints.Size;
 
+import org.jsondoc.core.annotation.ApiObject;
+import org.jsondoc.core.annotation.ApiObjectField;
+
 /**
  * 
  * @author tnthien
  * @version 01/24/2018
  *
  */
+@ApiObject(name = "MessageRequest")
 public class MessageRequest {
-	
+
 	/**
 	 * Customer external reference<br>
 	 * Description:
+	 * 
 	 * <pre>
 	 * <b>CDM: Individual. External reference</b>
 	 * </pre>
 	 */
 	@Size(max = 30)
+	@ApiObjectField(order = 1, description = "Customer external reference")
 	private String cusExRef;
-	
+
 	/**
 	 * Customer Name<br>
 	 * Description:
+	 * 
 	 * <pre>
 	 * <b>CDM: Individual.Name</b>
 	 * </pre>
 	 */
 	@Size(max = 100)
+	@ApiObjectField(order = 2, description = "Customer Name")
 	private String cusName;
-	
+
 	/**
 	 * Case reference<br>
 	 * Description:
+	 * 
 	 * <pre>
 	 * <b>CDM: Case.iMX case reference</b>
 	 * </pre>
 	 */
 	@Size(max = 10)
+	@ApiObjectField(order = 3, description = "Case reference")
 	private String casRef;
-	
+
 	/**
 	 * Box directory In<br>
 	 * Description:
+	 * 
 	 * <pre>
 	 * Search in Message box.
 	 * <b>CDM: Message.Addresee (inbox)</b>
 	 * </pre>
 	 */
 	@Size(max = 20)
+	@ApiObjectField(order = 4, description = "Box directory In")
 	private String msgBoxDirIn;
-	
+
 	/**
 	 * Box directory Out<br>
 	 * Description:
+	 * 
 	 * <pre>
 	 * <b>CDM: Message.Sender (outbox)</b>
 	 * </pre>
 	 */
 	@Size(max = 20)
+	@ApiObjectField(order = 5, description = "Box directory Out")
 	private String msgBoxDirOut;
-	
+
 	/**
 	 * Date from<br>
+	 * 
 	 * <pre>
 	 * Allows search with a date range. 
 	 * It presents the min date for the range.
@@ -70,11 +85,13 @@ public class MessageRequest {
 	 * </pre>
 	 */
 	@Size(max = 80)
+	@ApiObjectField(order = 6, description = "Date from")
 	private String msgFromDat;
-	
+
 	/**
 	 * Date to<br>
 	 * Description:
+	 * 
 	 * <pre>
 	 * Allows search with a date range. 
 	 * It presents the max date for the range.
@@ -82,11 +99,13 @@ public class MessageRequest {
 	 * </pre>
 	 */
 	@Size(max = 100)
+	@ApiObjectField(order = 7, description = "Date to")
 	private String msgToDat;
-	
+
 	/**
 	 * Search by<br>
 	 * Description:
+	 * 
 	 * <pre>
 	 * Presents list of all fields on which search can be performed.
 	 * <i>Property form translation tool message.types</i>
@@ -94,20 +113,24 @@ public class MessageRequest {
 	 * </pre>
 	 */
 	@Size(max = 10)
+	@ApiObjectField(order = 8, description = "Search by")
 	private String msgSearchBy;
-	
+
 	/**
 	 * Show unread messages<br>
 	 * Description:
+	 * 
 	 * <pre>
 	 * <b>CDM: Message. To read (Boolean)</b>
 	 * </pre>
 	 */
+	@ApiObjectField(order = 9, description = "Show unread messages")
 	private Boolean msgUnread;
-	
+
 	/**
 	 * Filter<br>
 	 * Description:
+	 * 
 	 * <pre>
 	 * <b>A free text search field
 	 * CDM: Message.Addresee + filter
@@ -119,6 +142,7 @@ public class MessageRequest {
 	 * </pre>
 	 */
 	@Size(max = 100)
+	@ApiObjectField(order = 10, description = "Filter")
 	private String msgFilter;
 
 	public String getCusExRef() {

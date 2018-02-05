@@ -8,6 +8,7 @@ com\demo\constant\TableConstants$1.class
 com\demo\mapper\MessageResponseMapper.class
 com\demo\model\MessageStatus.class
 hello\Application.class
+com\demo\utils\MessageUtils.class
 com\demo\model\MessageRequest.class
 com\demo\mapper\MessageRequestMapper.class
 com\demo\controller\MessageController.class

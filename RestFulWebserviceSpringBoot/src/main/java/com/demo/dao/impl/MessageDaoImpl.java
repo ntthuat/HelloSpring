@@ -7,9 +7,12 @@ import java.util.StringJoiner;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.demo.constant.TableConstants;
 import com.demo.dao.MessageDao;
@@ -26,6 +29,8 @@ import com.demo.model.MessageResponse;
  */
 @Component("messageDao")
 public class MessageDaoImpl implements MessageDao {
+	
+	private static final Logger logger = LoggerFactory.getLogger(MessageDaoImpl.class);
 
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -254,6 +259,7 @@ public class MessageDaoImpl implements MessageDao {
 	 * @return
 	 */
 	@Override
+	@Transactional
 	public List<Map<String, Object>> getMessage(MessageRequest messageRequest) {
 		Map<String, Object> argsMap = new HashMap<>();
 		argsMap.put("cusExRef", messageRequest.getCusExRef());
@@ -270,7 +276,7 @@ public class MessageDaoImpl implements MessageDao {
 		StringBuffer statementSQL = new StringBuffer();
 		
 		// build SELECT statement SQL
-		statementSQL.append(" SELECT ");
+		statementSQL.append("SELECT ");
 		statementSQL.append(buildSELECTStatementSQL());
 		
 		// build FROM statement SQL
@@ -283,7 +289,7 @@ public class MessageDaoImpl implements MessageDao {
 		
 		statementSQL.append(" ORDER BY elem.refdoss, msg.dtsaisie_dt DESC NULLS LAST");
 		
-		System.out.println(statementSQL.toString());
+		logger.debug(statementSQL.toString());
 		return namedParameterJdbcTemplate.queryForList(statementSQL.toString(), argsMap);
 	}
 }

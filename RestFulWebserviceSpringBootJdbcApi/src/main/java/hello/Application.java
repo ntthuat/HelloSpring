@@ -2,6 +2,7 @@ package hello;
 
 import java.util.HashMap;
 
+import org.jsondoc.spring.boot.starter.EnableJSONDoc;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -18,6 +19,7 @@ import com.demo.entity.Student;
  */
 @SpringBootApplication
 @ComponentScan({"com.demo.controller", "hello", "com.demo.dao.impl"})
+@EnableJSONDoc
 public class Application {
 	
 	private static ApplicationContext appContext;
