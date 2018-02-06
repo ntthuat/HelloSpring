@@ -48,6 +48,7 @@ public class MessageDaoImpl implements MessageDao {
 
 	
 	@Override
+	@Transactional
 	public MessageRequest getMessage2(final String cusExRef) {
 		final String sql = "SELECT g.refext cusExRef, g.nom cusName FROM g_individu g WHERE g.refext=:cusExRef";
 		Map<String, String> argsMap = new HashMap<>();
@@ -57,6 +58,7 @@ public class MessageDaoImpl implements MessageDao {
 	}
 
 	@Override
+	@Transactional
 	public MessageRequest getMessage(final String cusExRef) {
 		final String sql = "SELECT individu.refext cusExRef, individu.nom cusName, elements.refdoss casRef, information.encodeur msgBoxDirIn, information.refemetteur msgBoxDirOut, "
 				+ "information.dtsaisie_dt msgFromDat, information.dtsaisie_dt msgToDat, information.typedoc msgUnread "
@@ -75,6 +77,7 @@ public class MessageDaoImpl implements MessageDao {
 	 * for test: TEST_GNAC3YKW2JA2002697
 	 */
 	@Override
+	@Transactional
 	public MessageRequest getMessage(final String cusExRef, final String cusName, final String casRef,
 			final String msgBoxDirIn, final String msgBoxDirOut, final String msgFromDat, final String msgToDat,
 			final String msgSearchBy, final Boolean msgUnread, final String msgFilter) {
@@ -93,6 +96,7 @@ public class MessageDaoImpl implements MessageDao {
 	}
 
 	@Override
+	@Transactional
 	public List<MessageRequest> getListMessage(final String cusExRef) {
 		final String sql = "SELECT individu.refext cusExRef, individu.nom cusName, elements.refdoss casRef, information.encodeur msgBoxDirIn, information.refemetteur msgBoxDirOut, "
 				+ "information.dtsaisie_dt msgFromDat, information.dtsaisie_dt msgToDat, information.typedoc msgUnread "
@@ -117,6 +121,8 @@ public class MessageDaoImpl implements MessageDao {
 	 * @param msgRefInfo
 	 * @return
 	 */
+	@Transactional
+	@Override
 	public MessageResponse getMessageResponse(final String msgRefInfo) {
 		final String sql = 
 				"SELECT " + 
@@ -218,11 +224,11 @@ public class MessageDaoImpl implements MessageDao {
 			}
 		}
 		
-		whereSQL.add("(customer.reftype = 'CL')");
+		whereSQL.add("("+TableConstants.t_intervenants_temp+".reftype = 'CL')");
 		
 		whereSQL.add("(debtor.reftype = 'DB')");
 		whereSQL.add("(debtor.refindividu = dbi.refindividu)");
-		whereSQL.add("(elem.refdoss = debtor.refdoss (+))");
+		whereSQL.add("("+TableConstants.t_intervenants_temp+".refdoss = debtor.refdoss (+))");
 		
 		whereSQL.add("(elem.typeelem = 'ms')");
 		whereSQL.add("("+TableConstants.t_intervenants_temp + ".refindividu" + "=" + TableConstants.g_individu_temp + ".refindividu"+")");

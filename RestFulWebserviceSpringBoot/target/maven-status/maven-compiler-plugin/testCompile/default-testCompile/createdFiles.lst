@@ -1,3 +1,5 @@
+hello\ApplicationTest.class
+com\demo\utils\JdbcUtilsTest.class
+com\demo\controller\MessageControllerTest.class
 com\demo\service\MessageServiceTest.class
 com\demo\dao\MessageDaoTest.class
-com\demo\utils\JdbcUtilsTest.class

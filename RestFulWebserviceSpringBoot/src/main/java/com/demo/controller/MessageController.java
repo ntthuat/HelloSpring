@@ -35,62 +35,6 @@ public class MessageController {
 	
 	@Autowired
 	private MessageService messageSerivce;
-
-	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = "/message", method = RequestMethod.GET)
-	@ApiMethod(description = "Test message")
-	public HashMap<Integer, MessageRequest> getMessage(@RequestParam(value = "cusExRef", required = false) String cusExRef) {
-		return messageSerivce.getMessage(cusExRef);
-	}
-	
-	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = "/messageFullParameter", method = RequestMethod.GET)
-	@ApiMethod(description = "Test messageFullParameter")
-	public HashMap<Integer, MessageRequest> getMessageFullParameter(
-			@RequestParam(value = "cusExRef", required = false) String cusExRef,
-			@RequestParam(value = "cusName", required = false) String cusName,
-			@RequestParam(value = "casRef", required = false) String casRef,
-			@RequestParam(value = "msgBoxDirIn", required = false) String msgBoxDirIn,
-			@RequestParam(value = "msgBoxDirOut", required = false) String msgBoxDirOut,
-			@RequestParam(value = "msgFromDat", required = false) String msgFromDat,
-			@RequestParam(value = "msgToDat", required = false) String msgToDat,
-			@RequestParam(value = "msgSearchBy", required = false) String msgSearchBy,
-			@RequestParam(value = "msgUnread", required = false) Boolean msgUnread,
-			@RequestParam(value = "msgFilter", required = false) String msgFilter) {
-		return messageSerivce.getMessageFullParameter(cusExRef, cusName, casRef, msgBoxDirIn, msgBoxDirOut, msgFromDat,
-				msgToDat, msgSearchBy, msgUnread, msgFilter);
-	}
-	
-	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = "/list_messages_request", method = RequestMethod.GET)
-	@ApiMethod(description = "Test list_messages_request")
-	public List<MessageRequest> getListMessageRequest() {
-		return messageSerivce.getListMessageRequest();
-	}
-	
-	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = "/message_response", method = RequestMethod.GET)
-	@ApiMethod(description = "Test message_response")
-	public MessageResponse getMessageResponse() {
-		return messageSerivce.getMessageResponse();
-	}
-	
-	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = "/test/list_messages", method = RequestMethod.GET)
-	@ApiMethod(description = "Test test/list_messages")
-	public List<Map<String, Object>> getListMessageTest1(MessageRequest messageRequest,
-			@RequestParam(value = "cusExRef", required = false) String cusExRef,
-			@RequestParam(value = "cusName", required = false) String cusName,
-			@RequestParam(value = "casRef", required = false) String casRef,
-			@RequestParam(value = "msgBoxDirIn", required = false) String msgBoxDirIn,
-			@RequestParam(value = "msgBoxDirOut", required = false) String msgBoxDirOut,
-			@RequestParam(value = "msgFromDat", required = false) String msgFromDat,
-			@RequestParam(value = "msgToDat", required = false) String msgToDat,
-			@RequestParam(value = "msgSearchBy", required = false) String msgSearchBy,
-			@RequestParam(value = "msgUnread", required = false) Boolean msgUnread,
-			@RequestParam(value = "msgFilter", required = false) String msgFilter) {
-		return messageSerivce.getMessage(messageRequest);
-	}
 	
 	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping(value = "/list_messages", method = RequestMethod.GET)

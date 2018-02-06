@@ -1,5 +1,9 @@
 package com.demo.model;
 
+import java.util.StringJoiner;
+
+import com.demo.constant.TableConstants;
+
 /**
  * 
  * @author tnthien
@@ -69,15 +73,15 @@ public class MessageStatus {
 	}
 
 	public String toString() {
-		String msgStatus = "";
-
-		msgStatus += parseBoolean(getToRead()) + "|";
-		msgStatus += parseBoolean(getUrgent()) + "|";
-		msgStatus += parseBoolean(getImportant()) + "|";
-		msgStatus += parseReplyReqBoolean(getAnswerRequested()) + "|";
-		msgStatus += parseAttachmentBoolean(getAttachment());
-
-		return msgStatus;
+		StringJoiner str = new StringJoiner("|");
+		
+		str.add(parseBoolean(getToRead()));
+		str.add(parseBoolean(getUrgent()));
+		str.add(parseBoolean(getImportant()));
+		str.add(parseReplyReqBoolean(getAnswerRequested()));
+		str.add(parseAttachmentBoolean(getAttachment()));
+		
+		return str.toString();
 	}
 
 	private static String parseBoolean(Boolean val) {

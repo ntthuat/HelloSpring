@@ -15,4 +15,3 @@ com\demo\controller\MessageController.class
 com\demo\config\DataAccessBeans.class
 com\demo\service\MessageService.class
 hello\GreetingController.class
-com\demo\model\MessageFilter.class

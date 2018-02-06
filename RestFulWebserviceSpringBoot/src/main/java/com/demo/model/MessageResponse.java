@@ -4,6 +4,10 @@ import java.util.Date;
 
 import javax.validation.constraints.Size;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * 
  * @author tnthien
@@ -55,6 +59,8 @@ public class MessageResponse {
 	 * CDM: Message. Message date
 	 * </pre>
 	 */
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date msgDat;
 	
 	/**

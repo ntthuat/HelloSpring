@@ -64,15 +64,14 @@ public class MessageDaoTest {
 	public void testGetMessageResponse() {
 		MessageResponse message = messageDao.getMessageResponse("A600O8VC");
 		assertEquals("1508100003", message.getCasRef());
-		System.out.println(message);
 	}
 	
 	@Test
 	public void testGetMessage2() {
 		MessageRequest messageRequest = new MessageRequest();
-		messageRequest.setCusExRef("67457547");
+		messageRequest.setCusExRef("40300383");
 		List<Map<String, Object>> list = messageDao.getMessage(messageRequest);
-		assertEquals(0, list.size());
+		assertEquals(2, list.size());
 	}
 	
 	@Test
@@ -85,31 +84,27 @@ public class MessageDaoTest {
 	}
 	
 	/**
-	 * Test with 2 parameter:
-	 * cusExRef = "67457547"
-	 * msgFromDat = "2017-07-27"
+	 * Test with parameter:
+	 * msgFromDat = "2015-09-28"
 	 */
 	@Test
 	public void testGetListMessageFromDate() {
 		MessageRequest messageRequest = new MessageRequest();
-		messageRequest.setCusExRef("67457547");
-		messageRequest.setMsgFromDat("2017-07-27");
+		messageRequest.setMsgFromDat("2015-09-28");
 		List<Map<String, Object>> list = messageDao.getMessage(messageRequest);
-		assertEquals(0, list.size());
+		assertEquals(21, list.size());
 	}
 	
 	/**
-	 * Test with 2 parameter:
-	 * cusExRef = "67457547"
-	 * msgFromDat = "2017-07-27"
+	 * Test with parameter:
+	 * toDat = "2015-09-27"
 	 */
 	@Test
 	public void testGetListMessageToDate() {
 		MessageRequest messageRequest = new MessageRequest();
-		messageRequest.setCusExRef("67457547");
-		messageRequest.setMsgToDat("2017-07-26");
+		messageRequest.setMsgToDat("2015-09-27");
 		List<Map<String, Object>> list = messageDao.getMessage(messageRequest);
-		assertEquals(0, list.size());
+		assertEquals(21, list.size());
 	}
 	
 	@Test
