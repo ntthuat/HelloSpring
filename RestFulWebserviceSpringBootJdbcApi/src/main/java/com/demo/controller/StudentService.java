@@ -20,10 +20,10 @@ class StudentService{
 	@Autowired
 	private StudentDao studentDao;
 
-	@RequestMapping(value = "/test1", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/test1", method = RequestMethod.GET)
 	public HashMap<Long, Student> getAllStudents() {
 		return Application.hmStudent;
-	}
+	}*/
 
 	@RequestMapping(value = "/test2", method = RequestMethod.GET)
 	public Student getAllStudents2() {

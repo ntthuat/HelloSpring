@@ -1,0 +1,16 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.demo.config.properties.GlobalProperties",
+      "name": "",
+      "type": "com.demo.config.properties.GlobalProperties"
+    },
+    {
+      "sourceType": "com.demo.config.properties.AppProperties",
+      "name": "app",
+      "type": "com.demo.config.properties.AppProperties"
+    }
+  ],
+  "properties": []
+}

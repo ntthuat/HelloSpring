@@ -18,11 +18,11 @@ import com.demo.entity.Student;
  * @version 01/23/2018
  */
 @SpringBootApplication
-@ComponentScan({"com.demo.controller", "hello", "com.demo.dao.impl"})
-@EnableJSONDoc
+@ComponentScan({"com.demo.controller", "hello", "com.demo.dao.impl", "com.demo.config.properties"})
+/*@EnableJSONDoc*/
 public class Application {
 	
-	private static ApplicationContext appContext;
+	/*private static ApplicationContext appContext;
 	
 	public static HashMap<Long, Student> hmStudent;
 
@@ -38,6 +38,12 @@ public class Application {
 	
 	public static void setUp(){
 		appContext = new ClassPathXmlApplicationContext("classpath:META-INF/spring/bean-dataaccess-application.xml");
-		/*CodixTestController codixTestControllerBean = appContext.getBean("codixTestController", CodixTestController.class);*/
-	}
+		CodixTestController codixTestControllerBean = appContext.getBean("codixTestController", CodixTestController.class);
+	}*/
+	
+
+	    public static void main(String[] args) throws Exception {
+	        SpringApplication.run(Application.class, args);
+	    }
+
 }

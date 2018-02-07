@@ -18,10 +18,19 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.3.RELEASE</version> <!-- 1.5.9 for Codix, 1.5.3 at home -->
+		<version>1.5.9.RELEASE</version> <!-- 1.5.9 for Codix, 1.5.3 at home -->
 	</parent>
 
 	<dependencies>
+	<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-configuration-processor</artifactId>
+    <version>1.5.10.RELEASE</version>
+</dependency>
+		<dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-autoconfigure</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -56,11 +65,11 @@
 		</dependency>
 
 		<!-- Convert xml to json -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20171018</version>
-		</dependency>
+		</dependency> -->
 
 		<!-- <dependency>
 			<groupId>com.google.apis</groupId>
@@ -90,10 +99,15 @@
 						<target>${java-version}</target>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+				</plugin>
 			</plugins>
-
+	
 		</pluginManagement>
 	</build>
+	
 	<repositories>
 		<repository>
 			<id>java.net</id>
