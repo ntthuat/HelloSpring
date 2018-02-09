@@ -2,15 +2,92 @@
   "hints": [],
   "groups": [
     {
-      "sourceType": "com.demo.config.properties.GlobalProperties",
-      "name": "",
-      "type": "com.demo.config.properties.GlobalProperties"
-    },
-    {
       "sourceType": "com.demo.config.properties.AppProperties",
       "name": "app",
       "type": "com.demo.config.properties.AppProperties"
+    },
+    {
+      "sourceType": "com.demo.config.properties.AppProperties",
+      "name": "app.compiler",
+      "sourceMethod": "public com.demo.config.properties.AppProperties.Compiler getCompiler() ",
+      "type": "com.demo.config.properties.AppProperties$Compiler"
+    },
+    {
+      "sourceType": "com.demo.config.properties.DBProperties",
+      "name": "db",
+      "type": "com.demo.config.properties.DBProperties"
+    },
+    {
+      "sourceType": "com.demo.config.properties.GlobalProperties2",
+      "name": "global",
+      "type": "com.demo.config.properties.GlobalProperties2"
     }
   ],
-  "properties": []
+  "properties": [
+    {
+      "sourceType": "com.demo.config.properties.AppProperties$Compiler",
+      "name": "app.compiler.output-folder",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.demo.config.properties.AppProperties$Compiler",
+      "name": "app.compiler.timeout",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.demo.config.properties.AppProperties",
+      "name": "app.error",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.demo.config.properties.AppProperties",
+      "name": "app.menus",
+      "type": "java.util.List<com.demo.config.properties.AppProperties.Menu>"
+    },
+    {
+      "sourceType": "com.demo.config.properties.DBProperties",
+      "name": "db.driver",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.demo.config.properties.DBProperties",
+      "name": "db.password",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.demo.config.properties.DBProperties",
+      "name": "db.test-query",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.demo.config.properties.DBProperties",
+      "name": "db.tns-entry",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.demo.config.properties.DBProperties",
+      "name": "db.url",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.demo.config.properties.DBProperties",
+      "name": "db.use-wallet",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.demo.config.properties.DBProperties",
+      "name": "db.user",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.demo.config.properties.GlobalProperties2",
+      "name": "global.email",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.demo.config.properties.GlobalProperties2",
+      "name": "global.thread-pool",
+      "type": "java.lang.Integer"
+    }
+  ]
 }

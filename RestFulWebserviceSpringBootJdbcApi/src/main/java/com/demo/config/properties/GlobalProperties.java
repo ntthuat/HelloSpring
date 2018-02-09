@@ -1,6 +1,7 @@
 package com.demo.config.properties;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,11 +11,20 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-@ConfigurationProperties // no prefix, find root level values.
+@PropertySource("classpath:config/global.properties")
 public class GlobalProperties {
 	
+	@Value("${thread-pool}")
 	private int threadPool;
+	
+	@Value("${email}")
     private String email;
 
+	@Override
+	public String toString() {
+		return "threadPool: " + threadPool + "\n" +
+				"email: " + email;
+	}
+	
 	//getters and setters
 }

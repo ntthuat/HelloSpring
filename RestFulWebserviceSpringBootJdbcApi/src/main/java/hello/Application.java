@@ -5,6 +5,9 @@ import java.util.HashMap;
 import org.jsondoc.spring.boot.starter.EnableJSONDoc;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -18,32 +21,26 @@ import com.demo.entity.Student;
  * @version 01/23/2018
  */
 @SpringBootApplication
-@ComponentScan({"com.demo.controller", "hello", "com.demo.dao.impl", "com.demo.config.properties"})
+/*@ComponentScan({"com.demo.controller", "hello", "com.demo.dao.impl", "com.demo.config.properties"})*/
+@ComponentScan(basePackages = {"com.demo", "hello"})
 /*@EnableJSONDoc*/
-public class Application {
+/*@EnableConfigurationProperties*/
+public class Application extends SpringBootServletInitializer {
 	
-	/*private static ApplicationContext appContext;
+	/**
+	 * Hiện tại phải sử dụng @ComponentScan để start bean.
+	 * Tìm hiểu cách để start mà không sử dụng @ComponentScan, nhưng khó quá cần thời gian
+	 */
 	
-	public static HashMap<Long, Student> hmStudent;
+	public Application() {
+	}
+
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(new Class[] { Application.class });
+	}
 
 	public static void main(String[] args) {
-		setUp();
-		hmStudent = new HashMap<Long, Student>();
-		Student one = new Student("John", "math");
-		hmStudent.put(new Long(one.getId()), one);
 		SpringApplication.run(Application.class, args);
-		Student two = new Student("Jane", "history");
-		hmStudent.put(new Long(two.getId()), two);
 	}
-	
-	public static void setUp(){
-		appContext = new ClassPathXmlApplicationContext("classpath:META-INF/spring/bean-dataaccess-application.xml");
-		CodixTestController codixTestControllerBean = appContext.getBean("codixTestController", CodixTestController.class);
-	}*/
-	
-
-	    public static void main(String[] args) throws Exception {
-	        SpringApplication.run(Application.class, args);
-	    }
 
 }
