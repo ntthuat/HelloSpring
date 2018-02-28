@@ -1,0 +1,73 @@
+#!/usr/bin/env ksh
+#@##############################################################################
+#@#
+#@#   $Date: 2014/08/11 10:11:37 $
+#@#   $Revision: 1.1 $
+#@#   Description: Rename a variable
+#@#                
+#@#   Change variable names
+#@#   Example:
+#@#     rename_variable OLD_VARIABLE NEW_VARIABLE <SCOPE>
+#@#                
+#@#
+#@##############################################################################
+
+STARTDIR=$(pwd)
+cd $(dirname $(whence $0))
+BINDIR=$(pwd)
+cd $STARTDIR
+
+export OUTPUT=${OUTPUT:-TRUE}
+
+# Load functions
+[[ -f ${BINDIR}/functions ]] && . ${BINDIR}/functions || . $IMX_SYSADM/functions
+
+# Set log level
+LOGLEVEL=${DEBUGLEVEL:-5}
+
+[[ -f ${BINDIR}/.env ]] && . ${BINDIR}/.env 
+[[ -f ${IMX_CLT}/config/sysadm/cms/cms.conf ]] && . ${IMX_CLT}/config/sysadm/cms/cms.conf
+[[ -f ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf ]] && . ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf
+##======================##
+
+
+
+# Set log level
+LOGLEVEL=${DEBUGLEVEL:-5}
+
+display "\n${BOLD}Rename a variable${_BOLD}\n"
+
+OLD_VARNAME=$1
+NEW_VARNAME=$2
+
+if [[ -z $OLD_VARNAME || -z $NEW_VARNAME ]] 
+then 
+	error "Incorrect syntax. Usage example: rename_variable OLD_VARIABLE NEW_VARIABLE <SCOPE>"
+else
+	shift 2
+fi
+
+
+SCOPE=$@
+
+if [[ -z $SCOPE ]]
+then
+        SCOPE="."
+fi
+
+set_action_msg "List configurations pending update"
+execute 3 "$BINDIR/list_template -q $OLD_VARNAME | egrep '$SCOPE'"
+check_exit_code
+display
+
+getCommandOut | while read templateFile
+do
+      set_action_msg "Updating config ${templateFile##*/}"
+      execute 2 "perl -i''  -pe 's/%\+%$OLD_VARNAME%\+%/%\+%$NEW_VARNAME%\+%/g' $templateFile"
+      check_exit_code
+      display
+done
+
+display
+
+exit $RC

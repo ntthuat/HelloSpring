@@ -1,0 +1,189 @@
+#!/usr/bin/env ksh
+#@##############################################################################
+#@#
+#@#   File: compare_config
+#@#   $Date: 2014/11/20 10:28:48 $
+#@#   $Revision: 1.7 $
+#@#   Description: Compare template against running config
+#@#
+#@#   Compare all templates against running configuration
+#@#   If used with parameter, configuration file, will compare only this config
+#@#   Example:
+#@#     resolve_template
+#@#     compare_config  # will compare all templates
+#@#     compare_config listener.ora  # will compare only configuration for listener.ora file
+#@#
+#@##############################################################################
+
+STARTDIR=$(pwd)
+cd $(dirname $(whence $0))
+BINDIR=$(pwd)
+cd $STARTDIR
+
+export OUTPUT=${OUTPUT:-TRUE}
+
+# Load functions
+[[ -f ${BINDIR}/functions ]] && . ${BINDIR}/functions || . ${IMX_SYSADM:-$IMX_HOME/sysadm}/functions
+
+# Set log level
+LOGLEVEL=${DEBUGLEVEL:-5}
+
+[[ -f ${BINDIR}/.env ]] && . ${BINDIR}/.env		#Obsolete, tobe removed
+[[ -f ${BINDIR}/cms.env ]] && . ${BINDIR}/cms.env
+[[ -f ${IMX_CLT}/config/sysadm/cms/cms.conf ]] && . ${IMX_CLT}/config/sysadm/cms/cms.conf
+[[ -f ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf ]] && . ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf
+
+##======================##
+
+[[ -z $IMX_CLT ]] && error "Incorrect environment! \$IMX_CLT not specified."
+
+
+display "\n${BOLD}Compare running configuration against the template${_BOLD}\n"
+
+[[ -d ${RESOLVED_TEMPLATE_DIR} ]] || error "Template dir not found: $RESOLVED_TEMPLATE_DIR. Run resolve first."
+
+
+SCOPE=$@
+
+if [[ -z $SCOPE ]]
+then
+        SCOPE="."
+else
+
+ls -1d ${TEMPLATE_DIR}/* ${FORMS_TEMPLATE_DIR}/* 2>/dev/null | while read evar
+do
+        evar=$(basename $evar)
+        evar_=$(eval print -- "\$${evar}")
+        [[ -z ${evar_} ]] && evar_=null
+        SCOPE=$(print -- "${SCOPE}" | sed -e "s?${evar_}?${evar}?g" -e "s?\ ?\|?g")
+done
+fi
+
+find ${RESOLVED_TEMPLATE_DIR}/ -type d | egrep -v "^${RESOLVED_TEMPLATE_DIR}/$|/CVS/|/CVS$" | egrep "${SCOPE}" | tr " " "@" | while read dir
+do
+        rdir=$(print -- "${dir}" | tr "@" " " | sed -e "s?${RESOLVED_TEMPLATE_DIR}/??")
+        rdir_resolved=$(eval print -- "\$${rdir}")
+      
+        if [[ ! -d "${rdir_resolved}" ]]
+        then
+                set_action_msg "\$${rdir}"
+                status_ok MISSING
+                display
+                continue
+        fi
+
+done
+
+
+
+find ${RESOLVED_TEMPLATE_DIR} -type f -name "*_bin"| egrep "${SCOPE}" | while read bin_file
+do
+
+	[[ -f ${bin_file%_bin}_tpl ]] && continue
+        rconfig=$(print -- "${bin_file}" | sed -e "s?${RESOLVED_TEMPLATE_DIR}/?\$?" -e "s?_bin\$??" )
+        
+        rconfig_resolved=$(eval print -- "${rconfig}")
+        set_action_msg "${rconfig}"
+        
+
+        if [[ ! -r ${rconfig_resolved} ]]
+        then
+                status_ok MISSING
+                display
+                continue
+        fi
+
+        if [[ $(cksum $rconfig_resolved | awk '{print $1" "$2}') = $(cksum $bin_file | awk '{print $1" "$2}') ]]
+        then
+                status_ok "NO CHANGE"
+                display
+        else
+                status_ok DIFFER
+                display
+        fi
+        
+
+done
+
+find ${RESOLVED_TEMPLATE_DIR} -type f -name "*_tpl"| egrep "${SCOPE}" | while read tpl_file
+do
+	[[ -f ${tpl_file%_tpl}_bin ]] && display "\n${BOLD}WARNING:${_BOLD} There is both _bin and _tpl templates. Will use the _tpl template. Please clean the obsolete one.\n${BOLD}TPL:${_BOLD} ${tpl_file}\n${BOLD}BIN:${_BOLD} ${tpl_file%_tpl}_bin\n"
+
+        rconfig=$(print -- "${tpl_file}" | sed -e "s?${RESOLVED_TEMPLATE_DIR}/?\$?" -e "s?_tpl\$??" )
+
+        rconfig_resolved=$(eval print -- "${rconfig}")
+        set_action_msg "${rconfig}"
+        
+
+        if [[ ! -r ${rconfig_resolved} ]]
+        then
+                status_ok MISSING
+                display
+                continue
+        fi
+
+        execute 4 "diff ${tpl_file} ${rconfig_resolved}"
+        DRC=$?
+        if [[ $DRC = 1 ]]
+        then
+                status_ok DIFFER
+                display
+
+        elif [[ $DRC = 0 ]]
+        then
+                status_ok "NO CHANGE"
+                display
+        else
+                status_ko "ERROR"
+                display
+        fi
+done
+
+find ${RESOLVED_TEMPLATE_DIR} -type f -name "*_pfp" | egrep "${SCOPE}" | while read pfp_file
+do
+        log 4 "Processing PFP_FILE: $pfp_file"
+        rconfig=$(print -- "${pfp_file}" | sed -e "s?${RESOLVED_TEMPLATE_DIR}/?\$?" -e "s?_pfp\$??" )
+        log 4 "Current config file: $rconfig"
+        
+        rconfig_resolved=$(eval print -- "${rconfig}")
+        set_action_msg "${rconfig}"
+
+        if [[ ! -r ${rconfig_resolved} ]]
+        then
+                status_ok MISSING
+                display
+                continue
+        fi
+
+        execute 4 "diff ${pfp_file} ${rconfig_resolved}"
+        DRC=$?
+
+        if [[ $DRC = 1 ]]
+        then
+                status_ok DIFFER
+                display
+
+        elif [[ $DRC = 0 ]]
+        then
+                status_ok "NO CHANGE"
+                display
+        else
+                status_ko "ERROR"
+                display
+        fi      
+
+done
+
+find $IMX_CLT/config -type f | egrep -v 'cbackup|fax|IMXVERSION|\.Z|.bak|.debuginfo|/CVS/|\.\#'| egrep "${SCOPE}" | sed -e "s:^$IMX_CLT/::g" | while read runing_config
+do
+     if find ${TEMPLATE_DIR}/IMX_CLT/config -type f | sed -e "s:^${TEMPLATE_DIR}/IMX_CLT/::g" | grep -q $runing_config
+     then       
+                continue
+     else
+                set_action_msg "\$IMX_CLT/${runing_config}"
+                status_ok "UNMANAGED"
+                display
+     fi
+done
+
+exit $RC

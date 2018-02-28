@@ -1,0 +1,63 @@
+#!/usr/bin/env ksh
+#@##############################################################################
+#@#
+#@#   $Date: 2012/10/19 09:25:46 $
+#@#   $Revision: 1.5 $
+#@#   Description: Reset contributed managed configs
+#@#                
+#@#
+#@##############################################################################
+
+STARTDIR=$(pwd)
+cd $(dirname $(whence $0))
+BINDIR=$(pwd)
+cd $STARTDIR
+
+export OUTPUT=${OUTPUT:-TRUE}
+
+# Load functions
+[[ -f ${BINDIR}/functions ]] && . ${BINDIR}/functions || . ${IMX_SYSADM:-$IMX_HOME/sysadm}/functions
+
+# Set log level
+LOGLEVEL=${DEBUGLEVEL:-5}
+
+
+[[ -f ${BINDIR}/.env ]] && . ${BINDIR}/.env		#Obsolete, tobe removed
+[[ -f ${BINDIR}/cms.env ]] && . ${BINDIR}/cms.env 
+[[ -f ${IMX_CLT}/config/sysadm/cms/cms.conf ]] && . ${IMX_CLT}/config/sysadm/cms/cms.conf
+[[ -f ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf ]] && . ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf
+
+##======================##
+
+[[ -z $IMX_CLT ]] && error "Incorrect environment! \$IMX_CLT not specified."
+
+display "\n${BOLD}Resetting contributed managed configs${_BOLD}\n"
+
+set_action_msg "Clean old contrib dir"
+ls -Al $CONTRIB_DIR | egrep '^drwx'|  awk '{print $9}' | while read  contrib_dir 
+do
+	execute 2 "rm -rf $contrib_dir" || RC=1
+done
+check_exit_code  || error "Cannot remove old contrib directories"
+display
+
+
+
+set_action_msg "Resetting"
+cat $CONTRIB_DIR/contrib_files.lst| while read contrib_line
+do
+        contrib_file=$(print -- "$contrib_line" | awk -F':' '{print $2}')
+        contrib_full_path=$(eval print -- $(dirname $contrib_file))
+        contrib_relative_path=$(dirname $contrib_file | tr -d '$')
+        contrib_name=$(basename $contrib_file)
+        contrib_seq=$(print -- "$contrib_line" | awk -F':' '{print $1}')
+	if [[ -f ${contrib_full_path}/${contrib_name}_init_inventory ]] 
+	then
+		execute 2 "mv '${contrib_full_path}/${contrib_name}_init_inventory' '${contrib_full_path}/${contrib_name}_init_inventory_${UNIQUE_ID}.$PROG_NAME'" || error "Unable to rename file ${contrib_full_path}/${contrib_name}_init_inventory"
+	fi
+done
+check_exit_code
+display
+	
+exit ${RC}
+

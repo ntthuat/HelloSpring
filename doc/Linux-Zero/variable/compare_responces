@@ -1,0 +1,94 @@
+#!/usr/bin/env ksh
+#@##############################################################################
+#@#
+#@#   File: compare_responce
+#@#   $Date: 2012/10/19 09:25:36 $
+#@#   $Revision: 1.7 $
+#@#   Description : Compare responces beteen instances
+#@#
+#@#   Compare values for merged variables in both choosen responses
+#@#   Example:
+#@#     compare_responce $IMX_CLT/cms/rsp/responce1.rsp $IMX_CLT/cms/rsp/responce2.rsp
+#@#
+#@##############################################################################
+
+STARTDIR=$(pwd)
+cd $(dirname $(whence $0))
+BINDIR=$(pwd)
+cd $STARTDIR
+
+export OUTPUT=${OUTPUT:-TRUE}
+
+# Load functions
+[[ -f ${BINDIR}/functions ]] && . ${BINDIR}/functions || . ${IMX_SYSADM:-$IMX_HOME/sysadm}/functions
+
+# Set log level
+LOGLEVEL=${DEBUGLEVEL:-5}
+
+
+[[ -f ${BINDIR}/.env ]] && . ${BINDIR}/.env		#Obsolete, tobe removed
+[[ -f ${BINDIR}/cms.env ]] && . ${BINDIR}/cms.env
+[[ -f ${IMX_CLT}/config/sysadm/cms/cms.conf ]] && . ${IMX_CLT}/config/sysadm/cms/cms.conf
+[[ -f ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf ]] && . ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf
+
+##======================##
+
+[[ -z $IMX_CLT ]] && error "Incorrect environment! \$IMX_CLT not specified."
+
+display "\n${BOLD}Compare two responce files${_BOLD}\n"
+
+
+case $# in
+	1)	RSP1=${RESPONSE_DIR}/instance.rsp
+		RSP2=$1
+		;;
+	2)	RSP1=$1
+		RSP2=$2
+		;;
+	*)	error "Usage: $0 rsp1 rsp2/n"
+esac
+
+cd - >/dev/null
+
+cd $(dirname $RSP1)
+RSP1DIR=$(pwd)
+
+cd $(dirname $RSP2)
+RSP2DIR=$(pwd)
+
+cd $TPLDIR
+
+RSP1="${RSP1DIR}/$(basename $RSP1)"
+RSP2="${RSP2DIR}/$(basename $RSP2)"
+
+[[ -r $RSP1 ]] || error "Unable to read file: $RSP1"
+[[ -r $RSP2 ]] || error "Unable to read file: $RSP2"
+
+VARS=$(cat $RSP1 | awk -F'=' '{print $1}')
+
+cat $RSP1 $RSP2  | awk -F'=' '{print $1}' | egrep -v '^$|^#' | sort | uniq  | while read var
+do
+
+
+	LVAL=$(grep "^${var}=" $RSP1| awk -F'=' '{print $2}' | sed -e 's/ *$//')
+	RVAL=$(grep "^${var}=" $RSP2 | awk -F'=' '{print $2}' | sed -e 's/ *$//')
+
+
+	[[ -z ${LVAL} ]] && LVALNULL=TRUE
+	[[ -z ${RVAL} ]] && RVALNULL=TRUE
+
+
+	[[ ${#LVAL} -ge 49 ]] && LVAL=$(print -- "${LVAL}" | cut -c1-45)...\>
+	typeset -L50 LVAL
+	[[ ${#RVAL} -ge 49 ]] && RVAL=$(print -- "${RVAL}" | cut -c1-45)...\>
+	typeset -L50 var
+	[[ $LVALNULL = $RVALNULL ]]  || eval 'BLINK="[7m" _BLINK="[0m"'
+
+	print "${BOLD}${var}${BLINK}:${_BOLD} ${LVAL} ${RVAL}"
+
+	unset var LVAL RVAL BLINK _BLINK LVALNULL RVALNULL
+
+done
+
+
+exit $RC

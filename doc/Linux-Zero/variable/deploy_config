@@ -1,0 +1,205 @@
+#!/usr/bin/env ksh
+#@##############################################################################
+#@#
+#@#   File: deploy_config
+#@#   $Date: 2014/11/20 10:28:48 $
+#@#   $Revision: 1.12 $
+#@#   Description: Deploy changed configuration files
+#@#   
+#@#   Deploy changes from response file and templates to configuration file as
+#@#   create backup of current configurations before the deploy. If used without 
+#@#   parameter, configuration file, will deploy all different configuration files.
+#@#   Example:
+#@#     resolve_template
+#@#     deploy_config   # will deploy changes to all different configuration files
+#@#     deploy_config listener.ora   # will deploy only changes in the listener.ora file
+#@#
+#@##############################################################################
+
+STARTDIR=$(pwd)
+cd $(dirname $(whence $0))
+BINDIR=$(pwd)
+cd $STARTDIR
+
+export OUTPUT=${OUTPUT:-TRUE}
+
+# Load functions
+[[ -f ${BINDIR}/functions ]] && . ${BINDIR}/functions || . ${IMX_SYSADM:-$IMX_HOME/sysadm}/functions
+
+# Set log level
+LOGLEVEL=${DEBUGLEVEL:-5}
+
+
+[[ -f ${BINDIR}/.env ]] && . ${BINDIR}/.env		#Obsolete, tobe removed
+[[ -f ${BINDIR}/cms.env ]] && . ${BINDIR}/cms.env
+[[ -f ${IMX_CLT}/config/sysadm/cms/cms.conf ]] && . ${IMX_CLT}/config/sysadm/cms/cms.conf
+[[ -f ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf ]] && . ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf
+
+##======================##
+
+[[ -z $IMX_CLT ]] && error "Incorrect environment! \$IMX_CLT not specified."
+
+display "\n${BOLD}Deploy templates configurations${_BOLD}\n"
+
+[[ -d ${RESOLVED_TEMPLATE_DIR} ]] || error "Template dir not found: $TPLDIR. Run resolv first."
+
+SCOPE=$@
+
+if [[ -z $SCOPE ]]
+then
+        SCOPE="."
+else
+
+ls -1d ${TEMPLATE_DIR}/* ${FORMS_TEMPLATE_DIR}/* 2>/dev/null| while read evar
+do
+        evar=$(basename $evar)
+        evar_=$(eval print -- "\$${evar}")
+        [[ -z ${evar_} ]] && evar_=null
+        SCOPE=$(print -- "${SCOPE}" | sed -e "s?${evar_}?${evar}?g" -e "s?\ ?\|?g")
+done
+fi
+
+
+find ${RESOLVED_TEMPLATE_DIR}/ -type d | grep -vE "^${RESOLVED_TEMPLATE_DIR}/$|/CVS/|/CVS$" | grep -E "${SCOPE}" | tr " " "@" | while read dir
+do
+        log 4 "Processing DIRECTORY: $dir"
+        rdir=$(print -- "${dir}" | tr "@" " " | sed -e "s?${RESOLVED_TEMPLATE_DIR}/??")
+        log 4 "Target directory: $rdir"
+        rdir_resolved=$(eval print -- "\$${rdir}")
+      
+        if [[ ! -d "${rdir_resolved}" ]]
+        then
+                set_action_msg "${rdir}"
+                [[ -f ${dir}/dir_bcommand ]] && execute 4 "ksh ${dir}/dir_bcommand"
+                execute 3 "mkdir -p '${rdir_resolved}'" && status_ok CREATED || status_ko FAILED
+                [[ -f ${dir}/dir_acommand ]] && execute 4 "ksh ${dir}/dir_acommand"
+                display
+        fi
+
+done
+
+
+find ${RESOLVED_TEMPLATE_DIR} -type f \( -name "*_bin" -o -name ".??*_bin" \) | grep -E "${SCOPE}"| while read bin_file
+do
+	[[ -f ${bin_file%_bin}_tpl ]] && continue
+        log 4 "Processing BIN_FILE: $bin_file"
+        rconfig=$(print -- "${bin_file}" | sed -e "s?${RESOLVED_TEMPLATE_DIR}/?\$?" -e "s?_bin\$??" )
+        log 4 "Current config file: $rconfig"
+        
+        rconfig_resolved=$(eval print -- "${rconfig}")
+	rconfig_resolved_dir="${rconfig_resolved%/*}"
+	[[ -d $rconfig_resolved_dir ]] || mkdir -p -m 755 $rconfig_resolved_dir
+
+        if [[ ! -r ${rconfig_resolved} ]]
+        then
+                set_action_msg "${rconfig}"
+                [[ -f ${bin_file%_bin}_bcommand ]] && execute 4 "ksh ${bin_file%_bin}_bcommand"
+                execute 3 "cp '${bin_file}' '${rconfig_resolved}'" && status_ok DEPLOYED || status_ko FAILED
+                [[ -f ${bin_file%_bin}_acommand ]] && execute 4 "ksh ${bin_file%_bin}_acommand"
+                display
+                continue
+        fi
+
+        if [[ $(cksum $rconfig_resolved | awk '{print $1" "$2}') = $(cksum $bin_file | awk '{print $1" "$2}') ]]
+        then
+                continue
+        else
+                set_action_msg "${rconfig}"
+                execute 3 "cp '${rconfig_resolved}' '${rconfig_resolved}_${UNIQUE_ID}.cbackup'"
+                [[ -f ${bin_file%_bin}_bcommand ]] && execute 4 "ksh ${bin_file%_bin}_bcommand"
+                execute 3 "cp '${bin_file}' '${rconfig_resolved}'" && status_ok DEPLOYED || status_ko FAILED
+                [[ -f ${bin_file%_bin}_acommand ]] && execute 4 "ksh ${bin_file%_bin}_acommand"
+                display
+        fi
+        
+
+done
+
+find ${RESOLVED_TEMPLATE_DIR} -type f \( -name "*_tpl" -o -name ".??*_tpl" \) | grep -E "${SCOPE}" | while read tpl_file
+do
+	[[ -f ${tpl_file%_tpl}_bin ]] && display "\n${BOLD}WARNING:${_BOLD} There is both _bin and _tpl templates. Will use the _tpl template. Please clean the obsolete one.\n${BOLD}TPL:${_BOLD} ${tpl_file}\n${BOLD}BIN:${_BOLD} ${tpl_file%_tpl}_bin\n"
+        log 4 "Processing TPL_FILE: $tpl_file"
+
+        rconfig=$(print -- "${tpl_file}" | sed -e "s?${RESOLVED_TEMPLATE_DIR}/?\$?" -e "s?_tpl\$??" )
+        log 4 "Current config file: $rconfig"
+
+        rconfig_resolved=$(eval print -- "${rconfig}")
+	rconfig_resolved_dir="${rconfig_resolved%/*}"
+	[[ -d $rconfig_resolved_dir ]] || mkdir -p -m 755 $rconfig_resolved_dir
+
+        if [[ ! -r ${rconfig_resolved} ]]
+        then
+                set_action_msg "${rconfig}"
+                [[ -f ${tpl_file%_tpl}_bcommand ]] && execute 4 "ksh ${tpl_file%_tpl}_bcommand"
+                execute 3 "cp '${tpl_file}' '${rconfig_resolved}'" && status_ok DEPLOYED || status_ko FAILED
+                [[ -f ${tpl_file%_tpl}_acommand ]] && execute 4 "ksh ${tpl_file%_tpl}_acommand"
+                display
+                continue
+        fi
+
+        execute 4 "diff ${tpl_file} ${rconfig_resolved}"
+        DRC=$?
+
+        if [[ $DRC = 1 ]]
+        then
+                set_action_msg "${rconfig}"
+                execute 3 "cp '${rconfig_resolved}' '${rconfig_resolved}_${UNIQUE_ID}.cbackup'"
+                [[ -f ${tpl_file%_tpl}_bcommand ]] && execute 4 "ksh ${tpl_file%_tpl}_bcommand"
+                execute 3 "cp '${tpl_file}' '${rconfig_resolved}'" && status_ok DEPLOYED || status_ko FAILED
+                [[ -f ${tpl_file%_tpl}_acommand ]] && execute 4 "ksh ${tpl_file%_tpl}_acommand"
+                display
+
+        elif [[ $DRC = 0 ]]
+        then
+                continue
+        else
+                set_action_msg "${rconfig}"
+                status_ko "ERROR"
+                display
+        fi
+done
+
+find ${RESOLVED_TEMPLATE_DIR} -type f \( -name "*_pfp" -o -name ".??*_pfp" \)| grep -E "${SCOPE}" | while read pfp_file
+do
+        log 4 "Processing PFP_FILE: $pfp_file"
+        rconfig=$(print -- "${pfp_file}" | sed -e "s?${RESOLVED_TEMPLATE_DIR}/?\$?" -e "s?_pfp\$??" )
+        log 4 "Current config file: $rconfig"
+        
+        rconfig_resolved=$(eval print -- "${rconfig}")
+	rconfig_resolved_dir="${rconfig_resolved%/*}"
+	[[ -d $rconfig_resolved_dir ]] || mkdir -p -m 755 $rconfig_resolved_dir
+
+        if [[ ! -r ${rconfig_resolved} ]]
+        then
+                set_action_msg "${rconfig}"
+                [[ -f ${pfp_file%_pfp}_bcommand ]] && execute 4 "${pfp_file%_pfp}_bcommand"
+                execute 3 "cp '${pfp_file}' '${rconfig_resolved}'" && status_ok DEPLOYED || status_ko FAILED
+                [[ -f ${pfp_file%_pfp}_acommand ]] && execute 4 "${pfp_file%_pfp}_acommand"
+                display
+                continue
+        fi
+
+        execute 3 "diff ${pfp_file} ${rconfig_resolved}"
+        DRC=$?
+
+        if [[ $DRC = 1 ]]
+        then
+                set_action_msg "${rconfig}"
+                execute 3 "cp '${rconfig_resolved}' '${rconfig_resolved}_${UNIQUE_ID}.cbackup'"
+                [[ -f ${pfp_file%_pfp}_bcommand ]] && execute 4 "ksh ${pfp_file%_pfp}_bcommand"
+                execute 3 "cp '${pfp_file}' '${rconfig_resolved}'" && status_ok DEPLOYED || status_ko FAILED
+                [[ -f ${pfp_file%_pfp}_acommand ]] && execute 4 "ksh ${pfp_file%_pfp}_acommand"
+                display
+
+        elif [[ $DRC = 0 ]]
+        then
+                continue
+        else
+                set_action_msg "${rconfig}"
+                status_ko "ERROR"
+                display
+        fi
+
+done
+
+exit $RC

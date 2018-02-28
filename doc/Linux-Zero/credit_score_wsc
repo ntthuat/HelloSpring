@@ -1,0 +1,101 @@
+#!/usr/bin/env ksh
+#@######################################################################################################################
+#@# Description: shell script for starting and stopping credit_score_wsc web service client daemon
+#@# Current $Revision: 1.3 $ $Date: 2014/12/30 16:27:09 $
+#@######################################################################################################################
+umask 02
+
+#ADDED TEMPORARY  BY GS TO RELEASE THE TRAINING
+. $IMX_CLT/config/profile.net
+#END OF TEMPORARY ADDENDUM
+
+interface_name=credit_score_wsc
+interface_class=imx.interfaces.gnpf.credit_score_wsc
+excluded_string=more
+interface_config_file=$IMX_CLT/config/interfaces/${interface_name}/${interface_name}.conf
+log4j_configuration_file=$IMX_CLT/config/interfaces/${interface_name}/log4j.properties
+IMX_LIBJ=$IMX_HOME/src/lib_j
+IMX_JAVALIB=$IMX_LIBJ/dep
+
+. $IMX_HOME/src/lib_j/common_scripts.sh
+
+CLASSPATH=$(eval "print $(cat $IMX_LIBJ/classpaths/${interface_name}.classpath)")
+MAIN_JAR=`cat $IMX_LIBJ/classpaths/${interface_name}.file`
+CLASSPATH=$CLASSPATH:$IMX_LIBJ/$MAIN_JAR
+export CLASSPATH
+
+JAVA_CMD=/usr/java5/jre/bin/java
+
+run_interface()
+{
+
+  mkdir -p $IMX_INTERFACES/${interface_name}/log
+
+  DATESTR=`date '+%Y%m%d%H%M%S'`
+  stdout_log=$IMX_INTERFACES/${interface_name}/log/${interface_name}_$DATESTR.nohup
+  echo "Standard output and standard error are redirected to in file $stdout_log"
+
+  echo "Using CLASSPATH=$CLASSPATH" >> $stdout_log
+
+    # fixes the JVM 5 failing to load extlib/lib/libiconv.a
+  unset LIBPATH
+
+  JAVA_OPTS="-D${interface_name} -Xmx512M -Dinterfaces.basedir=$IMX_INTERFACES -Dcfg.filename=${interface_config_file}"
+  JAVA_OPTS=$JAVA_OPTS" -Dlog4j.configuration=file://${log4j_configuration_file}"
+
+  nohup $JAVA_CMD -Dpid=$! $JAVA_OPTS ${interface_class} $@ >> $stdout_log 2>&1 &
+}
+
+pid=`get_running_pid $interface_class $excluded_string`
+
+case $1 in
+    status)
+          if [ "${pid}" -gt 1 ]
+          then
+            echo "$interface_name is running with pid ${pid}"
+            exit 0
+          else
+            echo "$interface_name is not running!"
+            exit 1
+            fi
+          ;;
+    stop)
+        if [ "${pid}" -gt 1 ]
+        then
+          kill $pid
+          echo "$interface_name is shutting down gracefully."
+        else
+          echo "$interface_name was not running!"
+        fi
+        ;;
+    start|"")
+        if [ "${pid}" -gt 1 ]
+        then
+          echo "${interface_name} is already running, can't run twice."
+        else
+          run_interface
+          pid=`get_running_pid ${interface_class} ${excluded_string}`
+          echo "${interface_name} was started and is running with PID ${pid}"
+          print_used_resources
+        fi
+        ;;
+    *)
+        echo "usage: $interface_name start|stop"
+        ;;
+esac
+
+######################################################################################################################
+# $Log: credit_score_wsc,v $
+# Revision 1.3  2014/12/30 16:27:09  paltankov
+# TTS_KEY: [APF-3890]
+# FUNC_CHANGES: n/a
+# TECH CHANGES: adjusted the dependencies and the startup script to work with Oracle Wallet to be compatible with iMX v8 installations
+#
+# Revision 1.2  2013/04/23 07:49:18  vtodorov
+# TTS_KEY: [APF-2793]
+# TECH CHANGES: unset various parameters not to interfere with the connection allocation
+#
+# Revision 1.1  2012/08/16 14:38:33  paltankov
+# [dev] intermediate commit for code sharing
+#
+######################################################################################################################

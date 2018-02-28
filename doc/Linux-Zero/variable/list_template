@@ -1,0 +1,54 @@
+#!/usr/bin/env ksh
+#@##############################################################################
+#@#
+#@#   File: list_template
+#@#   $Date: 2014/08/11 10:21:44 $
+#@#   $Revision: 1.9 $
+#@#   Description: List all template files that contains specific variable
+#@#                
+#@#   Shows all template files that contain specific variable as search
+#@#   for it in templates directory
+#@#   Example:
+#@#     list_template IMX_HOME
+#@#
+#@##############################################################################
+
+STARTDIR=$(pwd)
+cd $(dirname $(whence $0))
+BINDIR=$(pwd)
+cd $STARTDIR
+
+export OUTPUT=${OUTPUT:-TRUE}
+
+# Load functions
+[[ -f ${BINDIR}/functions ]] && . ${BINDIR}/functions || . ${IMX_SYSADM:-$IMX_HOME/sysadm}/functions
+
+# Set log level
+LOGLEVEL=${DEBUGLEVEL:-5}
+
+[[ -f ${BINDIR}/.env ]] && . ${BINDIR}/.env		#Obsolete, tobe removed
+[[ -f ${BINDIR}/cms.env ]] && . ${BINDIR}/cms.env 
+[[ -f ${IMX_CLT}/config/sysadm/cms/cms.conf ]] && . ${IMX_CLT}/config/sysadm/cms/cms.conf
+[[ -f ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf ]] && . ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf
+##======================##
+
+
+[[ -z $IMX_CLT ]] && error "Incorrect environment! \$IMX_CLT not specified."
+
+# Set log level
+LOGLEVEL=${DEBUGLEVEL:-5}
+
+display "\n${BOLD}List config files that contains VAR_NAME as defined in instance.rsp${_BOLD}\n"
+
+VARNAME=$1
+[[ -z $VARNAME ]] && error "No ${BOLD}<VARNAME>${_BOLD} defined as first parameter"
+
+if [[ $QUIET = 'TRUE' ]]
+then
+	
+	find $TEMPLATE_DIR $FORMS_TEMPLATE_DIR -type f \( -name "*_tpl" -o -name "*_ed" \) | xargs egrep -l "%\+%$VARNAME%\+%" | sort | uniq | tr '\n' ' ' 
+else
+	find $TEMPLATE_DIR $FORMS_TEMPLATE_DIR -type f \( -name "*_tpl" -o -name "*_ed" \) | xargs egrep -l "%\+%$VARNAME%\+%" | sort | uniq
+fi
+
+exit $RC

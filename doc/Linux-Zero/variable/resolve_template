@@ -1,0 +1,169 @@
+#!/usr/bin/env ksh
+#@##############################################################################
+#@#
+#@#   File: resolve_template
+#@#   $Date: 2014/11/14 09:18:29 $
+#@#   $Revision: 1.10 $
+#@#   Description: Substitude template with concrete values
+#@#
+#@#   Substitude template with concrete values taken from the response file
+#@#   and store the resolved templates under $IMX_TMP/RESOLVED_TEMPLATE before
+#@#   deploy them
+#@#   Example:
+#@#     resolve_template
+#@#
+#@##############################################################################
+
+STARTDIR=$(pwd)
+cd $(dirname $(whence $0))
+BINDIR=$(pwd)
+cd $STARTDIR
+
+export OUTPUT=${OUTPUT:-TRUE}
+
+# Load functions
+[[ -f ${BINDIR}/functions ]] && . ${BINDIR}/functions || . ${IMX_SYSADM:-$IMX_HOME/sysadm}/functions
+
+# Set log level
+LOGLEVEL=${DEBUGLEVEL:-5}
+
+[[ -f ${BINDIR}/.env ]] && . ${BINDIR}/.env		#Obsolete, tobe removed
+[[ -f ${BINDIR}/cms.env ]] && . ${BINDIR}/cms.env 
+[[ -f ${IMX_CLT}/config/sysadm/cms/cms.conf ]] && . ${IMX_CLT}/config/sysadm/cms/cms.conf
+[[ -f ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf ]] && . ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf
+
+##======================##
+
+[[ -z $IMX_CLT ]] && error "Incorrect environment! \$IMX_CLT not specified."
+
+# Set interactive mode switch
+[[ "$1" = "-i" ]] &&  eval "INTERACTIVE=TRUE; shift"
+
+### Read config file
+
+GLOBAL_CONF=${RESPONSE_DIR}/instance.rsp
+[[ -z $1 ]] ||  GLOBAL_CONF="$1"
+[[ -r "$GLOBAL_CONF" ]] || GLOBAL_CONF=${RESPONSE_DIR}/$(basename $GLOBAL_CONF)
+
+display "\n${BOLD}Resolving config template $GLOBAL_CONF${_BOLD}\n"
+
+set_action_msg "Read response file"
+
+[[ -r "$GLOBAL_CONF" ]] && . $GLOBAL_CONF || error "Config file $GLOBAL_CONF does not exists or is unreadable"
+
+status_ok
+display
+
+### Create template dir
+
+set_action_msg "Creating temp dir"
+
+
+[[ -d ${RESOLVED_TEMPLATE_DIR} ]] && execute 3 'rm -rf ${RESOLVED_TEMPLATE_DIR}'
+
+execute 3 "mkdir $RESOLVED_TEMPLATE_DIR"  || error "Can't create temporary template directory: ${RESOLVED_TEMPLATE_DIR}"
+
+status_ok
+display
+
+### Populating $RESOLVED_TEMPLATE_DIR from TEMPLATE
+
+set_action_msg "Populating resolved template dir"
+
+execute 3 "find ${TEMPLATE_DIR} ${FORMS_TEMPLATE_DIR} -type d -print | egrep -v '^${TEMPLATE_DIR}$|^${FORMS_TEMPLATE_DIR}$' | sed -e 's~${TEMPLATE_DIR}/~${RESOLVED_TEMPLATE_DIR}/~'  -e 's~${FORMS_TEMPLATE_DIR}/~${RESOLVED_TEMPLATE_DIR}/~' | xargs mkdir -p "
+execute 3 "find ${TEMPLATE_DIR} ${FORMS_TEMPLATE_DIR} ${CONTRIB_DIR} -type f -print | pax -r -w -v -s '~${TEMPLATE_DIR}/~~' -s '~${FORMS_TEMPLATE_DIR}/~~' -s '~${CONTRIB_DIR}/~~' ${RESOLVED_TEMPLATE_DIR}"
+
+
+check_exit_code
+display
+
+### Substituing VARS from CONFIG_FILE
+
+set_action_msg "Substituting %+%VARS%+%"
+
+VARS=$(egrep -v '^#|^$' ${GLOBAL_CONF}| awk -F'=' '{printf $1" "}')
+
+for var in ${VARS}
+do
+    export SEARCH_FOR="%\+%${var}%\+%"
+    export REPLACE_WITH="$(egrep -v '^#|^$' ${GLOBAL_CONF} | egrep "^${var}=" | sed -e 's~^'${var}'=~~' -e 's~\@~\\\@~g' -e 's~\$~\\\$~g' -e 's~\~~\\\~~g')"
+    log 3 "${SEARCH_FOR}=${REPLACE_WITH}"
+    execute 3 $(find ${RESOLVED_TEMPLATE_DIR} -type f -name "*${SEARCH_FOR}*" | awk '{REPLACEWITH=$0;sub(ENVIRON["SEARCH_FOR"],ENVIRON["REPLACE_WITH"],REPLACEWITH); print "mv "$0" "REPLACEWITH";"}')
+    execute 3 "find ${RESOLVED_TEMPLATE_DIR} -type f \( -name '*_tpl' -o -name '*_ed' -o -name "*_?command" -o -name ".??*_tpl" -o -name ".??*_ed" -o -name ".??*_?command" \) | xargs egrep -l '${SEARCH_FOR}' | xargs -t perl -i'' -pe 's~${SEARCH_FOR}~${REPLACE_WITH}~g'"
+done
+
+MVARS=$(find ${RESOLVED_TEMPLATE_DIR} -type f \( -name "*_tpl" -o -name "*_ed" -o -name "*_?command" -o -name ".??*_tpl" -o -name ".??*_ed" -o -name ".??*_?command" \) | xargs egrep '%\+%.*%\+%' | sed -e 's~\(.*\):.*%+%\(.*\)%+%.*~FILE=\1;MVAR=\2~g' | sed -e 's~:.*;~;~')
+
+while [[ ! -z ${MVARS} ]]
+do
+  eval $MVARS
+  display "$(status_ko)\n\n\n${BOLD}!!!Some variables are missing from the responce file, $GLOBAL_CONF, so should be filled manually!!!\n${MVAR}=????${_BOLD}\n"
+  RC__=${RC}
+  export RC=1
+  [[ ${INTERACTIVE} = "TRUE" ]] || break
+
+  [[ -d "${MESG_DIR}" ]] || mkdir -p "${MESG_DIR}"
+  [[ -r "${MESG_DIR}/var.desc" ]] || touch "${MESG_DIR}/var.desc"
+
+  MVAR_DESC=$(awk 'BEGIN{ RS="" } /^VAR_'${MVAR}'\n/{ sub("^VAR_'${MVAR}'\n","",$0);print $0  }' ${MESG_DIR}/var.desc)
+
+  display "$MVAR_DESC\n"
+  display "${BOLD}${MVAR}${_BOLD}=\c"
+  read MVAR_VALUE
+  display
+
+  export SEARCH_FOR="%\+%${MVAR}%\+%"
+  export REPLACE_WITH="$(print -- $MVAR_VALUE | sed -e 's~^'${var}'=~~' -e 's~\@~\\\@~g' -e 's~\$~\\\$~g' -e 's~\~~\\\~~g')"
+  log 3 "${SEARCH_FOR}=${REPLACE_WITH}"
+  execute 3 $(find ${RESOLVED_TEMPLATE_DIR} -type f -name "*${SEARCH_FOR}*" | awk '{REPLACEWITH=$0;sub(ENVIRON["SEARCH_FOR"],ENVIRON["REPLACE_WITH"],REPLACEWITH); print "mv "$0" "REPLACEWITH";"}')
+  execute 3 "find ${RESOLVED_TEMPLATE_DIR} -type f \( -name '*_tpl' -o -name '*_ed' -o -name "*_?command" -o -name ".??*_tpl" -o -name ".??*_ed" -o -name ".??*_?command" \) | xargs egrep -l '${SEARCH_FOR}' | xargs -t perl -i'' -pe 's~${SEARCH_FOR}~${REPLACE_WITH}~g'"
+
+  MVARS=$(find ${RESOLVED_TEMPLATE_DIR} -type f \( -name "*_tpl" -o -name "*_ed" -o -name "*_?command" -o -name ".??*_tpl" -o -name ".??*_ed" -o -name ".??*_?command" \) | xargs egrep '%\+%.*%\+%' | sed -e 's~\(.*\):.*%+%\(.*\)%+%.*~FILE=\1;MVAR=\2~g' | sed -e 's~:.*;~;~')
+
+  display "Should this variable ${BOLD}${MVAR}=${MVAR_VALUE}${_BOLD} be saved permanently in the responce file, $GLOBAL_CONF
+[y/N]?: \c"
+read ANSW
+typeset -u ANSW
+[[ ${ANSW} = 'Y' ]] && print -- "\n${MVAR}=${MVAR_VALUE}" >> $GLOBAL_CONF 
+RC=${RC__}
+  display "Unresolved variables: ${MVARS:-NONE}"
+
+done
+
+EDFILES=$(find ${RESOLVED_TEMPLATE_DIR} -type f -name "*_ed" -print | sort -n)
+
+log 3 $EDFILES
+
+for edfile in $EDFILES
+do
+        log 4 "Processing EDFILE: $edfile"
+        EDNAME=${edfile##*/}
+        EDNAME=${EDNAME%_ed}
+        EDNAME=${EDNAME#*_}
+        log 5 "ED name: $EDNAME"
+        FPFILE=$(ls -1 $(dirname  $edfile)/[0-9]*_${EDNAME}_fp | sort -n |tail -1)
+        log 4 "FP filename: $FPFILE"
+
+        [[ -r $edfile ]] || continue
+        [[ -r $FPFILE ]] || continue
+
+        EDSEQ=$(basename $edfile _ed | awk -F'_' '{print $1}')
+        log 4 "ED Sequence ID: $EDSEQ"
+        FPSEQ=$(basename $FPFILE | awk -F'_' '{print $1}')
+        log 4 "FP Sequence ID: $FPSEQ"
+
+
+        if [[ $EDSEQ -ge $FPSEQ ]]
+        then
+                execute 4 "cat ${edfile}"
+                execute 2 "cat ${edfile} | ed -s ${FPFILE}"
+                cp ${FPFILE} $(dirname  $edfile)/${EDNAME}_pfp
+                [[ -r ${edfile%_ed}_bcommand ]] && cp ${edfile%_ed}_bcommand $(dirname  $edfile)/${EDNAME}_bcommand
+                [[ -r ${edfile%_ed}_acommand ]] && cp ${edfile%_ed}_acommand $(dirname  $edfile)/${EDNAME}_acommand
+        fi
+
+done
+[[ ${RC} = 0 ]] && status_ok
+display
+
+exit $RC

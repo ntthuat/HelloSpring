@@ -1,0 +1,139 @@
+#!/usr/bin/env ksh
+#@##############################################################################
+#@#
+#@#   File: backup_config
+#@#   $Date: 2012/10/19 09:25:33 $
+#@#   $Revision: 1.7 $
+#@#   Description: Backup current configuration files
+#@#
+#@#   Creates a backup of current configuration files in $IMX_TMP as default.
+#@#   Could be backed up to manually choosen directory
+#@#   Example:
+#@#     backup_configs
+#@#     backup_configs $IMX_TMP/temp/backup_configs.tar.Z
+#@#
+#@##############################################################################
+
+STARTDIR=$(pwd)
+cd $(dirname $(whence $0))
+BINDIR=$(pwd)
+cd $STARTDIR
+
+export OUTPUT=${OUTPUT:-TRUE}
+
+# Load functions
+[[ -f ${BINDIR}/functions ]] && . ${BINDIR}/functions || . ${IMX_SYSADM:-$IMX_HOME/sysadm}/functions
+
+# Set log level
+LOGLEVEL=${DEBUGLEVEL:-5}
+
+
+[[ -f ${BINDIR}/.env ]] && . ${BINDIR}/.env		#Obsolete, tobe removed
+[[ -f ${BINDIR}/cms.env ]] && . ${BINDIR}/cms.env
+[[ -f ${IMX_CLT}/config/sysadm/cms/cms.conf ]] && . ${IMX_CLT}/config/sysadm/cms/cms.conf
+[[ -f ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf ]] && . ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf
+
+##======================##
+
+[[ -z $IMX_CLT ]] && error "Incorrect environment! \$IMX_CLT not specified."
+
+
+[[ -d ${RESOLVED_TEMPLATE_DIR} ]] || error "Template dir not found: $RESOLVED_TEMPLATE_DIR. Run resolve_template first."
+
+case $# in
+ 0)     continue ;;
+ 1)     ZBFILE=$1 ;;
+
+ *)	ZBFILE=$1
+	shift
+	SCOPE=$@
+	;;
+esac
+
+
+[[ -z ${SCOPE} ]] &&  SCOPE="."
+
+[[ -z ${ZBFILE} ]] && ZBFILE=$IMX_TMP/config_backup_${UNIQUE_ID}.tar.Z
+
+BFILE=$(print -- "${ZBFILE}"| sed -e 's/\.Z$//')
+
+[[ -r ${ZBFILE} ]] && error "Backup file already exists: $ZBFILE"
+[[ -r ${BFILE} ]] && error "Backup file already exists: $BFILE"
+
+
+for evar in ${RESOLVED_TEMPLATE_DIR}/*
+do
+        evar=$(basename $evar)
+        evar_=$(eval print -- "\$${evar}")
+        SCOPE=$(print -- "${SCOPE}" | sed -e "s?${evar_}?${evar}?g" -e "s?\ ?\|?g")
+done
+
+
+touch $IMX_TMP/backup_start_${UNIQUE_ID}.flag
+execute 3 "tar -cf ${BFILE} $IMX_TMP/backup_start_${UNIQUE_ID}.flag"
+
+
+display "\n${BOLD}Backup running configurations${_BOLD}\n"
+
+find ${RESOLVED_TEMPLATE_DIR} -type f -name "*_tpl" | egrep "${SCOPE}" | while read tpl_file
+do
+	log 4 "For TPL_FILE: $tpl_file"
+	rconfig=$(print -- "${tpl_file}" | sed -e "s?${RESOLVED_TEMPLATE_DIR}/?\$?" -e "s?_tpl\$??" )
+	log 4 "Current config file: $rconfig"
+	
+	rconfig=$(eval print -- "${rconfig}")
+	
+	if [[ -r ${rconfig} ]]
+	then
+		set_action_msg "${rconfig}"
+		execute 3 "tar -uf ${BFILE} '${rconfig}'" && status_ok BACKUPED || status_ko FAILED
+		display
+		continue
+	fi
+
+done
+
+find ${RESOLVED_TEMPLATE_DIR} -type f -name "*_bin" | egrep "${SCOPE}" | while read bin_file
+do
+	log 4 "For BIN_FILE: $bin_file"
+	rconfig=$(print -- "${bin_file}" | sed -e "s?${RESOLVED_TEMPLATE_DIR}/?\$?" -e "s?_bin\$??" )
+	log 4 "Current config file: $rconfig"
+	
+	rconfig=$(eval print -- "${rconfig}")
+
+	if [[ -r ${rconfig} ]]
+	then
+		set_action_msg "${rconfig}"
+	        execute 3 "tar -uf ${BFILE} '${rconfig}'" && status_ok BACKUPED || status_ko FAILED
+                display
+                continue
+	fi
+done
+
+find ${RESOLVED_TEMPLATE_DIR} -type f -name "*_pfp"| egrep "${SCOPE}" | while read pfp_file
+do
+	log 4 "For PFP_FILE: $pfp_file"
+	rconfig=$(print -- "${pfp_file}" | sed -e "s?${RESOLVED_TEMPLATE_DIR}/?\$?" -e "s?_pfp\$??" )
+        log 4 "Current config file: $rconfig"
+	
+	rconfig=$(eval print -- "${rconfig}")
+
+	if [[ -r ${rconfig} ]]
+	then
+		set_action_msg "${rconfig}"
+                execute 3 "tar -uf ${BFILE} '${rconfig}'" && status_ok BACKUPED || status_ko FAILED
+                display
+                continue
+	fi
+done
+
+set_action_msg "Compressing"	
+execute 2 "compress $BFILE"
+check_exit_code
+display
+
+[[ -r ${ZBFILE} ]] && display "\n${BOLD}Backup file:${_BOLD} ${ZBFILE}"
+
+rm $IMX_TMP/backup_start_${UNIQUE_ID}.flag
+
+exit $RC

@@ -1,0 +1,58 @@
+#!/usr/bin/env ksh
+#@##############################################################################
+#@#
+#@#   $Date: 2012/10/19 09:25:44 $
+#@#   $Revision: 1.5 $
+#@#   Description: Produce diff output for specified config.
+#@#                
+#@#
+#@##############################################################################
+
+STARTDIR=$(pwd)
+cd $(dirname $(whence $0))
+BINDIR=$(pwd)
+cd $STARTDIR
+
+export OUTPUT=${OUTPUT:-TRUE}
+
+# Load functions
+[[ -f ${BINDIR}/functions ]] && . ${BINDIR}/functions || . ${IMX_SYSADM:-$IMX_HOME/sysadm}/functions
+
+# Set log level
+LOGLEVEL=${DEBUGLEVEL:-5}
+
+
+[[ -f ${BINDIR}/.env ]] && . ${BINDIR}/.env		#Obsolete, tobe removed
+[[ -f ${BINDIR}/cms.env ]] && . ${BINDIR}/cms.env 
+[[ -f ${IMX_CLT}/config/sysadm/cms/cms.conf ]] && . ${IMX_CLT}/config/sysadm/cms/cms.conf
+[[ -f ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf ]] && . ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf
+
+##======================##
+
+[[ -z $IMX_CLT ]] && error "Incorrect environment! \$IMX_CLT not specified."
+
+
+display "\n${BOLD}Compare files${_BOLD}\n"
+
+
+
+CONFIG=$1
+NEWCONFIG=$(print -- ${CONFIG}|sed -e "s?^$IMX_CLT/?$RESOLVED_TEMPLATE_DIR/IMX_CLT/?g" -e "s?^$ORACLE_HOME/?$RESOLVED_TEMPLATE_DIR/ORACLE_HOME/?g" -e "s?^$IMX_HOME/?$RESOLVED_TEMPLATE_DIR/IMX_HOME/?g")_tpl
+
+[[ -f $NEWCONFIG ]] || NEWCONFIG=$(print -- ${CONFIG}|sed -e "s?^$IMX_CLT/?$RESOLVED_TEMPLATE_DIR/IMX_CLT/?g" -e "s?^$ORACLE_HOME/?$RESOLVED_TEMPLATE_DIR/ORACLE_HOME/?g" -e "s?^$IMX_HOME/?$RESOLVED_TEMPLATE_DIR/IMX_HOME/?g")_pfp
+[[ -f $NEWCONFIG ]] || NEWCONFIG=$(print -- ${CONFIG}|sed -e "s?^$IMX_CLT/?$RESOLVED_TEMPLATE_DIR/IMX_CLT/?g" -e "s?^$ORACLE_HOME/?$RESOLVED_TEMPLATE_DIR/ORACLE_HOME/?g" -e "s?^$IMX_HOME/?$RESOLVED_TEMPLATE_DIR/IMX_HOME/?g")_bin
+
+
+TEMPLATE=$(print -- ${CONFIG}|sed -e "s?^$IMX_CLT/?$TEMPLATE_DIR/IMX_CLT/?g" -e "s?^$ORACLE_HOME/?$TEMPLATE_DIR/ORACLE_HOME/?g" -e "s?^$IMX_HOME/?$TEMPLATE_DIR/IMX_HOME/?g")_tpl
+[[ -f $TEMPLATE ]] || TEMPLATE=[0-9]*_$(print -- ${CONFIG}|sed -e "s?^$IMX_CLT/?$CONTRIB_DIR/IMX_CLT/?g" -e "s?^$ORACLE_HOME/?$CONTRIB_DIR/ORACLE_HOME/?g" -e "s?^$IMX_HOME/?$CONTRIB_DIR/IMX_HOME/?g")_fp
+[[ -f $TEMPLATE ]] || TEMPLATE=$(print -- ${CONFIG}|sed -e "s?^$IMX_CLT/?$TEMPLATE_DIR/IMX_CLT/?g" -e "s?^$ORACLE_HOME/?$TEMPLATE_DIR/ORACLE_HOME/?g" -e "s?^$IMX_HOME/?$TEMPLATE_DIR/IMX_HOME/?g")_bin
+
+
+display "${BOLD}CONFIG:${_BOLD} $CONFIG"
+display "${BOLD}NEWCONFIG:${_BOLD} $NEWCONFIG"
+display "${BOLD}TEMPLATE:${_BOLD} $TEMPLATE"
+display "${BOLD}========================================================================================================${_BOLD}"
+
+sdiff -l $NEWCONFIG $CONFIG
+display "${BOLD}========================================================================================================${_BOLD}"
+diff $NEWCONFIG $CONFIG

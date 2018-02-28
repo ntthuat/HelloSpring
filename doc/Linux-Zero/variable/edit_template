@@ -1,0 +1,105 @@
+#!/usr/bin/env ksh
+#@##############################################################################
+#@#
+#@#   File: list_template
+#@#   $Date: 2015/03/31 08:52:29 $
+#@#   $Revision: 1.3 $
+#@#   Description: Locate and edit template file for pointed config
+#@#                
+#@#   Shows all template files that contain specific variable as search
+#@#   for it in templates directory
+#@#   Example:
+#@#     list_template IMX_HOME
+#@#
+#@##############################################################################
+
+STARTDIR=$(pwd)
+cd $(dirname $(whence $0))
+BINDIR=$(pwd)
+cd $STARTDIR
+
+export OUTPUT=${OUTPUT:-TRUE}
+
+# Load functions
+[[ -f ${BINDIR}/functions ]] && . ${BINDIR}/functions || . ${IMX_SYSADM:-$IMX_HOME/sysadm}/functions
+
+# Set log level
+LOGLEVEL=${DEBUGLEVEL:-5}
+
+[[ -f ${BINDIR}/.env ]] && . ${BINDIR}/.env		#Obsolete, tobe removed
+[[ -f ${BINDIR}/cms.env ]] && . ${BINDIR}/cms.env 
+[[ -f ${IMX_CLT}/config/sysadm/cms/cms.conf ]] && . ${IMX_CLT}/config/sysadm/cms/cms.conf
+[[ -f ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf ]] && . ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf
+##======================##
+
+
+[[ -z $IMX_CLT ]] && error "Incorrect environment! \$IMX_CLT not specified."
+
+# Set log level
+LOGLEVEL=${DEBUGLEVEL:-5}
+
+display "\n${BOLD}Locate and edit template file for pointed config${_BOLD}\n"
+
+CONFIG_FILE=$1
+best_match_value="###########################################################################################################"
+
+[[ -z $CONFIG_FILE ]] && error "No ${BOLD}<CONFIG_FILE>${_BOLD} defined as first parameter"
+
+if [[ -n ${CONFIG_FILE%%/*} ]]
+then
+  # Relative path provided
+  CONFIG_FILE=$PWD/${CONFIG_FILE##./}
+fi
+
+CONFIG_FILE_SHORT=${CONFIG_FILE##*/}
+CONFIG_FILE_DIR=${CONFIG_FILE%/*}
+
+ls -1 $TEMPLATE_DIR $FORMS_TEMPLATE_DIR | tr '\n' '|' | read cms_evars_pattern
+
+env | egrep "${cms_evars_pattern%\|}"  | sort | while read evar
+do
+    evar_name=${evar%%=*}
+    evar_value=${evar#*=}
+    evar_match=${CONFIG_FILE_DIR#$evar_value}
+
+    if [[ ${#evar_match} -lt ${#CONFIG_FILE_DIR} ]]
+    then
+      MATCH_FOUND=TRUE
+      if [[ ${#evar_match} -lt ${#best_match_value} ]]
+      then
+          best_match_value=$evar_value
+          best_match_evar=$evar_name
+          best_match_rest=${evar_match#/}
+      fi
+    fi
+done
+
+[[ $MATCH_FOUND = 'TRUE' ]] || error "No matches found for $CONFIG_FILE"
+
+if [[ -d "$TEMPLATE_DIR/${best_match_evar}/${best_match_rest}" ]]
+  then
+    SEARCH_PATH="$TEMPLATE_DIR/${best_match_evar}/${best_match_rest}"
+  fi
+
+if [[ -d "$FORMS_TEMPLATE_DIR/${best_match_evar}/${best_match_rest}" ]]
+  then
+    SEARCH_PATH="$SEARCH_PATH $FORMS_TEMPLATE_DIR/${best_match_evar}/${best_match_rest}"
+  fi
+
+
+ls -1a ${SEARCH_PATH} | egrep "^${CONFIG_FILE_SHORT}_tpl|*_${CONFIG_FILE_SHORT}_ed|^${CONFIG_FILE_SHORT}_bin" | wc -l | read FOUND_RESULT_COUNT
+case $FOUND_RESULT_COUNT in
+  0) error "Nothing found for config $CONFIG_FILE";;
+  1)  ls -1a ${SEARCH_PATH} | egrep "^${CONFIG_FILE_SHORT}_tpl|_${CONFIG_FILE_SHORT}_ed|^${CONFIG_FILE_SHORT}_bin"| sed "s@^@${SEARCH_PATH}/@"
+      exec  $EDITOR $(ls -1a ${SEARCH_PATH} | egrep "^${CONFIG_FILE_SHORT}_tpl|_${CONFIG_FILE_SHORT}_ed|^${CONFIG_FILE_SHORT}_bin"| sed "s@^@${SEARCH_PATH}/@")
+      ;;
+  *)  ls -1a ${SEARCH_PATH} | egrep "^${CONFIG_FILE_SHORT}_tpl|_${CONFIG_FILE_SHORT}_ed|^${CONFIG_FILE_SHORT}_bin" | sed "s@^@${SEARCH_PATH}/@"
+      print "Choose which one to edit: \c"
+      read answ
+      print -- "$answ"
+      $EDITOR $answ
+      ;;
+esac
+
+
+exit $RC

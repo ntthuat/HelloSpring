@@ -1,0 +1,67 @@
+#!/usr/bin/env ksh
+#@##############################################################################
+#@#
+#@#   File: set_variable
+#@#   $Date: 2013/06/19 06:14:35 $
+#@#   $Revision: 1.8 $
+#@#   Description: Change value of variable in the response file
+#@#
+#@#   Substitute value of variable in the response file as before that creates
+#@#   backup of current response
+#@#   Example:
+#@#     set_variable IMX_HOME=/imxmt/prod/intra/base
+#@#
+#@##############################################################################
+
+STARTDIR=$(pwd)
+cd $(dirname $(whence $0))
+BINDIR=$(pwd)
+cd $STARTDIR
+
+export OUTPUT=${OUTPUT:-TRUE}
+
+# Load functions
+[[ -f ${BINDIR}/functions ]] && . ${BINDIR}/functions || . ${IMX_SYSADM:-$IMX_HOME/sysadm}/functions
+
+# Set log level
+LOGLEVEL=${DEBUGLEVEL:-5}
+
+
+[[ -f ${BINDIR}/.env ]] && . ${BINDIR}/.env		#Obsolete, tobe removed
+[[ -f ${BINDIR}/cms.env ]] && . ${BINDIR}/cms.env
+[[ -f ${IMX_CLT}/config/sysadm/cms/cms.conf ]] && . ${IMX_CLT}/config/sysadm/cms/cms.conf
+[[ -f ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf ]] && . ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf
+
+##======================##
+
+[[ -z $IMX_CLT ]] && error "Incorrect environment! \$IMX_CLT not specified."
+
+
+VARNAME="${1%%=*}"
+NEWVAL="${1#*=}"
+
+[[ -z "$VARNAME" ]] && error "Please define variable to be changed"
+
+if $BINDIR/get_variable -q $VARNAME
+then
+
+	set_action_msg "Backup"
+	execute 2 "cp $RESPONSE_DIR/instance.rsp $RESPONSE_DIR/instance.rsp_${UNIQUE_ID}"
+	check_exit_code
+	display
+
+	set_action_msg "Changing"
+	OLDVAR="$(egrep "^$VARNAME=" $RESPONSE_DIR/instance.rsp)"
+	execute 2 "print '/^${VARNAME}=/c\n${VARNAME}=${NEWVAL}\n.\nw' | ed -s $RESPONSE_DIR/instance.rsp"
+	check_exit_code 'checkExistNOK "^\?$"'
+	display
+	NEWVAR="$(egrep "^$VARNAME=" $RESPONSE_DIR/instance.rsp)"
+
+	[[ -z ${OLDVAR} || -z ${NEWVAR} ]]  || display "${OLDVAR} ---> ${NEWVAR}"
+else
+	exec $BINDIR/add_variable "$@"
+fi
+
+
+
+exit $RC

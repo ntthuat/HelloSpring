@@ -1,0 +1,58 @@
+#!/usr/bin/env ksh
+#@##############################################################################
+#@#
+#@#   $Date: 2015/01/19 16:10:29 $
+#@#   $Revision: 1.7 $
+#@#   Description: Print command descriptions
+#@#
+#@#
+#@##############################################################################
+
+STARTDIR=$(pwd)
+cd $(dirname $(whence $0))
+BINDIR=$(pwd)
+cd $STARTDIR
+
+export OUTPUT=${OUTPUT:-TRUE}
+
+# Load functions
+[[ -f ${BINDIR}/functions ]] && . ${BINDIR}/functions || . ${IMX_SYSADM:-$IMX_HOME/sysadm}/functions
+
+# Set log level
+LOGLEVEL=${DEBUGLEVEL:-5}
+
+NO_RC=TRUE
+
+##======================##
+
+SCOPE=$@
+
+if [[ -z $SCOPE ]]
+then
+        SCOPE="."
+fi
+
+count=0
+
+typeset -L30 SNAME=COMMAND
+SDESC=" Description of the command (positional arguments)"
+display "\n${BOLD}${SNAME}${_BOLD}:\t${SDESC}"
+display "==================================================================================="
+display "all commands accept arguments : ${BOLD}-d${NORM}(debug) ${BOLD}-v${NORM}(verbose) ${BOLD}-vv${NORM}(very verbose) ${BOLD}-e${NORM}(env params) ${BOLD}-q${NORM}(quiet)\n"
+egrep '^#@#[[:space:]]*Description:' $BINDIR/*  | sed -e 's/#@#[[:space:]]*Description://' | egrep -i "${SCOPE}"| while read sdesc
+do
+  count=$(( $count + 1 ))
+  typeset -L30 SNAME="$(print $sdesc| awk -F':' '{print $1}'|sed 's@.*/@@')"
+  SDESC=$(print $sdesc| awk -F':' '{print $2}')
+  display "${BOLD}${SNAME}${_BOLD}:\t${SDESC}"
+done
+
+if [[ $count = 0 ]]
+then
+    error "Command not found" 144
+fi
+display
+exit $RC
+
+
+

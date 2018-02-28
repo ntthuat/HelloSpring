@@ -1,0 +1,62 @@
+#!/usr/bin/env ksh
+#@##############################################################################
+#@#
+#@#   File: add_variable
+#@#   $Date: 2012/10/19 09:25:32 $
+#@#   $Revision: 1.5 $
+#@#   Description: Add variable to the response file
+#@#   Add variable and value for it to the response file under
+#@#   $IMX_CLT/cms/rsp/instance.rsp as creates backup before the adding.
+#@#   Example:
+#@#     add_variable IMX_HOME=/imxmt/prod/intra/base
+#@#                
+#@##############################################################################
+
+STARTDIR=$(pwd)
+cd $(dirname $(whence $0))
+BINDIR=$(pwd)
+cd $STARTDIR
+
+export OUTPUT=${OUTPUT:-TRUE}
+
+# Load functions
+[[ -f ${BINDIR}/functions ]] && . ${BINDIR}/functions || . ${IMX_SYSADM:-$IMX_HOME/sysadm}/functions
+
+# Set log level
+LOGLEVEL=${DEBUGLEVEL:-5}
+
+
+[[ -f ${BINDIR}/.env ]] && . ${BINDIR}/.env		#Obsolete, tobe removed
+[[ -f ${BINDIR}/cms.env ]] && . ${BINDIR}/cms.env 
+[[ -f ${IMX_CLT}/config/sysadm/cms/cms.conf ]] && . ${IMX_CLT}/config/sysadm/cms/cms.conf
+[[ -f ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf ]] && . ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf
+
+##======================##
+
+[[ -z $IMX_CLT ]] && error "Incorrect environment! \$IMX_CLT not specified."
+
+display "\n${BOLD}Change instance configuration${_BOLD}\n"
+
+VARNAME="$(print -- "$@" | awk -F'=' '{print $1}')"
+
+[[ -z "$VARNAME" ]] && error "Please define variable to be deleted"
+
+
+if ${BINDIR}/get_variable -q $VARNAME
+then 
+	exec ${BINDIR}/set_variable "$@"
+else
+	set_action_msg "Backup"
+	execute 2 "cp $RESPONSE_DIR/instance.rsp $RESPONSE_DIR/instance.rsp_${UNIQUE_ID}"
+	check_exit_code
+	display
+
+	set_action_msg "Adding"
+	execute 2 "print -- '$@' >> $RESPONSE_DIR/instance.rsp"
+	check_exit_code
+	display
+	NEWVAR="$(egrep "^$VARNAME=" $RESPONSE_DIR/instance.rsp)"
+	display "${NEWVAR}"
+fi
+
+exit $RC

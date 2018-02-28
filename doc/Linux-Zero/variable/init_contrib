@@ -1,0 +1,53 @@
+#!/usr/bin/env ksh
+#@##############################################################################
+#@#
+#@#   $Date: 2012/10/19 09:25:45 $
+#@#   $Revision: 1.7 $
+#@#   Description: Initilize contributed managed configs
+#@#                
+#@#
+#@##############################################################################
+
+STARTDIR=$(pwd)
+cd $(dirname $(whence $0))
+BINDIR=$(pwd)
+cd $STARTDIR
+
+export OUTPUT=${OUTPUT:-TRUE}
+
+# Load functions
+[[ -f ${BINDIR}/functions ]] && . ${BINDIR}/functions || . ${IMX_SYSADM:-$IMX_HOME/sysadm}/functions
+
+# Set log level
+LOGLEVEL=${DEBUGLEVEL:-5}
+
+
+[[ -f ${BINDIR}/.env ]] && . ${BINDIR}/.env		#Obsolete, tobe removed
+[[ -f ${BINDIR}/cms.env ]] && . ${BINDIR}/cms.env 
+[[ -f ${IMX_CLT}/config/sysadm/cms/cms.conf ]] && . ${IMX_CLT}/config/sysadm/cms/cms.conf
+[[ -f ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf ]] && . ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf
+
+##======================##
+
+[[ -z $IMX_CLT ]] && error "Incorrect environment! \$IMX_CLT not specified."
+
+display "\n${BOLD}Initilize contributed managed configs${_BOLD}\n"
+
+cat $CONTRIB_DIR/contrib_files.lst| while read contrib_line
+do
+	contrib_file=$(print -- "$contrib_line" | awk -F':' '{print $2}')
+	contrib_full_path=$(eval print -- $(dirname $contrib_file))
+	contrib_relative_path=$(dirname $contrib_file | tr -d '$')
+	contrib_name=$(basename $contrib_file)
+	contrib_seq=$(print -- "$contrib_line" | awk -F':' '{print $1}')
+	display "${BOLD}File:${_BOLD} $contrib_file"
+	set_action_msg "Initializing"
+	execute 2 "mkdir -p $CONTRIB_DIR/${contrib_relative_path}" || error "Cannot create directory $CONTRIB_DIR/${contrib_relative_path}"
+	[[ -f ${contrib_full_path}/${contrib_name}_init_inventory ]] || execute 3 "cp ${contrib_full_path}/${contrib_name} ${contrib_full_path}/${contrib_name}_init_inventory"
+	execute 2 "cp ${contrib_full_path}/${contrib_name}_init_inventory  ${CONTRIB_DIR}/${contrib_relative_path}/${contrib_seq}_${contrib_name}_fp"
+	check_exit_code
+	display
+done
+	
+exit ${RC}
+

@@ -1,0 +1,87 @@
+#!/usr/bin/env ksh
+#@##############################################################################
+#@#
+#@#   File: list_variable
+#@#   $Date: 2013/01/14 12:36:11 $
+#@#   $Revision: 1.7 $
+#@#   Description: List all config variables needed by the template
+#@#
+#@#   Shows all configuration variables needed by the templates as grep them
+#@#   from the response directory
+#@#   Example:
+#@#     list_variable
+#@#                
+#@#
+#@##############################################################################
+
+STARTDIR=$(pwd)
+cd $(dirname $(whence $0))
+BINDIR=$(pwd)
+cd $STARTDIR
+
+export OUTPUT=${OUTPUT:-TRUE}
+
+# Load functions
+[[ -f ${BINDIR}/functions ]] && . ${BINDIR}/functions || . ${IMX_SYSADM:-$IMX_HOME/sysadm}/functions
+
+# Set log level
+LOGLEVEL=${DEBUGLEVEL:-5}
+
+[[ -f ${BINDIR}/.env ]] && . ${BINDIR}/.env		#Obsolete, tobe removed
+[[ -f ${BINDIR}/cms.env ]] && . ${BINDIR}/cms.env 
+[[ -f ${IMX_CLT}/config/sysadm/cms/cms.conf ]] && . ${IMX_CLT}/config/sysadm/cms/cms.conf
+[[ -f ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf ]] && . ${IMX_CLT}/config/sysadm/cms/${PROG_NAME}.conf
+##======================##
+
+#QUIET=yes
+
+
+
+# Set log level
+LOGLEVEL=${DEBUGLEVEL:-5}
+
+display "\n${BOLD}List config files that contains VAR_NAME as defined in instance.rsp${_BOLD}\n"
+
+STEPONLY=false
+
+if [[ $1 = '-s' ]]
+then
+	shift
+	STEPONLY=true
+fi
+
+if [[ ${1} = '-f' ]]
+then
+        shift
+        SEPARATOR=${1}
+        shift
+else
+        SEPARATOR="\n"
+fi
+
+
+if [[ -n $STEPS ]] && $STEPONLY 
+then
+	STEPFILTER="$(print -- "$STEPS" | tr ' ' '|')|$TEMPLATE_DIR/install"
+else
+	STEPFILTER="." 
+fi
+
+SCOPE=$@
+
+if [[ -z $SCOPE ]]
+then
+        SCOPE="."
+fi
+
+{	
+find $TEMPLATE_DIR $FORMS_TEMPLATE_DIR $CONTRIB_DIR -type f ! -name "*_bin" | egrep  "$STEPFILTER" | xargs egrep "%\+%.*%\+%" 
+find $TEMPLATE_DIR $FORMS_TEMPLATE_DIR $CONTRIB_DIR| egrep  "$STEPFILTER" | egrep "%\+%.*%\+%" 
+find ${TEMPLATE_DIR} $FORMS_TEMPLATE_DIR ${CONTRIB_DIR} -type f -print -o ! \( -name "${TEMPLATE_DIR##/*/}" -o -name "${CONTRIB_DIR##/*/}" \) -prune |  xargs egrep "%\+%.*%\+%"
+} |  awk -F'%\+%' 'BEGIN {OFS='\n'}{for (i=1;i<=NF;i++){ if ((i%2)==0) {print $i}}}' | sed -e "s:${TEMPLATE_DIR}/::"  -e "s:${FORMS_TEMPLATE_DIR}/::"  -e "s:${CONTRIB_DIR}/::" | sort | uniq | egrep "$SCOPE" | tr '\n' "$SEPARATOR" | awk '{print}' | sed "s/$(echo $SEPARATOR)\$//g"  | while read vline
+do
+	print "${vline}"
+done
+
+display
+exit $RC
