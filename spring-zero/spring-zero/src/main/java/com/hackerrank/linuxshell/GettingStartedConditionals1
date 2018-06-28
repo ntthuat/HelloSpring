@@ -1,0 +1,11 @@
+#!/bin/bash
+while true; do
+    read -p "Do you wish to install this program?" yn
+    case $yn in
+        [Y]* ) echo "YES"; break;;
+        [y]* ) echo "YES"; break;;
+        [N]* ) echo "NO"; break;;
+        [n]* ) echo "NO"; break;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done

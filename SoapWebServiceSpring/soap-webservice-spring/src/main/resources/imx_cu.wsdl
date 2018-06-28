@@ -1,0 +1,36 @@
+<definitions xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://bu.imx_cu.service.ws.codix/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://bu.imx_cu.service.ws.codix/" name="IndividualConsultServiceImplService">
+  <types>
+    <xsd:schema>
+      <xsd:import namespace="http://bu.imx_cu.service.ws.codix/" schemaLocation="Individualconsult.xsd"/>
+    </xsd:schema>
+  </types>
+  <message name="IndividualConsult">
+    <part name="parameters" element="tns:IndividualConsult"/>
+  </message>
+  <message name="IndividualConsultResponse">
+    <part name="parameters" element="tns:IndividualConsultResponse"/>
+  </message>
+  <portType name="IndividualConsultServiceImpl">
+    <operation name="IndividualConsult">
+      <input wsam:Action="http://bu.imx_cu.service.ws.codix/IndividualConsultServiceImpl/IndividualConsultRequest" message="tns:IndividualConsult"/>
+      <output wsam:Action="http://bu.imx_cu.service.ws.codix/IndividualConsultServiceImpl/IndividualConsultResponse" message="tns:IndividualConsultResponse"/>
+    </operation>
+  </portType>
+  <binding name="IndividualConsultServiceImplPortBinding" type="tns:IndividualConsultServiceImpl">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <operation name="IndividualConsult">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="IndividualConsultServiceImplService">
+    <port name="IndividualConsultServiceImplPort" binding="tns:IndividualConsultServiceImplPortBinding">
+      <soap:address location="http://localhost:8080/bcol_api/soap"/>
+    </port>
+  </service>
+</definitions>

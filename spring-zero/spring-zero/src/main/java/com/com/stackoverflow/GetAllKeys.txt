@@ -1,0 +1,10 @@
+{
+  "The Object I already know": {
+    "key1": "value1",
+    "key2": "value2",
+    "AnotherObject": {
+      "anotherKey1": "anotherValue1",
+      "anotherKey2": "anotherValue2"
+    }
+  }
+}

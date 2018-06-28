@@ -1,0 +1,12 @@
+io\spring\guides\gs_producing_web_service\ObjectFactory.class
+soap_ws\Application.class
+soap_ws\WebServiceConfig.class
+soap_ws\utils\StringUtils.class
+io\spring\guides\gs_producing_web_service\GetCountryResponse.class
+io\spring\guides\gs_producing_web_service\Country.class
+soap_ws\CountryEndpoint.class
+io\spring\guides\gs_producing_web_service\GetCountryRequest.class
+io\spring\guides\gs_producing_web_service\package-info.class
+io\spring\guides\gs_producing_web_service\Currency.class
+soap_ws\dao\CountryDao.class
+soap_ws\WebServiceContext.class

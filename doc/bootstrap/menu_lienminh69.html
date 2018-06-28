@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<style type="text/css">
+.no-border{
+   border-radius:0;
+}
+.dropdown:hover>.dropdown-menu {
+  display: block;
+}
+
+.dropdown>.dropdown-toggle:active {
+  /*Without this, clicking will make it sticky*/
+    pointer-events: none;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- <h3>Lien minh 69 Menu</h3> -->
+  <div class="btn-group">
+    
+    <!--Create Guide-->
+    <div class="dropdown">
+      <button class="btn btn-primary no-border" type="button" id="dropdownMenuButton-create-guide" aria-haspopup="true" aria-expanded="false">
+        Create Guide
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-create-guide">
+        <a class="dropdown-item" href="#">Create Guide 1</a>
+        <a class="dropdown-item" href="#">Create Guide 2</a>
+        <a class="dropdown-item" href="#">Create Guide 3</a>
+      </div>
+    </div>
+
+    <!--Builds & Guides-->
+    <div class="dropdown">
+      <button class="btn btn-primary no-border" type="button" id="dropdownMenuButton-champions" aria-haspopup="true" aria-expanded="false">
+        Builds & Guides
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-champions">
+        <a class="dropdown-item" href="#">Builds & Guides 1</a>
+        <a class="dropdown-item" href="#">Builds & Guides 2</a>
+        <a class="dropdown-item" href="#">Builds & Guides 3</a>
+      </div>
+    </div>
+
+    <!--Champions-->
+    <div class="dropdown">
+      <button class="btn btn-primary no-border" type="button" id="dropdownMenuButton-champions" aria-haspopup="true" aria-expanded="false">
+        Champions
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-champions">
+        <a class="dropdown-item" href="#">Champions 1</a>
+        <a class="dropdown-item" href="#">Champions 2</a>
+        <a class="dropdown-item" href="#">Champions 3</a>
+      </div>
+    </div>
+
+    <!-- Tier List -->
+    <div class="dropdown">
+      <button class="btn btn-primary no-border" type="button" id="dropdownMenuButton-tier-list" aria-haspopup="true" aria-expanded="false">
+        Tier List
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-tier-list">
+        <a class="dropdown-item" href="#">Tier List 1</a>
+        <a class="dropdown-item" href="#">Tier List 2</a>
+        <a class="dropdown-item" href="#">Tier List 3</a>
+      </div>
+    </div>
+
+    <!-- Community -->
+    <div class="dropdown">
+      <button class="btn btn-primary no-border" type="button" id="dropdownMenuButton-community" aria-haspopup="true" aria-expanded="false">
+        Community
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-community">
+        <a class="dropdown-item" href="#">Community 1</a>
+        <a class="dropdown-item" href="#">Community 2</a>
+        <a class="dropdown-item" href="#">Community 3</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

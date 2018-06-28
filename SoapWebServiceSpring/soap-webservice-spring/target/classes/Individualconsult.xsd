@@ -1,0 +1,54 @@
+<xs:schema xmlns:tns="http://bu.imx_cu.service.ws.codix/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://bu.imx_cu.service.ws.codix/">
+  <xs:element name="IndividualConsult" type="tns:IndividualConsult"/>
+  <xs:element name="IndividualConsultRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="documentType" type="xs:int"/>
+        <xs:element name="documentNumber" type="xs:decimal"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IndividualConsultResponse" nillable="true" type="xs:anyType"/>
+  <xs:complexType name="IndividualConsult">
+    <xs:sequence>
+      <xs:element name="arg0" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="documentType" type="xs:int"/>
+            <xs:element name="documentNumber" type="xs:decimal"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="IndividualConsultResponse">
+    <xs:sequence>
+      <xs:element name="return" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="businessLine" type="xs:string"/>
+            <xs:element name="documentType" type="xs:int"/>
+            <xs:element name="documentNumber" type="xs:decimal"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="obligationNumber" type="xs:string"/>
+            <xs:element name="plan" type="xs:string"/>
+            <xs:element name="obligationType" type="xs:string"/>
+            <xs:element name="initialBalance" type="xs:decimal"/>
+            <xs:element name="currentBalance" type="xs:decimal"/>
+            <xs:element name="monthlyInstallment" type="xs:decimal"/>
+            <xs:element name="latePaymentDays" type="xs:int"/>
+            <xs:element name="latePaymentValue" type="xs:decimal"/>
+            <xs:element name="restructurationInitialDate" type="xs:decimal"/>
+            <xs:element name="penaltyDate" type="xs:decimal"/>
+            <xs:element name="cancellationDate" type="xs:decimal"/>
+            <xs:element name="status" type="xs:int"/>
+            <xs:element name="quality" type="xs:string"/>
+            <xs:element name="restructured" type="xs:string"/>
+            <xs:element name="openingDate" type="xs:decimal"/>
+            <xs:element name="penalizedPortfolioStatus" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
