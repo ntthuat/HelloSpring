@@ -48,3 +48,5 @@ Temporary Items
 
 # thuat's ignore
 spring-zero/spring-zero/target/*
+*.tmp
+~$*
